@@ -1,7 +1,7 @@
 {
   "version": 2,
   "project": {
-    "id": 9996,
+    "id": 9997,
     "apiHost": "connection.keboola.com"
   },
   "allowTargetEnv": true,
@@ -18,7 +18,7 @@
     "dataAppConfig": "app/{component_id}/{config_name}"
   },
   "allowedBranches": [
-    "865220"
+    "865221"
   ],
   "ignoredComponents": [],
   "templates": {
@@ -33,17 +33,9 @@
   },
   "branches": [
     {
-      "id": 865220,
+      "id": 865221,
       "path": "main"
     }
   ],
-  "configurations": [
-    {
-      "branchId": 865220,
-      "componentId": "keboola.snowflake-transformation",
-      "id": "1111152903",
-      "path": "transformation/keboola.snowflake-transformation/test-zs",
-      "rows": []
-    }
-  ]
+  "configurations": []
 }
