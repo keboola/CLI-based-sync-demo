@@ -1,5 +1,4 @@
 name: Manual KBC Pull
-description: Pulls the state of the remote project
 on:
   workflow_dispatch:
 permissions:
