@@ -19,7 +19,6 @@ inputs:
 runs:
   using: "composite"
   steps:
-    - uses: actions/checkout@v4
     # Pull remote project's state
     - name: Init data from Keboola connection project
       env:
