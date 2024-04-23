@@ -46,6 +46,7 @@ jobs:
         with:
           githubToken: ${{ secrets.GITHUB_TOKEN }}
           workdir: L1
+          kbcUrl: "connection.keboola.com"
           kbcStorageApiToken: ${{ secrets.L1_TOKEN }}
           kbcProjectId: ${{ vars.L1_PROJECT_ID }}
           kbcBranchId: ${{ vars.L1_BRANCH_ID }}
