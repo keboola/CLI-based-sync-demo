@@ -12,10 +12,10 @@ for var in "${required_vars[@]}"; do
 done
 
 # Název souboru
-MANIFEST_FILE="$WORKDIR/.keboola/manifest.json"
+#MANIFEST_FILE="$WORKDIR/.keboola/manifest.json"
 
 # Aktualizace hodnoty name v JSON souboru
-jq --argjson project_id "$KBC_PROJECT_ID" --argjson project_id "$KBC_PROJECT_ID" '.project.id = $project_id  ' "$MANIFEST_FILE" > temp.json && mv temp.json "$MANIFEST_FILE"
+#jq --argjson project_id "$KBC_PROJECT_ID" --argjson project_id "$KBC_PROJECT_ID" '.project.id = $project_id  ' "$MANIFEST_FILE" > temp.json && mv temp.json "$MANIFEST_FILE"
 
 
 # Cesta k souboru .env.local
