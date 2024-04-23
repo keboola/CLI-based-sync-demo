@@ -31,7 +31,6 @@ jobs:
       - name: Pull L1 from Keboola Connection
         uses: ./.github/actions/kbc_pull
         with:
-          githubToken: ${{ secrets.GITHUB_TOKEN }}
           workdir: L1
           kbcUrl: ${{ env.kbcUrl }}
           kbcStorageApiToken: ${{ secrets.L1_TOKEN }}
