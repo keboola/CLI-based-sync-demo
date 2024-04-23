@@ -4,6 +4,7 @@
     "id": 9996,
     "apiHost": "connection.keboola.com"
   },
+  "allowTargetEnv": false,
   "sortBy": "id",
   "naming": {
     "branch": "{branch_name}",
