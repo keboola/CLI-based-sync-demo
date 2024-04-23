@@ -1,11 +1,12 @@
-name: KBC PULL
+name: Manual KBC Pull
+description: Pulls the state of the remote project
 on:
   workflow_dispatch:
 permissions:
   contents: write
 jobs:
   KBC_PULL:
-    environment: prod
+    environment: dev
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -36,5 +37,5 @@ jobs:
           git config --global user.name 'Keboola CLI'
           git config --global user.email 'keboola-cli@users.noreply.github.com'
           git add -A
-          git commit -a -m "Automatic pull $currentDate" -m "$pull_log" || true
+          git commit -a -m "Manual KBC pull $currentDate" -m "$pull_log" || true
           git push
