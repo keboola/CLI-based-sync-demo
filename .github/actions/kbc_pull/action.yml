@@ -45,7 +45,7 @@ runs:
         
         # Check if the directory exists
         if [ -d "$WORKDIR" ]; then
-          #echo "Directory '$WORKDIR' exists. Removing..."
+          echo "Directory '$WORKDIR' exists. Removing..."
           rm -rf "$WORKDIR"
           if [ $? -eq 0 ]; then
             echo "Directory was successfully removed."
