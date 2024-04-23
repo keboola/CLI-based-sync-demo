@@ -1,0 +1,38 @@
+name: Manual KBC Pull All
+on:
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  Pull_All:
+    environment: |-
+      ${{
+         github.ref_name == 'main' && 'prod'
+      || github.ref_name == 'dev' && 'dev'
+      }}
+    runs-on: ubuntu-latest
+    env:
+       kbcUrl: "connection.keboola.com"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/install
+        with:
+          githubToken: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Pull L0 from Keboola Connection
+        uses: ./.github/actions/kbc_push
+        with:
+          workdir: L0
+          kbcUrl: ${{ env.kbcUrl }}
+          kbcStorageApiToken: ${{ secrets.L0_TOKEN }}
+          kbcProjectId: ${{ vars.L0_PROJECT_ID }}
+          kbcBranchId: ${{ vars.L0_BRANCH_ID }}
+
+      - name: Pull L1 from Keboola Connection
+        uses: ./.github/actions/kbc_push
+        with:
+          workdir: L1
+          kbcUrl: ${{ env.kbcUrl }}
+          kbcStorageApiToken: ${{ secrets.L1_TOKEN }}
+          kbcProjectId: ${{ vars.L1_PROJECT_ID }}
+          kbcBranchId: ${{ vars.L1_BRANCH_ID }}
