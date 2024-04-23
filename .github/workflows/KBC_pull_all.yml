@@ -18,6 +18,7 @@ jobs:
         with:
           githubToken: ${{ secrets.GITHUB_TOKEN }}
           workdir: L0
+          kbcUrl: "connection.keboola.com"
           kbcStorageApiToken: ${{ secrets.L0_TOKEN }}
           kbcProjectId: ${{ vars.L0_PROJECT_ID }}
           kbcBranchId: ${{ vars.L0_BRANCH_ID }}
