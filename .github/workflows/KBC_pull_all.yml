@@ -4,7 +4,7 @@ on:
 permissions:
   contents: write
 jobs:
-  Pull_L0:
+  Pull_All:
     environment: |-
       ${{
          github.ref_name == 'main' && 'prod'
@@ -22,26 +22,6 @@ jobs:
           kbcStorageApiToken: ${{ secrets.L0_TOKEN }}
           kbcProjectId: ${{ vars.L0_PROJECT_ID }}
           kbcBranchId: ${{ vars.L0_BRANCH_ID }}
-      - name: Commit and push
-        run: |
-          currentDate=`date +%Y-%m-%d:%T%Z`
-          pull_log=`cat "$RUNNER_TEMP/log.txt"`
-          git config --global user.name 'Keboola CLI'
-          git config --global user.email 'keboola-cli@users.noreply.github.com'
-          git add -A
-          git commit -a -m "Manual KBC pull $currentDate" -m "$pull_log" || true
-          git push --force
-
-  Pull_L1:
-    needs: [ Pull_L0 ]
-    environment: |-
-      ${{
-         github.ref_name == 'main' && 'prod'
-      || github.ref_name == 'dev' && 'dev'
-      }}
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
       - name: Pull L1 from Keboola Connection
         uses: ./.github/actions/kbc_pull
         with:
