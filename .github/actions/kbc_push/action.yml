@@ -4,9 +4,6 @@ inputs:
   workdir:
     description: Working directory
     required: true
-  kbcUrl:
-    description: Keboola Connection Stack URL
-    required: true
   kbcStorageApiToken:
     description: Keboola Connection Storage API Token
     required: true
@@ -33,11 +30,11 @@ runs:
         KBC_STORAGE_API_TOKEN: ${{ inputs.kbcStorageApiToken }}
         KBC_PROJECT_ID: ${{ inputs.kbcProjectId }}
         KBC_BRANCH_ID: ${{ inputs.kbcBranchId }}
-        KBC_URL: ${{ inputs.kbcUrl }}
         WORKDIR: ${{ inputs.workdir }}
       # filled by the script
       id: kbc_pull_L0_step
       run: |
+        apt-get update && apt-get install -y jq
         set -eo pipefail
 
         # Kontrola, jestli jsou nastaveny potřebné proměnné prostředí
@@ -49,17 +46,20 @@ runs:
           fi
         done
         
-        # Check if the directory exists
-        if [ -d "$WORKDIR" ]; then
-          #echo "Directory '$DIR_PATH' exists. Removing..."
-          rm -rf "$WORKDIR"
-          if [ $? -eq 0 ]; then
-            echo "Directory was successfully removed."
-          else
-            echo "Failed to remove directory."
-            return 1
-          fi
-        fi
+        # Název souboru
+        MANIFEST_FILE="$WORKDIR/.keboola/manifest.json"
         
-        kbc init -t "$KBC_STORAGE_API_TOKEN" -H "$KBC_URL" -b "$KBC_BRANCH_ID" -d "$WORKDIR" --allow-target-env --ci=false --verbose 2>&1 | tee "$RUNNER_TEMP/log.txt"
+        # Aktualizace hodnoty name v JSON souboru
+        jq --argjson project_id "$KBC_PROJECT_ID" --argjson project_id "$KBC_PROJECT_ID" '.project.id = $project_id  ' "$MANIFEST_FILE" > temp.json && mv temp.json "$MANIFEST_FILE"
+        
+        
+        # Cesta k souboru .env.local
+        ENV_FILE="$WORKDIR/.env.local"
+        
+        echo "KBC_STORAGE_API_TOKEN=\"$KBC_STORAGE_API_TOKEN\"" > "$ENV_FILE"
+        echo "KBC_PROJECT_ID=\"$KBC_PROJECT_ID\"" >> "$ENV_FILE"
+        echo "KBC_BRANCH_ID=\"$KBC_BRANCH_ID\"" >> "$ENV_FILE"
+        
+        # Spuštění kbc pull s logováním
+        kbc pull -d "$WORKDIR" --force --verbose 2>&1 | tee "$RUNNER_TEMP/log.txt"
       shell: bash
