@@ -26,6 +26,6 @@ echo "KBC_PROJECT_ID=\"$KBC_PROJECT_ID\"" >> "$ENV_FILE"
 echo "KBC_BRANCH_ID=\"$KBC_BRANCH_ID\"" >> "$ENV_FILE"
 
 # Spuštění kbc pull s logováním
-kbc pull -d "$WORKDIR" --force 2>&1 | tee "$RUNNER_TEMP/log.txt"
+kbc pull -d "$WORKDIR" --force --verbose 2>&1 | tee "$RUNNER_TEMP/log.txt"
 
 
