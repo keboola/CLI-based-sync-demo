@@ -5,8 +5,11 @@ permissions:
   contents: write
 jobs:
   KBC_PULL:
-    environment:
-      name: ${{ github.ref_name }}
+    environment: |-
+      ${{
+         github.ref_name == 'main' && 'prod'
+      || github.ref_name == 'dev' && 'dev'
+      }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
