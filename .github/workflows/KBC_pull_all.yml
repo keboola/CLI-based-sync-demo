@@ -13,9 +13,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - name: git pull
-        run: |
-          git pull
       - name: Pull L0 from Keboola Connection
         uses: ./.github/actions/kbc_pull
         with:
@@ -32,7 +29,7 @@ jobs:
           git config --global user.email 'keboola-cli@users.noreply.github.com'
           git add -A
           git commit -a -m "Manual KBC pull $currentDate" -m "$pull_log" || true
-          git push
+          git push --force
 
   Pull_L1:
     needs: [ Pull_L0 ]
@@ -44,9 +41,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - name: git pull
-        run: |
-          git pull
       - name: Pull L1 from Keboola Connection
         uses: ./.github/actions/kbc_pull
         with:
@@ -63,4 +57,4 @@ jobs:
           git config --global user.email 'keboola-cli@users.noreply.github.com'
           git add -A
           git commit -a -m "Manual KBC pull $currentDate" -m "$pull_log" || true
-          git push
+          git push --force
