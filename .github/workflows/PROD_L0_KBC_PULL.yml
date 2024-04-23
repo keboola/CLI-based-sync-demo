@@ -1,6 +1,8 @@
 name: KBC PULL
 on:
   workflow_dispatch:
+permissions:
+  contents: write
 jobs:
   KBC_PULL:
     runs-on: ubuntu-latest
