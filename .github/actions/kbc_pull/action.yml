@@ -60,6 +60,13 @@ runs:
             return 1
           fi
         fi
+        mkdir -p "$WORKDIR"
+        if [ $? -eq 0 ]; then
+          echo "Directory was successfully created."
+        else
+          echo "Failed to create directory."
+          return 1
+        fi
         
         kbc init -t "$KBC_STORAGE_API_TOKEN" -H "$KBC_URL" -b "$KBC_BRANCH_ID" -d "$WORKDIR" --allow-target-env --ci=false --verbose 2>&1 | tee "$RUNNER_TEMP/log.txt"
       shell: bash
