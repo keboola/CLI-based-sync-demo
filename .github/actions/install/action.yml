@@ -13,7 +13,7 @@ runs:
       shell: bash
     # Download the latest release asset
     - id: kbc_download_latest_release
-      uses: robinraju/release-downloader@v1.7
+      uses: robinraju/release-downloader@v1.10
       with:
         repository: "keboola/keboola-as-code"
         #latest: true
