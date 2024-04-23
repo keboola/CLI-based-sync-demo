@@ -4,7 +4,7 @@ on:
 permissions:
   contents: write
 jobs:
-  Pull_All:
+  Push_All:
     environment: |-
       ${{
          github.ref_name == 'main' && 'prod'
