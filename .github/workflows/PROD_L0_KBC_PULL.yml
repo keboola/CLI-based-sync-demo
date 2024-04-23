@@ -24,12 +24,13 @@ jobs:
           KBC_STORAGE_API_TOKEN: ${{ secrets.L0_TOKEN }}
           KBC_PROJECT_ID: ${{ vars.L0_PROJECT_ID }}
           KBC_BRANCH_ID: ${{ vars.L0_BRANCH_ID }}
-          PROJECT: L0
+          WORKDIR: L0
         # filled by the script
         id: kbc_pull_L0_step
         run: |
-          chmod +x scripts/tools/pull.sh
-          ./scripts/tools/pull.sh "$KBC_STORAGE_API_TOKEN" "$KBC_PROJECT_ID" "$KBC_BRANCH_ID" "$PROJECT"
+          apt-get update && apt-get install -y jq
+          chmod +x ./.github/scripts/pull.sh
+          ./.github/scripts/pull.sh
         shell: bash
       # Commit message contains date and output of the pull command
       - name: Commit and push
