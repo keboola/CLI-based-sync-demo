@@ -38,9 +38,6 @@ jobs:
           echo "KBC_BRANCH_ID=\"$KBC_BRANCH_ID\"" >> $ENV_FILE
           
           kbc pull --force 2>&1 | tee "$RUNNER_TEMP/log.txt"
-      # Automatic pull can be canceled by push, wait a while
-      - name: Wait
-        run: sleep 20
       # Commit message contains date and output of the pull command
       - name: Commit and push
         run: |
