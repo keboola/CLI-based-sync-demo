@@ -27,6 +27,7 @@ jobs:
           ./.github/scripts/commit_and_push.sh
 
   Pull_L1:
+    needs: [ Pull_L0 ]
     environment: |-
       ${{
          github.ref_name == 'main' && 'prod'
