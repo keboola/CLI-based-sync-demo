@@ -5,7 +5,7 @@ runs:
   steps:
     - id: prepare
       run: |
-        mkdir "./kbc"
+        mkdir "${{ runner.temp }}/kbc"
         apt-get update && apt-get install -y curl unzip git
       shell: bash
     # Extract binary
@@ -14,7 +14,7 @@ runs:
         latest_version=$(curl --silent -qI https://github.com/keboola/keboola-as-code/releases/latest | awk -F '/' '/^location/ {print  substr($NF, 1, length($NF)-1)}'); \
         file_name="keboola-cli_${latest_version:1}_linux_amd64.zip"
         target_url="https://github.com/keboola/keboola-as-code/releases/download/$latest_version/$file_name"
-        release_zip="./kbc/$file_name"
+        release_zip="${{ runner.temp }}/kbc/$file_name"
         echo "Downloading $target_url" to "$release_zip"
         curl -L -o "$release_zip" "$target_url"
         
