@@ -13,8 +13,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+      - name: git pull
+        run: |
+          git pull
       - name: Pull L0 from Keboola Connection
-        uses: ./.github/actions/pull
+        uses: ./.github/actions/kbc_pull
         with:
           githubToken: ${{ secrets.GITHUB_TOKEN }}
           workdir: L0
@@ -23,8 +26,13 @@ jobs:
           kbcBranchId: ${{ vars.L0_BRANCH_ID }}
       - name: Commit and push
         run: |
-          chmod +x ./.github/scripts/commit_and_push.sh
-          ./.github/scripts/commit_and_push.sh
+          currentDate=`date +%Y-%m-%d:%T%Z`
+          pull_log=`cat "$RUNNER_TEMP/log.txt"`
+          git config --global user.name 'Keboola CLI'
+          git config --global user.email 'keboola-cli@users.noreply.github.com'
+          git add -A
+          git commit -a -m "Manual KBC pull $currentDate" -m "$pull_log" || true
+          git push
 
   Pull_L1:
     needs: [ Pull_L0 ]
@@ -36,8 +44,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+      - name: git pull
+        run: |
+          git pull
       - name: Pull L1 from Keboola Connection
-        uses: ./.github/actions/pull
+        uses: ./.github/actions/kbc_pull
         with:
           githubToken: ${{ secrets.GITHUB_TOKEN }}
           workdir: L1
@@ -46,5 +57,10 @@ jobs:
           kbcBranchId: ${{ vars.L1_BRANCH_ID }}
       - name: Commit and push
         run: |
-          chmod +x ./.github/scripts/commit_and_push.sh
-          ./.github/scripts/commit_and_push.sh
+          currentDate=`date +%Y-%m-%d:%T%Z`
+          pull_log=`cat "$RUNNER_TEMP/log.txt"`
+          git config --global user.name 'Keboola CLI'
+          git config --global user.email 'keboola-cli@users.noreply.github.com'
+          git add -A
+          git commit -a -m "Manual KBC pull $currentDate" -m "$pull_log" || true
+          git push
