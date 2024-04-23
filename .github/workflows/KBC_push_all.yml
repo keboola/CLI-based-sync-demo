@@ -1,4 +1,4 @@
-name: Manual KBC Pull All
+name: Manual KBC Push All
 on:
   workflow_dispatch:
 permissions:
