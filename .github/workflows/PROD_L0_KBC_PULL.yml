@@ -9,6 +9,8 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - uses: ./.github/actions/install
+        with:
+          githubToken: ${{ secrets.GITHUB_TOKEN }}
       # Pull remote project's state
       # filled by the script
       - name: Pull L0 from Keboola Connection
