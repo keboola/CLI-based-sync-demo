@@ -16,18 +16,12 @@ inputs:
   kbcBranchId:
     description: Keboola Connection Branch ID
     required: true
-  githubToken:
-    description: GitHub Workflow Token
-    required: true
 runs:
   using: "composite"
   steps:
     - uses: actions/checkout@v4
-    - uses: ./.github/actions/install
-      with:
-        githubToken: ${{ inputs.githubToken }}
     # Pull remote project's state
-    - name: Pull L0 from Keboola Connection
+    - name: Init data from Keboola connection project
       env:
         # filled by the script
         KBC_STORAGE_API_TOKEN: ${{ inputs.kbcStorageApiToken }}
@@ -36,7 +30,7 @@ runs:
         KBC_URL: ${{ inputs.kbcUrl }}
         WORKDIR: ${{ inputs.workdir }}
       # filled by the script
-      id: kbc_pull_L0_step
+      id: kbc_init
       run: |
         set -eo pipefail
 
