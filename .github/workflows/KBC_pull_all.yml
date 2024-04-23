@@ -1,0 +1,47 @@
+name: Manual KBC Pull
+on:
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  Pull_L0:
+    environment: |-
+      ${{
+         github.ref_name == 'main' && 'prod'
+      || github.ref_name == 'dev' && 'dev'
+      }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Pull L0 from Keboola Connection
+        uses: ./.github/actions/pull
+        with:
+          githubToken: ${{ secrets.GITHUB_TOKEN }}
+          workdir: L0
+          kbcStorageApiToken: ${{ secrets.L0_TOKEN }}
+          kbcProjectId: ${{ vars.L0_PROJECT_ID }}
+          kbcBranchId: ${{ vars.L0_BRANCH_ID }}
+      - name: Commit and push
+        run: |
+          chmod +x ./.github/scripts/commit_and_push.sh
+          ./.github/scripts/commit_and_push.sh
+
+  Pull_L1:
+    environment: |-
+      ${{
+         github.ref_name == 'main' && 'prod'
+      || github.ref_name == 'dev' && 'dev'
+      }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Pull L0 from Keboola Connection
+        uses: ./.github/actions/pull
+        with:
+          githubToken: ${{ secrets.GITHUB_TOKEN }}
+          workdir: L1
+          kbcStorageApiToken: ${{ secrets.L1_TOKEN }}
+          kbcProjectId: ${{ vars.L1_PROJECT_ID }}
+          kbcBranchId: ${{ vars.L1_BRANCH_ID }}
+      - name: Commit and push
+        run: |
+          chmod +x ./.github/scripts/commit_and_push.sh
+          ./.github/scripts/commit_and_push.sh
