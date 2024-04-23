@@ -19,7 +19,6 @@ jobs:
         env:
           # filled by the script
           KBC_STORAGE_API_TOKEN: ${{ secrets.L0_TOKEN }}
-          BRANCH_NAME: ${{ GITHUB_REF_NAME }}
         # filled by the script
         id: kbc_pull_L0_step
         run: |
