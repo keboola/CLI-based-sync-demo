@@ -12,6 +12,7 @@ jobs:
       }}
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v3
       - name: Pull L0 from Keboola Connection
         uses: ./.github/actions/pull
         with:
@@ -33,6 +34,7 @@ jobs:
       }}
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v3
       - name: Pull L0 from Keboola Connection
         uses: ./.github/actions/pull
         with:
