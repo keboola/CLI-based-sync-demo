@@ -1,7 +1,7 @@
 {
   "version": 2,
   "project": {
-    "id": 9995,
+    "id": 9997,
     "apiHost": "connection.keboola.com"
   },
   "allowTargetEnv": true,
@@ -18,7 +18,7 @@
     "dataAppConfig": "app/{component_id}/{config_name}"
   },
   "allowedBranches": [
-    "865219"
+    "865221"
   ],
   "ignoredComponents": [],
   "templates": {
@@ -33,7 +33,7 @@
   },
   "branches": [
     {
-      "id": 865219,
+      "id": 865221,
       "path": "main"
     }
   ],
