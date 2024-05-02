@@ -1,10 +1,12 @@
-name: Manual KBC Pull All
+name: Manual KBC Pull L0, L1
+description: Pull configurations from Keboola Connection projects (L0, L1)
 on:
   workflow_dispatch:
 permissions:
   contents: write
 jobs:
   Pull_All:
+    # Generated value
     environment: |-
       ${{
          github.ref_name == 'main' && 'prod'
@@ -12,6 +14,7 @@ jobs:
       }}
     runs-on: ubuntu-latest
     env:
+       # Generated value
        kbcUrl: "connection.keboola.com"
     steps:
       - uses: actions/checkout@v4
@@ -19,23 +22,25 @@ jobs:
         with:
           githubToken: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Pull L0 from Keboola Connection
+      # Generated steps 
+      - name: Pull configurations from 
         uses: ./.github/actions/kbc_pull
         with:
-          workdir: L0
-          kbcUrl: ${{ env.kbcUrl }}
+          workdir: "L0"
+          kbcUrl: ${{env.kbcUrl}}
           kbcStorageApiToken: ${{ secrets.L0_TOKEN }}
           kbcProjectId: ${{ vars.L0_PROJECT_ID }}
           kbcBranchId: ${{ vars.L0_BRANCH_ID }}
-
-      - name: Pull L1 from Keboola Connection
+      
+      - name: Pull configurations from 
         uses: ./.github/actions/kbc_pull
         with:
-          workdir: L1
-          kbcUrl: ${{ env.kbcUrl }}
+          workdir: "L1"
+          kbcUrl: ${{env.kbcUrl}}
           kbcStorageApiToken: ${{ secrets.L1_TOKEN }}
           kbcProjectId: ${{ vars.L1_PROJECT_ID }}
           kbcBranchId: ${{ vars.L1_BRANCH_ID }}
+      # End generated steps
 
       - name: Commit and push
         run: |
