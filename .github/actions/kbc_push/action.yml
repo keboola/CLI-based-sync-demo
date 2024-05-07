@@ -33,6 +33,7 @@ runs:
       run: |
         set -eo pipefail
 
+        # Check, if required environment variables are set
         required_vars=(KBC_STORAGE_API_TOKEN KBC_STORAGE_API_HOST KBC_PROJECT_ID KBC_BRANCHES WORKDIR)
         for var in "${required_vars[@]}"; do
           if [ -z "${!var}" ]; then
@@ -41,20 +42,16 @@ runs:
           fi
         done
         
+        # Temporary directory
         WORKDIR_TMP="$WORKDIR"_tmp
-        
-        if [ ! -d "$WORKDIR_TMP" ]; then
-          mkdir -p "$WORKDIR_TMP"
-        else
-            if [ -n "$WORKDIR_TMP" ] && [ "$WORKDIR_TMP" != "/" ]; then
-                rm -rf "$WORKDIR_TMP"
-                mkdir -p "$WORKDIR_TMP"
-            fi
-        fi
-        
+        mkdir -p "$WORKDIR_TMP"
+       
+        # Need a new .keboola directory
         kbc init -d "$WORKDIR_TMP" --allow-target-env --ci=false 2>&1 | tee "$RUNNER_TEMP/log.txt"
-
+        
+        # Copy .keboola directory
         rsync -av --progress "$WORKDIR_TMP/.keboola" "$WORKDIR/"
         
+        # push to Keboola Connection
         kbc push -d "$WORKDIR" --force --verbose 2>&1 | tee "$RUNNER_TEMP/log.txt"
       shell: bash
