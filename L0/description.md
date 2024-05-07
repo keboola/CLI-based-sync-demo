@@ -1,1 +1,1 @@
-nová desc.z devu
+desc z produ L0
