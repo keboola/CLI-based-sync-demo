@@ -1,1 +1,0 @@
-nová desc.z devu
