@@ -54,4 +54,6 @@ runs:
         
         # Init data from Keboola connection project
         kbc init -d "$WORKDIR" --allow-target-env --ci=false 2>&1 | tee "$RUNNER_TEMP/log.txt"
+        
+        echo "/.keboola/" >> "$WORKDIR"/.gitignore
       shell: bash
