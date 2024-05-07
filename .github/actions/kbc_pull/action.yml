@@ -42,20 +42,17 @@ runs:
           fi
         done
         
-        # Check if the working directory exists
         if [ ! -d "$WORKDIR" ]; then
-            echo "Directory does not exist. Creating directory..."
-            mkdir -p "$WORKDIR"
-        fi
-        
-        # Pull or Init depending on the manifest file
-        if [ -f "$WORKDIR/.keboola/manifest.json" ]; then
-            echo "Manifest file exists. Pulling..."
-            kbc pull -d "$WORKDIR" --force 2>&1 | tee "$RUNNER_TEMP/log.txt"
+          mkdir -p "$WORKDIR"
         else
-            echo "No manifest file found. Removing contents. Initializing..."
-            rm -rf "$WORKDIR"/*
-            kbc init -d "$WORKDIR" --allow-target-env --ci=false 2>&1 | tee "$RUNNER_TEMP/log.txt"
+            if [ -n "$WORKDIR" ] && [ "$WORKDIR" != "/" ]; then
+                rm -rf "$WORKDIR"
+                mkdir -p "$WORKDIR"
+            fi
         fi
+             
+        kbc init -d "$WORKDIR" --allow-target-env --ci=false 2>&1 | tee "$RUNNER_TEMP/log.txt"
+
+        echo "/.keboola/" >> "$WORKDIR"/.gitignore
 
       shell: bash
