@@ -53,7 +53,7 @@ runs:
             else
                 echo "No manifest file found. Removing contents. Initializing..."
                 rm -rf "$WORKDIR"/*
-                kbc init -d "$WORKDIR" --allow-target-env --ci=false --verbose 2>&1 | tee "$RUNNER_TEMP/log.txt"
+                kbc init -d "$WORKDIR" --allow-target-env --ci=false 2>&1 | tee "$RUNNER_TEMP/log.txt"
             fi
         fi
 
