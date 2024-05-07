@@ -20,7 +20,7 @@ jobs:
 
       # Generated steps 
       - name: Push configurations to L0
-        uses: ./.github/actions/kbc_pull
+        uses: ./.github/actions/kbc_push
         with:
           workdir: "L0"
           kbcStorageApiToken: ${{ secrets.L0_TOKEN }}
@@ -28,7 +28,7 @@ jobs:
           kbcBranchId: ${{ vars.L0_BRANCH_ID }}
       
       - name: Push configurations to L1
-        uses: ./.github/actions/kbc_pull
+        uses: ./.github/actions/kbc_push
         with:
           workdir: "L1"
           kbcStorageApiToken: ${{ secrets.L1_TOKEN }}

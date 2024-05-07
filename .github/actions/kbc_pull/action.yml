@@ -25,16 +25,16 @@ runs:
         # filled by the script
         KBC_STORAGE_API_TOKEN: ${{ inputs.kbcStorageApiToken }}
         KBC_PROJECT_ID: ${{ inputs.kbcProjectId }}
-        KBC_BRANCH_ID: ${{ inputs.kbcBranchId }}
-        KBC_URL: ${{ inputs.kbcUrl }}
+        KBC_BRANCHES: ${{ inputs.kbcBranchId }}
+        KBC_STORAGE_API_HOST: ${{ inputs.kbcUrl }}
         WORKDIR: ${{ inputs.workdir }}
       # filled by the script
       id: kbc_init
       run: |
         set -eo pipefail
 
-        # CHeck, if required environment variables are set
-        required_vars=(KBC_STORAGE_API_TOKEN KBC_PROJECT_ID KBC_BRANCH_ID WORKDIR KBC_URL)
+        # Check, if required environment variables are set
+        required_vars=(KBC_STORAGE_API_TOKEN KBC_STORAGE_API_HOST KBC_PROJECT_ID KBC_BRANCHES WORKDIR)
         for var in "${required_vars[@]}"; do
           if [ -z "${!var}" ]; then
             echo "Error: Environment variable $var is not set." >&2
@@ -65,6 +65,6 @@ runs:
             echo "Failed to create directory."
             return 1
           fi
-          kbc init -t "$KBC_STORAGE_API_TOKEN" -H "$KBC_URL" -b "$KBC_BRANCH_ID" -d "$WORKDIR" --allow-target-env --ci=false --verbose 2>&1 | tee "$RUNNER_TEMP/log.txt"
+          kbc init -d "$WORKDIR" --allow-target-env --ci=false --verbose 2>&1 | tee "$RUNNER_TEMP/log.txt"
         fi
       shell: bash
