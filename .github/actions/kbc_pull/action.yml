@@ -42,29 +42,19 @@ runs:
           fi
         done
         
-        if [ -f "$WORKDIR/.keboola/manifest.json" ]; then
-          echo "Manifest file exists. Pulling..."
-          kbc pull -d "$WORKDIR" --force 2>&1 | tee "$RUNNER_TEMP/log.txt"
+        # Check if the working directory exists
+        if [ ! -d "$WORKDIR" ]; then
+            echo "Directory does not exist. Creating directory..."
+            mkdir -p "$WORKDIR"
         else
-          echo "Manifest file does not exist. Initializing..."
-          # Check if the directory exists
-          if [ -d "$WORKDIR" ]; then
-            echo "Directory '$WORKDIR' exists. Removing..."
-            rm -rf "$WORKDIR"
-            if [ $? -eq 0 ]; then
-              echo "Directory was successfully removed."
+            if [ -f "$WORKDIR/.keboola/manifest.json" ]; then
+                echo "Manifest file exists. Pulling..."
+                kbc pull -d "$WORKDIR" --force 2>&1 | tee "$RUNNER_TEMP/log.txt"
             else
-              echo "Failed to remove directory."
-              return 1
+                echo "No manifest file found. Removing contents. Initializing..."
+                rm -rf "$WORKDIR"/*
+                kbc init -d "$WORKDIR" --allow-target-env --ci=false --verbose 2>&1 | tee "$RUNNER_TEMP/log.txt"
             fi
-          fi
-          mkdir -p "$WORKDIR"
-          if [ $? -eq 0 ]; then
-            echo "Directory was successfully created."
-          else
-            echo "Failed to create directory."
-            return 1
-          fi
-          kbc init -d "$WORKDIR" --allow-target-env --ci=false --verbose 2>&1 | tee "$RUNNER_TEMP/log.txt"
         fi
+
       shell: bash
