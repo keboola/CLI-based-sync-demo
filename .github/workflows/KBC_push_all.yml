@@ -1,5 +1,4 @@
 name: Manual KBC Push All
-description: Push configurations to Keboola Connection projects (L0, L1)
 on:
   workflow_dispatch:
 permissions:
