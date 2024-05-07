@@ -54,7 +54,7 @@ runs:
         
         kbc init -d "$WORKDIR_TMP" --allow-target-env --ci=false 2>&1 | tee "$RUNNER_TEMP/log.txt"
 
-        cp "$WORKDIR_TMP/.keboola" "$WORKDIR/"
+        rsync -av --progress "$WORKDIR_TMP/.keboola" "$WORKDIR/"
         
         kbc push -d "$WORKDIR" --force --verbose 2>&1 | tee "$RUNNER_TEMP/log.txt"
       shell: bash
