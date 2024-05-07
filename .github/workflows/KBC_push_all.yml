@@ -1,5 +1,4 @@
-name: Manual KBC Push All
-description: Push configurations to Keboola Connection projects (L0, L1)
+name: Manual KBC Push (L0, L1) to Environment by branch
 on:
   workflow_dispatch:
 permissions:
@@ -24,17 +23,17 @@ jobs:
         uses: ./.github/actions/kbc_push
         with:
           workdir: "L0"
-          kbcStorageApiHost: ${{ secrets.L0_STACK_URL }}
-          kbcStorageApiToken: ${{ secrets.L0_TOKEN }}
-          kbcProjectId: ${{ vars.L0_PROJECT_ID }}
-          kbcBranches: ${{ vars.L0_BRANCH_ID }}
+          kbcStorageApiHost: ${{ vars.KBC_STORAGE_API_HOST_L0 }}
+          kbcStorageApiToken: ${{ secrets.KBC_STORAGE_API_TOKEN_L0 }}
+          kbcProjectId: ${{ vars.KBC_PROJECT_ID_L0 }}
+          kbcBranches: ${{ vars.KBC_BRANCHES_L0 }}
       
       - name: Push configurations to L1
         uses: ./.github/actions/kbc_push
         with:
           workdir: "L1"
-          kbcStorageApiHost: ${{ secrets.L1_STACK_URL }}
-          kbcStorageApiToken: ${{ secrets.L1_TOKEN }}
-          kbcProjectId: ${{ vars.L1_PROJECT_ID }}
-          kbcBranches: ${{ vars.L1_BRANCH_ID }}
+          kbcStorageApiHost: ${{ vars.KBC_STORAGE_API_HOST_L1 }}
+          kbcStorageApiToken: ${{ secrets.KBC_STORAGE_API_TOKEN_L1 }}
+          kbcProjectId: ${{ vars.KBC_PROJECT_ID_L1 }}
+          kbcBranches: ${{ vars.KBC_BRANCHES_L1 }}
       # End generated steps
