@@ -27,7 +27,7 @@ jobs:
           kbcStorageApiToken: ${{ secrets.KBC_STORAGE_API_TOKEN_L0 }}
           kbcProjectId: ${{ vars.KBC_PROJECT_ID_L0 }}
           kbcBranches: ${{ vars.KBC_BRANCHES_L0 }}
-      
+
       - name: Push configurations to L1
         uses: ./.github/actions/kbc_push
         with:
