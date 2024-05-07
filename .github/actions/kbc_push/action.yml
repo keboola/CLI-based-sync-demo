@@ -33,7 +33,6 @@ runs:
       run: |
         set -eo pipefail
 
-        # Kontrola, jestli jsou nastaveny potřebné proměnné prostředí
         required_vars=(KBC_STORAGE_API_TOKEN KBC_STORAGE_API_HOST KBC_PROJECT_ID KBC_BRANCHES WORKDIR)
         for var in "${required_vars[@]}"; do
           if [ -z "${!var}" ]; then
@@ -42,6 +41,20 @@ runs:
           fi
         done
         
-        # Spuštění kbc push s logováním
+        WORKDIR_TMP="$WORKDIR"_tmp
+        
+        if [ ! -d "$WORKDIR_TMP" ]; then
+          mkdir -p "$WORKDIR_TMP"
+        else
+            if [ -n "$WORKDIR_TMP" ] && [ "$WORKDIR_TMP" != "/" ]; then
+                rm -rf "$WORKDIR_TMP"
+                mkdir -p "$WORKDIR_TMP"
+            fi
+        fi
+        
+        kbc init -d "$WORKDIR_TMP" --allow-target-env --ci=false 2>&1 | tee "$RUNNER_TEMP/log.txt"
+
+        cp "$WORKDIR_TMP/.keboola" "$WORKDIR/"
+        
         kbc push -d "$WORKDIR" --force --verbose 2>&1 | tee "$RUNNER_TEMP/log.txt"
       shell: bash
