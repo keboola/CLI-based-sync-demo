@@ -4,7 +4,7 @@ inputs:
   workdir:
     description: Working directory
     required: true
-  kbcUrl:
+  kbcStorageApiHost:
     description: Keboola Connection Stack URL
     required: true
   kbcStorageApiToken:
@@ -13,7 +13,7 @@ inputs:
   kbcProjectId:
     description: Keboola Connection Project ID
     required: true
-  kbcBranchId:
+  kbcBranches:
     description: Keboola Connection Branch ID
     required: true
 runs:
@@ -25,8 +25,8 @@ runs:
         # filled by the script
         KBC_STORAGE_API_TOKEN: ${{ inputs.kbcStorageApiToken }}
         KBC_PROJECT_ID: ${{ inputs.kbcProjectId }}
-        KBC_BRANCHES: ${{ inputs.kbcBranchId }}
-        KBC_STORAGE_API_HOST: ${{ inputs.kbcUrl }}
+        KBC_BRANCHES: ${{ inputs.kbcBranches }}
+        KBC_STORAGE_API_HOST: ${{ inputs.kbcStorageApiHost }}
         WORKDIR: ${{ inputs.workdir }}
       # filled by the script
       id: kbc_init
@@ -41,7 +41,6 @@ runs:
             exit 1
           fi
         done
-        
         
         # Check if the working directory exists
         if [ ! -d "$WORKDIR" ]; then
