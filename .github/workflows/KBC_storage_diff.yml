@@ -1,0 +1,68 @@
+name: Manual Storage Diff
+on:
+  workflow_dispatch:
+    inputs:
+      destination_project:
+        description: 'Which environment to compare against (will be destination)'
+        required: true
+        default: ''
+permissions:
+  contents: write
+jobs:
+  get_prod_env:
+    runs-on: ubuntu-latest
+    environment:  'prod'
+    steps:
+      - name: Set production environment variables
+        run: |
+          echo "DEV_KBC_PROJECT_ID_L0=${{ vars.KBC_PROJECT_ID_L0 }}" > .env.prod
+
+      - name: Upload production environment variables
+        uses: actions/upload-artifact@v3
+        with:
+          name: prod-env
+          path: ".env.prod"
+
+  get_dev_env:
+    runs-on: ubuntu-latest
+    environment: 'dev'
+    steps:
+      - name: Set production environment variables
+        run: |
+          echo "PROD_KBC_PROJECT_ID_L0=${{ vars.KBC_PROJECT_ID_L0 }}" > .env.dev
+
+      - name: Upload production environment variables
+        uses: actions/upload-artifact@v3
+        with:
+          name: dev-env
+          path: ".env.dev"
+
+  echo:
+    runs-on: ubuntu-latest
+    needs: [ get_prod_env, get_dev_env ]
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Download prod environment variables
+        uses: actions/download-artifact@v3
+        with:
+          name: prod-env
+          path: .
+
+      - name: Download dev environment variables
+        uses: actions/download-artifact@v3
+        with:
+          name: dev-env
+          path: .
+
+      - name: Set environment variables
+        run: |
+          cat .env.prod >> $GITHUB_ENV
+          cat .env.dev >> $GITHUB_ENV
+
+      - name: Use variables from both environments
+        run: |
+          echo "Using prod project_id L0: $PROD_KBC_PROJECT_ID_L0"
+          echo "Using dev project_id L0: $DEV_KBC_PROJECT_ID_L0"

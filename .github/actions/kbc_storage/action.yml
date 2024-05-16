@@ -1,0 +1,59 @@
+name: Keboola Storage structure comparing
+description: Pulling from Keboola both env projects structure and comparing, generate
+inputs:
+  source_workdir:
+    description: Working directory
+    required: true
+  source_kbcStorageApiHost:
+    description: Keboola Connection Stack URL
+    required: true
+  source_kbcStorageApiToken:
+    description: Keboola Connection Storage API Token
+    required: true
+  source_kbcProjectId:
+    description: Keboola Connection Project ID
+    required: true
+  source_kbcBranches:
+    description: Keboola Connection Branch ID
+    required: true
+runs:
+  using: "composite"
+  steps:
+    # Pull remote project's state
+    - name: Init data from Keboola connection project
+      env:
+        # filled by the script
+        KBC_STORAGE_API_TOKEN: ${{ inputs.source_kbcStorageApiToken }}
+        KBC_PROJECT_ID: ${{ inputs.source_kbcProjectId }}
+        KBC_BRANCHES: ${{ inputs.source_kbcBranches }}
+        KBC_STORAGE_API_HOST: ${{ inputs.source_kbcStorageApiHost }}
+        WORKDIR: ${{ inputs.source_workdir }}
+      # filled by the script
+      id: kbc_init
+      run: |
+        set -eo pipefail
+
+        # Check, if required environment variables are set
+        required_vars=(KBC_STORAGE_API_TOKEN KBC_STORAGE_API_HOST KBC_PROJECT_ID KBC_BRANCHES WORKDIR)
+        for var in "${required_vars[@]}"; do
+          if [ -z "${!var}" ]; then
+            echo "Error: Environment variable $var is not set." >&2
+            exit 1
+          fi
+        done
+        
+        # Working directory is ready and empty
+        if [ ! -d "$WORKDIR" ]; then
+          mkdir -p "$WORKDIR"
+        else
+            if [ -n "$WORKDIR" ] && [ "$WORKDIR" != "/" ]; then
+                rm -rf "$WORKDIR"
+                mkdir -p "$WORKDIR"
+            fi
+        fi
+        
+        # Init data from Keboola connection project
+        kbc init -d "$WORKDIR" --allow-target-env --ci=false 2>&1 | tee "$RUNNER_TEMP/log.txt"
+        
+        echo "/.keboola/" >> "$WORKDIR"/.gitignore
+      shell: bash
