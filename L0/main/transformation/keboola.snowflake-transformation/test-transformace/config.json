@@ -1,3 +1,13 @@
 {
-  "parameters": {}
+  "parameters": {},
+  "storage": {
+    "output": {
+      "tables": [
+        {
+          "destination": "out.c-test-transformace.tes",
+          "source": "tes"
+        }
+      ]
+    }
+  }
 }
