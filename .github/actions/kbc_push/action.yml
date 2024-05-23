@@ -25,7 +25,7 @@ runs:
         # filled by the script
         KBC_STORAGE_API_TOKEN: ${{ inputs.kbcStorageApiToken }}
         KBC_PROJECT_ID: ${{ inputs.kbcProjectId }}
-        KBC_BRANCHES: ${{ inputs.kbcBranches }}
+        KBC_BRANCH_ID: ${{ inputs.kbcBranches }}
         KBC_STORAGE_API_HOST: ${{ inputs.kbcStorageApiHost }}
         WORKDIR: ${{ inputs.workdir }}
       # filled by the script
