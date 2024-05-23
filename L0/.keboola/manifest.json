@@ -40,22 +40,6 @@
   "configurations": [
     {
       "branchId": 865218,
-      "componentId": "keboola.app-merge-branch-storage",
-      "id": "1127171339",
-      "path": "application/keboola.app-merge-branch-storage/my-merge-branch-storage-application",
-      "rows": [
-        {
-          "id": "1127172034",
-          "path": "rows/column-metadata"
-        },
-        {
-          "id": "1127173373",
-          "path": "rows/add-column"
-        }
-      ]
-    },
-    {
-      "branchId": 865218,
       "componentId": "keboola.ex-google-drive",
       "id": "1119451229",
       "path": "extractor/keboola.ex-google-drive/my-google-sheets-data-source",
