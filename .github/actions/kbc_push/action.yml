@@ -47,12 +47,12 @@ runs:
         mkdir -p "$WORKDIR_TMP"
        
         # Need a new .keboola directory
-        kbc init -d "$WORKDIR_TMP" --allow-target-env --ci=false 2>&1 | tee "$RUNNER_TEMP/log.txt"
+        #kbc init -d "$WORKDIR_TMP" --allow-target-env --ci=false 2>&1 | tee "$RUNNER_TEMP/log.txt"
         
         #python3 .github/actions/kbc_push/validations/secure_variable_validation.py "$WORKDIR_TMP"
         
         # Copy .keboola directory
-        rsync -av --progress "$WORKDIR_TMP/.keboola" "$WORKDIR/"
+        #rsync -av --progress "$WORKDIR_TMP/.keboola" "$WORKDIR/"
         
         # push to Keboola Connection
         kbc push -d "$WORKDIR" --force --verbose 2>&1 | tee "$RUNNER_TEMP/log.txt"
