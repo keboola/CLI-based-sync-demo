@@ -1,0 +1,12 @@
+{
+  "parameters": {
+    "action": "ADD_COLUMN",
+    "values": [
+      "Text"
+    ],
+    "resourceId": "out.c-create-table-test.out",
+    "rawResourceJson": [
+      "Text"
+    ]
+  }
+}
