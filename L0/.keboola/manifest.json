@@ -89,6 +89,13 @@
           "path": "rows/out"
         }
       ]
+    },
+    {
+      "branchId": 865218,
+      "componentId": "keboola.wr-db-snowflake",
+      "id": "1137270688",
+      "path": "writer/keboola.wr-db-snowflake/my-snowflake-data-destination-test",
+      "rows": []
     }
   ]
 }
