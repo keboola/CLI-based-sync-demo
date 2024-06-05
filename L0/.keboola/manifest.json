@@ -70,7 +70,7 @@
       "branchId": 865218,
       "componentId": "keboola.wr-db-snowflake",
       "id": "1119462008",
-      "path": "writer/keboola.wr-db-snowflake/my-snowflake-data-destination",
+      "path": "writer/keboola.wr-db-snowflake/change",
       "rows": [
         {
           "id": "1119462395",
