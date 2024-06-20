@@ -1,0 +1,9 @@
+name: Keboola Secret Validation
+description: Pulling from Keboola both env projects configurations and search existing secrets
+runs:
+  using: "composite"
+  steps:
+    - name: kbc_init_secret_validation
+      run: |
+        "echo" "Hello ! while Keboola secret validation"
+      shell: bash

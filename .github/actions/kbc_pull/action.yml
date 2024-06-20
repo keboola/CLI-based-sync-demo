@@ -19,6 +19,7 @@ inputs:
 runs:
   using: "composite"
   steps:
+    - uses: ./.github/actions/kbc_secret_validation
     # Pull remote project's state
     - name: Init data from Keboola connection project
       env:
@@ -28,6 +29,7 @@ runs:
         KBC_BRANCH_ID: ${{ inputs.kbcBranchId }}
         KBC_STORAGE_API_HOST: ${{ inputs.kbcStorageApiHost }}
         WORKDIR: ${{ inputs.workdir }}
+
       # filled by the script
       id: kbc_init
       run: |

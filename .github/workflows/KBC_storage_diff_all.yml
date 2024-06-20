@@ -1,0 +1,90 @@
+name: Manual Storage Diff All
+on:
+  workflow_dispatch:
+    inputs:
+      dest_env:
+        description: 'Which environment to compare against (will be destination)'
+        required: true
+        default: ''
+permissions:
+  contents: write
+jobs:
+  get_current_branch_env:
+    runs-on: ubuntu-latest
+    environment: |-
+      ${{
+         github.ref_name == 'main' && 'prod'
+      || github.ref_name == 'dev' && 'dev'
+      }}
+    steps:
+      - name: Get environment variables
+        run: |
+          echo "SRC_WORKDIR_L0: "L0" > .env.src
+          echo "SRC_KBC_STORAGE_API_HOST_L0=${{ vars.KBC_STORAGE_API_HOST_L0 }}" >> .env.src
+          echo "SRC_KBC_STORAGE_API_TOKEN_L0=${{ vars.KBC_STORAGE_API_TOKEN_L0 }}" >> .env.src
+          echo "SRC_KBC_PROJECT_ID_L0=${{ vars.KBC_PROJECT_ID_L0 }}" >> .env.src
+          echo "SRC_KBC_BRANCHES_L0=${{ vars.KBC_BRANCHES_L0 }}" >> .env.src
+          echo "SRC_WORKDIR_L1: "L1" >> .env.src
+          echo "SRC_KBC_STORAGE_API_HOST_L1=${{ vars.KBC_STORAGE_API_HOST_L1 }}" >> .env.src
+          echo "SRC_KBC_STORAGE_API_TOKEN_L1=${{ secrets.KBC_STORAGE_API_TOKEN_L1 }}" >> .env.src
+          echo "SRC_KBC_PROJECT_ID_L1=${{ vars.KBC_PROJECT_ID_L1 }}" >> .env.src
+          echo "SRC_KBC_BRANCHES_L1=${{ vars.KBC_BRANCHES_L1 }}" >> .env.src
+
+      - name: Save variables to file
+        uses: actions/upload-artifact@v3
+        with:
+          name: src-env
+          path: ".env.src"
+
+  get_dest_env:
+    runs-on: ubuntu-latest
+    environment: ${{ inputs.dest_env }}
+    steps:
+      - name: Set production environment variables
+        run: |
+          echo "DEST_WORKDIR_L0: "L0" > .env.dest
+          echo "DEST_KBC_STORAGE_API_HOST_L0=${{ vars.KBC_STORAGE_API_HOST_L0 }}" >> .env.dest
+          echo "DEST_KBC_STORAGE_API_TOKEN_L0=${{ vars.KBC_STORAGE_API_TOKEN_L0 }}" >> .env.dest
+          echo "DEST_KBC_PROJECT_ID_L0=${{ vars.KBC_PROJECT_ID_L0 }}" >> .env.dest
+          echo "DEST_KBC_BRANCHES_L0=${{ vars.KBC_BRANCHES_L0 }}" >> .env.dest
+          echo "DEST_WORKDIR_L1: "L1" >> .env.dest
+          echo "DEST_KBC_STORAGE_API_HOST_L1=${{ vars.KBC_STORAGE_API_HOST_L1 }}" >> .env.dest
+          echo "DEST_KBC_STORAGE_API_TOKEN_L1=${{ secrets.KBC_STORAGE_API_TOKEN_L1 }} >> .env.dest
+          echo "DEST_KBC_PROJECT_ID_L1=${{ vars.KBC_PROJECT_ID_L1 }}" >> .env.dest
+          echo "DEST_KBC_BRANCHES_L1=${{ vars.KBC_BRANCHES_L1 }}" >> .env.dest
+
+      - name: Save variables to file
+        uses: actions/upload-artifact@v3
+        with:
+          name: dest-env
+          path: ".env.dest"
+
+  echo:
+    runs-on: ubuntu-latest
+    needs: [ get_current_branch_env, get_dest_env ]
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Download prod environment variables
+        uses: actions/download-artifact@v3
+        with:
+          name: src-env
+          path: .
+
+      - name: Download dev environment variables
+        uses: actions/download-artifact@v3
+        with:
+          name: dest-env
+          path: .
+
+      - name: Set environment variables
+        run: |
+          cat .env.src >> $GITHUB_ENV
+          cat .env.dest >> $GITHUB_ENV
+
+      - name: Compare storage structure
+        run: |
+          python3 .github/actions/kbc_push/storage/main.py --source-workdir="$SRC_WORKDIR_L0" --source-host="$SRC_KBC_STORAGE_API_HOST_L0" --source-token="$SRC_KBC_STORAGE_API_TOKEN_L0" --dest-workdir="$DEST_WORKDIR_L0" --dest-host="$DEST_KBC_STORAGE_API_HOST_L0" --dest-token="$DEST_KBC_STORAGE_API_TOKEN_L0"
+          python3 .github/actions/kbc_push/storage/main.py --source-workdir="$SRC_WORKDIR_L1" --source-host="$SRC_KBC_STORAGE_API_HOST_L1" --source-token="$SRC_KBC_STORAGE_API_TOKEN_L1" --dest-workdir="$DEST_WORKDIR_L1" --dest-host="$DEST_KBC_STORAGE_API_HOST_L1" --dest-token="$DEST_KBC_STORAGE_API_TOKEN_L1"
