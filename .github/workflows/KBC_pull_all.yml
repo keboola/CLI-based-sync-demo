@@ -1,4 +1,4 @@
-name: Manual KBC Pull (L0, L1) from Environment by branch
+name: Manual KBC Pull (L0, L1)
 on:
   workflow_dispatch:
 permissions:
