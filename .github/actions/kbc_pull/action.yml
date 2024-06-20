@@ -19,7 +19,6 @@ inputs:
 runs:
   using: "composite"
   steps:
-    - uses: ./.github/actions/kbc_secret_validation
     # Pull remote project's state
     - name: Init data from Keboola connection project
       env:
@@ -58,3 +57,6 @@ runs:
         kbc init -d "$WORKDIR" --allow-target-env --ci=false 2>&1 | tee "$RUNNER_TEMP/log.txt"
 
       shell: bash
+      # Pull configuration from Keboola connection project and check secrets
+    - name: validation_after
+      uses: ./.github/actions/kbc_secret_validation
