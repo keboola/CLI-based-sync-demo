@@ -1,9 +1,20 @@
 name: Manual KBC Pull (L0, L1)
 on:
   workflow_dispatch:
+    inputs:
+      dest_env:
+        description: 'Which environment to compare against (will be destination)'
+        required: true
+        default: ''
 permissions:
   contents: write
 jobs:
+  # jak přidat validace?
+  # přes artifacty je to security risk
+  # ideál bude udělat zvlášt akci na vytažení klíčů z vaulut, storage struktury a následně porovnání
+  # bude se to muset odehrát až v akci!, takže definice environmentu by měla být až tam
+  # včetně všech proměnných
+
   Pull_All:
     # Dynamic generated value
     environment: |-
@@ -27,7 +38,6 @@ jobs:
           kbcStorageApiToken: ${{ secrets.KBC_STORAGE_API_TOKEN_L0 }}
           kbcProjectId: ${{ vars.KBC_PROJECT_ID_L0 }}
           kbcBranchId: ${{ vars.KBC_BRANCH_ID_L0 }}
-      
       - name: Pull configurations from L1
         uses: ./.github/actions/kbc_pull
         with:

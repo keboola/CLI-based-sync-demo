@@ -3,7 +3,8 @@ description: Pulling from Keboola both env projects configurations and search ex
 runs:
   using: "composite"
   steps:
-    - name: kbc_init_secret_validation
+    - env:
+        kbcProjectId: ${{ vars.KBC_PROJECT_ID_L0 }}
       run: |
-        "echo" "Hello ! while Keboola secret validation"
+        "echo" "Hello ! while Keboola secret validation $kbcProjectId"
       shell: bash
