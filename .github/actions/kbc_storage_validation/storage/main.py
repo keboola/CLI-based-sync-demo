@@ -20,6 +20,7 @@ def check_parameters():
     parser.add_argument('--dest-token', type=str, required=True)
 
     # Check for empty strings
+    args = parser.parse_args()
     for arg, value in vars(args).items():
         if value.strip() == "":
             parser.error(f"The argument {arg} cannot be an empty string")
