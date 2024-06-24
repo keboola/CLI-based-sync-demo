@@ -40,5 +40,5 @@ if __name__ == '__main__':
     parser.add_argument('--token', required=True, help='KBC token')
     parser.add_argument('--destination-file', required=True, help='Destination file')
     args = parser.parse_args()
-
+    # TODO add empty var check
     StoragePull(args.host, args.token, args.destination_file).pull()

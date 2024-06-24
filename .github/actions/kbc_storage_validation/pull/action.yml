@@ -19,16 +19,11 @@ inputs:
 runs:
   using: "composite"
   steps:
-    - name: Set variables
-      env:
-        DEST_FILE: ${{ inputs.workdir }}_${{ inputs.kbcProjectId }}
-      run: |
-        echo "DEST_FILE=$WORKDIR.json" >> "${GITHUB_ENV}"
-      shell: bash
     - name: Pull
       env:
         KBC_STORAGE_API_TOKEN: ${{ inputs.kbcStorageApiToken }}
         KBC_STORAGE_API_HOST: ${{ inputs.kbcStorageApiHost }}
+        DEST_FILE: ${{ inputs.workdir }}_${{ inputs.kbcProjectId }}
       shell: bash
       run: |
         python3 .github/actions/kbc_storage_validation/pull/storage_pull.py --host="$KBC_STORAGE_API_HOST" --token="$KBC_STORAGE_API_TOKEN" --destination-file="$DEST_FILE"
