@@ -20,15 +20,16 @@ runs:
   using: "composite"
   steps:
     - name: Pull
+      id: pull
       env:
         KBC_STORAGE_API_TOKEN: ${{ inputs.kbcStorageApiToken }}
         KBC_STORAGE_API_HOST: ${{ inputs.kbcStorageApiHost }}
-        DEST_FILE: ${{ inputs.workdir }}_${{ inputs.kbcProjectId }}
       shell: bash
       run: |
-        python3 .github/actions/kbc_storage_validation/pull/storage_pull.py --host="$KBC_STORAGE_API_HOST" --token="$KBC_STORAGE_API_TOKEN" --destination-file="$DEST_FILE"
+        echo "dest_file=${{ inputs.workdir }}_${{ inputs.kbcProjectId }}.json" >> $GITHUB_OUTPUT
+        python3 .github/actions/kbc_storage_validation/pull/storage_pull.py --host="$KBC_STORAGE_API_HOST" --token="$KBC_STORAGE_API_TOKEN" --destination-file="$dest_file"
     - name: Upload output file
       uses: actions/upload-artifact@v4
       with:
-          name: $DEST_FILE
-          path: $DEST_FILE
+        name: ${{ steps.pull.outputs.dest_file }}
+        path: ${{ steps.pull.outputs.dest_file }}
