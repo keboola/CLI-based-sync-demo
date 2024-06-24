@@ -17,53 +17,24 @@ jobs:
       || github.ref_name == 'dev' && 'dev'
       }}
     outputs:
-      WORKDIR_L0: ${{ steps.L0.outputs.WORKDIR_L0 }}
-      KBC_STORAGE_API_HOST_L0: ${{ steps.L0.outputs.KBC_STORAGE_API_HOST_L0 }}
-      KBC_STORAGE_API_TOKEN_L0: ${{ steps.L0.outputs.KBC_STORAGE_API_TOKEN_L0 }}
-
-      WORKDIR_L1: ${{ steps.L1.outputs.WORKDIR_L1 }}
-      KBC_STORAGE_API_HOST_L1: ${{ steps.L1.outputs.KBC_STORAGE_API_HOST_L1 }}
-      KBC_STORAGE_API_TOKEN_L1: ${{ steps.L1.outputs.KBC_STORAGE_API_TOKEN_L1 }}
-    steps:
-      - name: Get L0 vars
-        id: L0
-        run: |
-          echo "WORKDIR_L0=L0" >> "${GITHUB_OUTPUT}"
-          echo "KBC_STORAGE_API_HOST_L0=${{ vars.KBC_STORAGE_API_HOST_L0 }}" >> "${GITHUB_OUTPUT}"
-          echo "KBC_STORAGE_API_TOKEN_L0=${{ secrets.KBC_STORAGE_API_TOKEN_L0 }}" >> "${GITHUB_OUTPUT}"
-
-      - name: Get L1 vars
-        id: L1
-        run: |
-          echo "WORKDIR_L1=L1" >> "${GITHUB_OUTPUT}"
-          echo "KBC_STORAGE_API_HOST_L1=${{ vars.KBC_STORAGE_API_HOST_L1 }}" >> "${GITHUB_OUTPUT}"
-          echo "KBC_STORAGE_API_TOKEN_L1=${{ secrets.KBC_STORAGE_API_TOKEN_L1 }}" >> "${GITHUB_OUTPUT}"
+      WORKDIR_L0: "L0"
+      KBC_STORAGE_API_HOST_L0: ${{ vars.KBC_STORAGE_API_HOST_L0 }}
+      KBC_STORAGE_API_TOKEN_L0: ${{ secrets.KBC_STORAGE_API_TOKEN_L0 }}
+      WORKDIR_L1: "L1"
+      KBC_STORAGE_API_HOST_L1: ${{ vars.KBC_STORAGE_API_HOST_L1 }}
+      KBC_STORAGE_API_TOKEN_L1: ${{ secrets.KBC_STORAGE_API_TOKEN_L1 }}
 
   dest_vars:
     runs-on: ubuntu-latest
     environment: ${{ inputs.dest_env }}
     outputs:
-        WORKDIR_L0: ${{ steps.L0.outputs.WORKDIR_L0 }}
+        WORKDIR_L0: "L0"
         KBC_STORAGE_API_HOST_L0: ${{ vars.KBC_STORAGE_API_HOST_L0 }}
-        KBC_STORAGE_API_TOKEN_L0: ${{ steps.L0.outputs.KBC_STORAGE_API_TOKEN_L0 }}
+        KBC_STORAGE_API_TOKEN_L0: ${{ secrets.KBC_STORAGE_API_TOKEN_L0 }}
 
-        WORKDIR_L1: ${{ steps.L1.outputs.WORKDIR_L1 }}
-        KBC_STORAGE_API_HOST_L1: ${{ steps.L1.outputs.KBC_STORAGE_API_HOST_L1 }}
-        KBC_STORAGE_API_TOKEN_L1: ${{ steps.L1.outputs.KBC_STORAGE_API_TOKEN_L1 }}
-    steps:
-      - name: Get L0 vars
-        id: L0
-        run: |
-          echo "WORKDIR_L0=L0" >> "${GITHUB_OUTPUT}"
-          echo "KBC_STORAGE_API_HOST_L0=${{ vars.KBC_STORAGE_API_HOST_L0 }}" >> "${GITHUB_OUTPUT}"
-          echo "KBC_STORAGE_API_TOKEN_L0=${{ secrets.KBC_STORAGE_API_TOKEN_L0 }}" >> "${GITHUB_OUTPUT}"
-
-      - name: Get L1 vars
-        id: L1
-        run: |
-          echo "WORKDIR_L1=L1" >> "${GITHUB_OUTPUT}"
-          echo "KBC_STORAGE_API_HOST_L1=${{ vars.KBC_STORAGE_API_HOST_L1 }}" >> "${GITHUB_OUTPUT}"
-          echo "KBC_STORAGE_API_TOKEN_L1=${{ secrets.KBC_STORAGE_API_TOKEN_L1 }}" >> "${GITHUB_OUTPUT}"
+        WORKDIR_L1: "L1"
+        KBC_STORAGE_API_HOST_L1: ${{ vars.KBC_STORAGE_API_HOST_L1 }}
+        KBC_STORAGE_API_TOKEN_L1: ${{ secrets.KBC_STORAGE_API_TOKEN_L1 }}
 
   run_storage_diff_for_all:
     runs-on: ubuntu-latest
@@ -82,3 +53,4 @@ jobs:
             --dest-workdir="${{ needs.dest_vars.outputs.WORKDIR_L0 }}" \
             --dest-host="${{ needs.dest_vars.outputs.KBC_STORAGE_API_HOST_L0 }}" \
             --dest-token="${{ needs.dest_vars.outputs.KBC_STORAGE_API_TOKEN_L0 }}"
+          # TODO handle the output to commit description

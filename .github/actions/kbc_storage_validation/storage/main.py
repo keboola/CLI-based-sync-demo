@@ -18,6 +18,12 @@ def check_parameters():
     parser.add_argument('--dest-workdir', type=str, required=True)
     parser.add_argument('--dest-host', type=str, required=True)
     parser.add_argument('--dest-token', type=str, required=True)
+
+    # Check for empty strings
+    for arg, value in vars(args).items():
+        if value.strip() == "":
+            parser.error(f"The argument {arg} cannot be an empty string")
+
     return parser.parse_args()
 
 
