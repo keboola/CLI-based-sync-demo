@@ -24,11 +24,12 @@ jobs:
       WORKDIR_L1: "L1"
       KBC_STORAGE_API_HOST_L1: ${{ vars.KBC_STORAGE_API_HOST_L1 }}
       KBC_STORAGE_API_TOKEN_L1: ${{ steps.L1.outputs.KBC_STORAGE_API_TOKEN_L1 }}
-
+    env:
+      token_L0: ${{ secrets.KBC_STORAGE_API_TOKEN_L0 }}
     steps:
       - name: L0
         id: L0
-        run: echo "KBC_STORAGE_API_TOKEN_L0=::add-mask::${{ secrets.KBC_STORAGE_API_TOKEN_L0 }}" >> "${GITHUB_OUTPUT}"
+        run: echo "KBC_STORAGE_API_TOKEN_L0=::add-mask::$token_L0" >> "${GITHUB_OUTPUT}"
 
       - name: L1
         id: L1
