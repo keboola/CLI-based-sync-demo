@@ -33,7 +33,7 @@ runs:
         KBC_STORAGE_API_HOST: ${{ inputs.kbcStorageApiHost }}
       shell: bash
       run: |
-        python3 .github/actions/kbc_storage_validation/pull/storage_pull.py --host="$SRC_KBC_STORAGE_API_HOST" --token="$SRC_KBC_STORAGE_API_TOKEN" --destination-file="$DEST_FILE"
+        python3 .github/actions/kbc_storage_validation_pull/storage_pull.py --host="$SRC_KBC_STORAGE_API_HOST" --token="$SRC_KBC_STORAGE_API_TOKEN" --destination-file="$DEST_FILE"
     - name: Upload output file
       uses: actions/upload-artifact@v4
       with:
