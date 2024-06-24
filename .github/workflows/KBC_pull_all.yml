@@ -11,6 +11,7 @@ permissions:
 jobs:
   # jak přidat validace?
   # přes artifacty je to security risk
+  # >>> co to udělat přes export do GIHUB_ENV? Nebo GITHUB_OUTPUT? <<<
   # ideál bude udělat zvlášt akci na vytažení klíčů z vaulut, storage struktury a následně porovnání
   # bude se to muset odehrát až v akci!, takže definice environmentu by měla být až tam
   # včetně všech proměnných
@@ -38,6 +39,7 @@ jobs:
           kbcStorageApiToken: ${{ secrets.KBC_STORAGE_API_TOKEN_L0 }}
           kbcProjectId: ${{ vars.KBC_PROJECT_ID_L0 }}
           kbcBranchId: ${{ vars.KBC_BRANCH_ID_L0 }}
+
       - name: Pull configurations from L1
         uses: ./.github/actions/kbc_pull
         with:

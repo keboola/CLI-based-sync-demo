@@ -58,5 +58,8 @@ runs:
 
       shell: bash
       # Pull configuration from Keboola connection project and check secrets
+    - name: project_detail
+      uses: ./.github/actions/kbc_project_detail
+
     - name: validation_after
       uses: ./.github/actions/kbc_secret_validation
