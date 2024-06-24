@@ -45,7 +45,7 @@ jobs:
           
           echo "DEST_WORKDIR_L1=L1" >> "${GITHUB_ENV}"
           echo "DEST_KBC_STORAGE_API_HOST_L1=${{ vars.KBC_STORAGE_API_HOST_L1 }}" >> "${GITHUB_ENV}"
-          echo "DEST_KBC_STORAGE_API_TOKEN_L1=${{ secrets.KBC_STORAGE_API_TOKEN_L1 }} >> "${GITHUB_ENV}"
+          echo "DEST_KBC_STORAGE_API_TOKEN_L1=${{ secrets.KBC_STORAGE_API_TOKEN_L1 }}" >> "${GITHUB_ENV}"
           echo "DEST_KBC_PROJECT_ID_L1=${{ vars.KBC_PROJECT_ID_L1 }}" >> "${GITHUB_ENV}"
           echo "DEST_KBC_BRANCHES_L1=${{ vars.KBC_BRANCHES_L1 }}" >> "${GITHUB_ENV}"
 
