@@ -19,15 +19,20 @@ jobs:
     outputs:
       WORKDIR_L0: "L0"
       KBC_STORAGE_API_HOST_L0: ${{ vars.KBC_STORAGE_API_HOST_L0 }}
-      KBC_STORAGE_API_TOKEN_L0: ${{ secrets.KBC_STORAGE_API_TOKEN_L0 }}
+      KBC_STORAGE_API_TOKEN_L0: ${{ steps.L0.outputs.KBC_STORAGE_API_TOKEN_L0 }}
 
       WORKDIR_L1: "L1"
       KBC_STORAGE_API_HOST_L1: ${{ vars.KBC_STORAGE_API_HOST_L1 }}
       KBC_STORAGE_API_TOKEN_L1: ${{ secrets.KBC_STORAGE_API_TOKEN_L1 }}
 
     steps:
-      - name: Echo
-        run: echo "Get variables only!"
+      - name: L0
+        id: L0
+        run: echo "KBC_STORAGE_API_TOKEN_L0=::add-mask::${{ secrets.KBC_STORAGE_API_TOKEN_L0 }}" >> "${GITHUB_OUTPUT}"
+
+      - name: L1
+        id: L1
+        run: echo "KBC_STORAGE_API_TOKEN_L1=${{ secrets.KBC_STORAGE_API_TOKEN_L1 }}" >> "${GITHUB_OUTPUT}"
 
   dest_vars:
     runs-on: ubuntu-latest
@@ -35,7 +40,7 @@ jobs:
     outputs:
         WORKDIR_L0: "L0"
         KBC_STORAGE_API_HOST_L0: ${{ vars.KBC_STORAGE_API_HOST_L0 }}
-        KBC_STORAGE_API_TOKEN_L0: ${{ secrets.KBC_STORAGE_API_TOKEN_L0 }}
+        KBC_STORAGE_API_TOKEN_L0: ::add-mask::${{ secrets.KBC_STORAGE_API_TOKEN_L0 }}
 
         WORKDIR_L1: "L1"
         KBC_STORAGE_API_HOST_L1: ${{ vars.KBC_STORAGE_API_HOST_L1 }}
