@@ -31,8 +31,8 @@ def check_parameters():
 if __name__ == '__main__':
     args = check_parameters()
     print("token_here")
-    print(args.source_token[3:4])
-    print(args.dest_token[3:4])
+    print(args.source_token[2:8])
+    print(args.dest_token[2:8])
     StorageDiff(
         source_workdir=args.source_workdir,
         source_host=args.source_host,
