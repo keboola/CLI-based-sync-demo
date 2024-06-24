@@ -18,7 +18,7 @@ jobs:
       }}
     steps:
       - name: Get environment variables for actual branch
-        uses: ./.github/actions/kbc_storage_validation/pull
+        uses: ./.github/actions/kbc_storage_validation_pull
         with:
           workdir: "L0"
           kbcStorageApiHost: ${{ vars.KBC_STORAGE_API_HOST_L0 }}
