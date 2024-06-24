@@ -59,5 +59,7 @@ jobs:
 
       - name: Compare storage structure
         run: |
+          echo "workdir: $SRC_WORKDIR_L0"
+          echo "host: ${{ env.DEST_KBC_STORAGE_API_HOST_L1 }}"
           python3 .github/actions/kbc_storage_validation/storage/main.py --source-workdir="$SRC_WORKDIR_L0" --source-host="$SRC_KBC_STORAGE_API_HOST_L0" --source-token="$SRC_KBC_STORAGE_API_TOKEN_L0" --dest-workdir="$DEST_WORKDIR_L0" --dest-host="$DEST_KBC_STORAGE_API_HOST_L0" --dest-token="$DEST_KBC_STORAGE_API_TOKEN_L0"
           python3 .github/actions/kbc_storage_validation/storage/main.py --source-workdir="$SRC_WORKDIR_L1" --source-host="$SRC_KBC_STORAGE_API_HOST_L1" --source-token="$SRC_KBC_STORAGE_API_TOKEN_L1" --dest-workdir="$DEST_WORKDIR_L1" --dest-host="$DEST_KBC_STORAGE_API_HOST_L1" --dest-token="$DEST_KBC_STORAGE_API_TOKEN_L1"
