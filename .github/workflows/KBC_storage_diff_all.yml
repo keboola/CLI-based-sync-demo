@@ -9,7 +9,7 @@ on:
 permissions:
   contents: write
 jobs:
-  get_current_branch_env:
+  pull_storage_structure_current_branch:
     runs-on: ubuntu-latest
     environment: |-
       ${{
@@ -18,18 +18,13 @@ jobs:
       }}
     steps:
       - name: Get environment variables for actual branch
-        run: |
-          echo "SRC_WORKDIR_L0=L0" >> "${GITHUB_ENV}"
-          echo "SRC_KBC_STORAGE_API_HOST_L0=${{ vars.KBC_STORAGE_API_HOST_L0 }}" >> "${GITHUB_ENV}"
-          echo "SRC_KBC_STORAGE_API_TOKEN_L0=${{ secrets.KBC_STORAGE_API_TOKEN_L0 }}" >> "${GITHUB_ENV}"
-          echo "SRC_KBC_PROJECT_ID_L0=${{ vars.KBC_PROJECT_ID_L0 }}" >> "${GITHUB_ENV}"
-          echo "SRC_KBC_BRANCHES_L0=${{ vars.KBC_BRANCHES_L0 }}" >> "${GITHUB_ENV}"
-          
-          echo "SRC_WORKDIR_L1=L1" >> "${GITHUB_ENV}"
-          echo "SRC_KBC_STORAGE_API_HOST_L1=${{ vars.KBC_STORAGE_API_HOST_L1 }}" >> "${GITHUB_ENV}"
-          echo "SRC_KBC_STORAGE_API_TOKEN_L1=${{ secrets.KBC_STORAGE_API_TOKEN_L1 }}" >> "${GITHUB_ENV}"
-          echo "SRC_KBC_PROJECT_ID_L1=${{ vars.KBC_PROJECT_ID_L1 }}" >> "${GITHUB_ENV}"
-          echo "SRC_KBC_BRANCHES_L1=${{ vars.KBC_BRANCHES_L1 }}" >> "${GITHUB_ENV}"
+        uses: ./.github/actions/kbc_push/pull
+        with:
+          workdir: "L0"
+          kbcStorageApiHost: ${{ vars.KBC_STORAGE_API_HOST_L0 }}
+          kbcStorageApiToken: ${{ secrets.KBC_STORAGE_API_TOKEN_L0 }}
+          kbcProjectId: ${{ vars.KBC_PROJECT_ID_L0 }}
+          kbcBranchId: ${{ vars.KBC_BRANCH_ID_L0 }}
 
   get_dest_env:
     runs-on: ubuntu-latest
@@ -37,21 +32,21 @@ jobs:
     steps:
       - name: Get production environment variables
         run: |
-          echo "DEST_WORKDIR_L0=L0" >> "${GITHUB_ENV}"
-          echo "DEST_KBC_STORAGE_API_HOST_L0=${{ vars.KBC_STORAGE_API_HOST_L0 }}" >> "${GITHUB_ENV}"
-          echo "DEST_KBC_STORAGE_API_TOKEN_L0=${{ secrets.KBC_STORAGE_API_TOKEN_L0 }}" >> "${GITHUB_ENV}"
-          echo "DEST_KBC_PROJECT_ID_L0=${{ vars.KBC_PROJECT_ID_L0 }}" >> "${GITHUB_ENV}"
-          echo "DEST_KBC_BRANCHES_L0=${{ vars.KBC_BRANCHES_L0 }}" >> "${GITHUB_ENV}"
+          echo "DEST_WORKDIR_L0=L0" >> "${GITHUB_OUTPUT}"
+          echo "DEST_KBC_STORAGE_API_HOST_L0=${{ vars.KBC_STORAGE_API_HOST_L0 }}" >> "${GITHUB_OUTPUT}"
+          echo "DEST_KBC_STORAGE_API_TOKEN_L0=${{ secrets.KBC_STORAGE_API_TOKEN_L0 }}" >> "${GITHUB_OUTPUT}"
+          echo "DEST_KBC_PROJECT_ID_L0=${{ vars.KBC_PROJECT_ID_L0 }}" >> "${GITHUB_OUTPUT}"
+          echo "DEST_KBC_BRANCHES_L0=${{ vars.KBC_BRANCHES_L0 }}" >> "${GITHUB_OUTPUT}"
           
-          echo "DEST_WORKDIR_L1=L1" >> "${GITHUB_ENV}"
-          echo "DEST_KBC_STORAGE_API_HOST_L1=${{ vars.KBC_STORAGE_API_HOST_L1 }}" >> "${GITHUB_ENV}"
-          echo "DEST_KBC_STORAGE_API_TOKEN_L1=${{ secrets.KBC_STORAGE_API_TOKEN_L1 }}" >> "${GITHUB_ENV}"
-          echo "DEST_KBC_PROJECT_ID_L1=${{ vars.KBC_PROJECT_ID_L1 }}" >> "${GITHUB_ENV}"
-          echo "DEST_KBC_BRANCHES_L1=${{ vars.KBC_BRANCHES_L1 }}" >> "${GITHUB_ENV}"
+          echo "DEST_WORKDIR_L1=L1" >> "${GITHUB_OUTPUT}"
+          echo "DEST_KBC_STORAGE_API_HOST_L1=${{ vars.KBC_STORAGE_API_HOST_L1 }}" >> "${GITHUB_OUTPUT}"
+          echo "DEST_KBC_STORAGE_API_TOKEN_L1=${{ secrets.KBC_STORAGE_API_TOKEN_L1 }}" >> "${GITHUB_OUTPUT}"
+          echo "DEST_KBC_PROJECT_ID_L1=${{ vars.KBC_PROJECT_ID_L1 }}" >> "${GITHUB_OUTPUT}"
+          echo "DEST_KBC_BRANCHES_L1=${{ vars.KBC_BRANCHES_L1 }}" >> "${GITHUB_OUTPUT}"
 
   run_storage_diff_for_all:
     runs-on: ubuntu-latest
-    needs: [ get_current_branch_env, get_dest_env ]
+    needs: [ pull_storage_structure_current_branch, get_dest_env ]
 
     steps:
       - name: Checkout code
@@ -60,6 +55,6 @@ jobs:
       - name: Compare storage structure
         run: |
           echo "workdir: $SRC_WORKDIR_L0"
-          echo "host: ${{ env.DEST_KBC_STORAGE_API_HOST_L1 }}"
+          echo "host: ${{ needs.get_current_branch_env.outputs.SRC_KBC_STORAGE_API_HOST_L0 }}"
           python3 .github/actions/kbc_storage_validation/storage/main.py --source-workdir="$SRC_WORKDIR_L0" --source-host="$SRC_KBC_STORAGE_API_HOST_L0" --source-token="$SRC_KBC_STORAGE_API_TOKEN_L0" --dest-workdir="$DEST_WORKDIR_L0" --dest-host="$DEST_KBC_STORAGE_API_HOST_L0" --dest-token="$DEST_KBC_STORAGE_API_TOKEN_L0"
           python3 .github/actions/kbc_storage_validation/storage/main.py --source-workdir="$SRC_WORKDIR_L1" --source-host="$SRC_KBC_STORAGE_API_HOST_L1" --source-token="$SRC_KBC_STORAGE_API_TOKEN_L1" --dest-workdir="$DEST_WORKDIR_L1" --dest-host="$DEST_KBC_STORAGE_API_HOST_L1" --dest-token="$DEST_KBC_STORAGE_API_TOKEN_L1"
