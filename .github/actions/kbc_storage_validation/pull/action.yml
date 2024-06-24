@@ -26,12 +26,11 @@ runs:
         KBC_STORAGE_API_HOST: ${{ inputs.kbcStorageApiHost }}
       shell: bash
       run: |
-        echo "dest_file=${{ inputs.workdir }}_${{ inputs.kbcProjectId }}.json"
-        echo "$dest_file"
-        echo "dest_file=$dest_file">> $GITHUB_OUTPUT
+        dest_file="${{ inputs.workdir }}_${{ inputs.kbcProjectId }}.json"
+        echo "dest_file=${dest_file}" >> $GITHUB_ENV
         python3 .github/actions/kbc_storage_validation/pull/storage_pull.py --host="$KBC_STORAGE_API_HOST" --token="$KBC_STORAGE_API_TOKEN" --destination-file="$dest_file"
     - name: Upload output file
       uses: actions/upload-artifact@v4
       with:
-        name: ${{ steps.pull.outputs.dest_file }}
-        path: ${{ steps.pull.outputs.dest_file }}
+        name: ${{ env.dest_file }}
+        path: ${{ env.dest_file }}
