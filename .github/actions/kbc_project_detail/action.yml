@@ -14,7 +14,7 @@ runs:
         FOLDER_NAME="${{ inputs.workdir }}"
 
         # Form the variable name based on the folder name
-        VAR_NAME="KBC_BRANCH_ID_${FOLDER_NAME}"
+        VAR_NAME="vars.KBC_PROJECT_ID_${FOLDER_NAME}"
 
         # Retrieve the variable value using indirect reference
         VALUE=$(eval echo \$$VAR_NAME)
