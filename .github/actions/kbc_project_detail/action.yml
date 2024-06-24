@@ -1,17 +1,17 @@
 name: Keboola Project Detail
 description: Get to the Keboola project detail
 inputs:
-  source_workdir:
+  workdir:
     description: Working directory
     required: true
 runs:
   using: "composite"
   steps:
     - run: |
-        "echo" "Hello ! while Keboola secret validation $KBC_BRANCH_ID_L0${{ inputs.source_workdir }}"
+        "echo" "Hello ! while Keboola secret validation $KBC_BRANCH_ID_${{ inputs.workdir }}"
         
         # Retrieve the input folder name
-        FOLDER_NAME="${{ inputs.source_workdir }}"
+        FOLDER_NAME="${{ inputs.workdir }}"
 
         # Form the variable name based on the folder name
         VAR_NAME="KBC_BRANCH_ID_${FOLDER_NAME}"
