@@ -11,12 +11,6 @@ permissions:
 jobs:
   get_current_branch_env:
     runs-on: ubuntu-latest
-    env:
-      current_env: |-
-        ${{
-           github.ref_name == 'main' && 'prod'
-        || github.ref_name == 'dev' && 'dev'
-        }}
     strategy:
       matrix:
         include:
