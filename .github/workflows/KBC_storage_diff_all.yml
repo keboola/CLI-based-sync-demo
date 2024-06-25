@@ -14,19 +14,19 @@ jobs:
     strategy:
       matrix:
         include:
-         - environment: |-
-            ${{
-               github.ref_name == 'main' && 'prod'
-            || github.ref_name == 'dev' && 'dev'
-            }}
-           type: "source"
-         - environment: ${{ github.event.inputs.dest_env }}
-           type: "destination"
+          - environment: |-
+              ${{
+                 github.ref_name == 'main' && 'prod'
+              || github.ref_name == 'dev' && 'dev'
+              }}
+            type: "source"
+          - environment: ${{ github.event.inputs.dest_env }}
+            type: "destination"
     environment: ${{ matrix.environment }}
     steps:
       - uses: actions/checkout@v4
 
-      # Dynamic generated value
+      # L0
       - name: Pull storage L0
         uses: ./.github/actions/kbc_storage_validation/pull
         with:
@@ -34,13 +34,20 @@ jobs:
           kbcStorageApiHost: ${{ vars.KBC_STORAGE_API_HOST_L0 }}
           kbcStorageApiToken: ${{ secrets.KBC_STORAGE_API_TOKEN_L0 }}
 
+      - name: Save structure to artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: projects_structure
+          path: ${{ matrix.type }}/*
+          retention-days: 5
+
+      # L1
       - name: Pull storage L1
         uses: ./.github/actions/kbc_storage_validation/pull
         with:
           destFile: "${{ matrix.type }}/${{ matrix.environment }}_L1.json"
           kbcStorageApiHost: ${{ vars.KBC_STORAGE_API_HOST_L1 }}
           kbcStorageApiToken: ${{ secrets.KBC_STORAGE_API_TOKEN_L1 }}
-       # END Dynamic generated value
 
       - name: Save structure to artifact
         uses: actions/upload-artifact@v3
