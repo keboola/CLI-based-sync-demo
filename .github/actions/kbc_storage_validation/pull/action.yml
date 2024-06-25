@@ -35,11 +35,11 @@ runs:
         python3 .github/actions/kbc_storage_validation/pull/storage_pull.py \
           --host="${{ inputs.kbcStorageApiHost }}" \
           --token="${{ inputs.kbcStorageApiToken }}" \
-          --destination-file="$OUT_DIR/${{ inputs.destFile }}"
+          --destination-file="${{ env.OUT_DIR }}/${{ inputs.destFile }}"
 
     - name: Save structure to artifact
       uses: actions/upload-artifact@v4
       with:
-        name: $OUT_DIR
-        path: $OUT_DIR/*
+        name: ${{ env.OUT_DIR }}
+        path: ${{ env.OUT_DIR }}/*
         retention-days: 5
