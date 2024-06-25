@@ -42,9 +42,9 @@ jobs:
           kbcStorageApiToken: ${{ secrets.KBC_STORAGE_API_TOKEN_L1 }}
        # END Dynamic generated value
 
-      - name: Save variables to file
+      - name: Save structure to artifact
         uses: actions/upload-artifact@v3
         with:
-          name: source_projects_structure
-          path: .
+          name: projects_structure
+          path: ${{ matrix.type }}/.
           retention-days: 5
