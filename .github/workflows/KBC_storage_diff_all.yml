@@ -15,7 +15,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        environment: [ ${{ env.current_environment }}, ${{ github.event.inputs.dest_env }} ]
+        environment: [ "${{ env.current_environment }}", "${{ github.event.inputs.dest_env }}" ]
     environment: ${{ matrix.environment }}
     steps:
       - name: Pull storage L0
