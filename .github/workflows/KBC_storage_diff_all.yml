@@ -19,39 +19,42 @@ jobs:
                  github.ref_name == 'main' && 'prod'
               || github.ref_name == 'dev' && 'dev'
               }}
-            type: "source"
+            origin: "source"
           - environment: ${{ github.event.inputs.dest_env }}
-            type: "destination"
+            origin: "destination"
     environment: ${{ matrix.environment }}
+    env:
+      outFolder: "projects_structure_${{ matrix.origin }}"
     steps:
       - uses: actions/checkout@v4
-
       # L0
       - name: Pull storage L0
         uses: ./.github/actions/kbc_storage_validation/pull
         with:
-          destFile: "${{ matrix.type }}/${{ matrix.environment }}_L0.json"
+          outFolder: "${{ env.outFolder }}"
+          destFile: "${{ matrix.origin }}/${{ matrix.environment }}/L0.json"
           kbcStorageApiHost: ${{ vars.KBC_STORAGE_API_HOST_L0 }}
           kbcStorageApiToken: ${{ secrets.KBC_STORAGE_API_TOKEN_L0 }}
-
-      - name: Save structure to artifact
-        uses: actions/upload-artifact@v3
-        with:
-          name: projects_structure
-          path: ${{ matrix.type }}/*
-          retention-days: 5
 
       # L1
       - name: Pull storage L1
         uses: ./.github/actions/kbc_storage_validation/pull
         with:
-          destFile: "${{ matrix.type }}/${{ matrix.environment }}_L1.json"
+          outFolder: "${{ env.outFolder }}"
+          destFile: "${{ matrix.origin }}/${{ matrix.environment }}/L1.json"
           kbcStorageApiHost: ${{ vars.KBC_STORAGE_API_HOST_L1 }}
           kbcStorageApiToken: ${{ secrets.KBC_STORAGE_API_TOKEN_L1 }}
 
-      - name: Save structure to artifact
-        uses: actions/upload-artifact@v3
+  compare_storage:
+    runs-on: ubuntu-latest
+    needs: get_current_branch_env
+    steps:
+      - uses: actions/checkout@v4
+      - name: Download structures
+        uses: actions/download-artifact@v4
         with:
-          name: projects_structure
-          path: ${{ matrix.type }}/*
-          retention-days: 5
+          name: |
+            projects_structure_source
+            projects_structure_destination
+      - run: |
+          ls -l

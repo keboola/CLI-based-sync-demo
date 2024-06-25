@@ -4,16 +4,15 @@ inputs:
   destFile:
     description: Destination file
     required: true
+  outFolder:
+    description: Output folder
+    required: true
   kbcStorageApiHost:
     description: Keboola Connection Stack URL
     required: true
   kbcStorageApiToken:
     description: Keboola Connection Storage API Token
     required: true
-outputs:
-    destFile:
-        description: Destination file
-        value: ${{ inputs.destFile }}
 runs:
   using: "composite"
   steps:
@@ -26,5 +25,11 @@ runs:
         python3 .github/actions/kbc_storage_validation/pull/storage_pull.py \
           --host="${{ inputs.kbcStorageApiHost }}" \
           --token="${{ inputs.kbcStorageApiToken }}" \
-          --destination-file="${{ inputs.destFile }}"
+          --destination-file="${{ inputs.outFolder }}/${{ inputs.destFile }}"
 
+    - name: Save structure to artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: projects_structure
+        path: ${{ inputs.outFolder }}/*
+        retention-days: 5
