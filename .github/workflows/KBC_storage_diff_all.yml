@@ -19,15 +19,16 @@ jobs:
                github.ref_name == 'main' && 'prod'
             || github.ref_name == 'dev' && 'dev'
             }}
+           type: "source"
          - environment: ${{ github.event.inputs.dest_env }}
+           type: "destination"
     environment: ${{ matrix.environment }}
     steps:
       - uses: actions/checkout@v4
       - name: Pull storage L0
         uses: ./.github/actions/kbc_storage_validation/pull
         with:
-          environment: ${{ matrix.environment }}
-          workdir: "L0"
+          destFile: "${{ matrix.type }}/${{ matrix.environment }}_L0.json"
           kbcStorageApiHost: ${{ secrets.KBC_STORAGE_API_HOST_L0 }}
           kbcStorageApiToken: ${{ secrets.KBC_STORAGE_API_TOKEN_L0 }}
 
