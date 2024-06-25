@@ -15,9 +15,10 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        environment: [ $current_environment, "${{ github.event.inputs.dest_env }}" ]
+        environment: [ "${{ env.current_environment }}", "${{ github.event.inputs.dest_env }}" ]
     environment: ${{ matrix.environment }}
     steps:
+      - uses: actions/checkout@v4
       - name: Pull storage L0
         uses: ./.github/actions/kbc_storage_validation/pull
         with:
