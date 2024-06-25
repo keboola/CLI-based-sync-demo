@@ -19,7 +19,7 @@ jobs:
         }}
     strategy:
       matrix:
-        environment: [ "${{ env.current_env }}", "${{ github.event.inputs.dest_env }}" ]
+        environment: [ "${{ current_env }}", "${{ github.event.inputs.dest_env }}" ]
     environment: ${{ matrix.environment }}
     steps:
       - uses: actions/checkout@v4
