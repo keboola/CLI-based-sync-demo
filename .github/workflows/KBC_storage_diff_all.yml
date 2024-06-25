@@ -11,9 +11,15 @@ permissions:
 jobs:
   get_current_branch_env:
     runs-on: ubuntu-latest
+    env:
+      current_env: |-
+        ${{
+           github.ref_name == 'main' && 'prod'
+        || github.ref_name == 'dev' && 'dev'
+        }}
     strategy:
       matrix:
-        environment: [ "${ { github.ref_name == 'main' && 'prod' || github.ref_name == 'dev' && 'dev' }}", "${{ github.event.inputs.dest_env }}" ]
+        environment: [ "${{ env.current_env }}", "${{ github.event.inputs.dest_env }}" ]
     environment: ${{ matrix.environment }}
     steps:
       - uses: actions/checkout@v4
