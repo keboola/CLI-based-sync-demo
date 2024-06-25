@@ -24,10 +24,16 @@ runs:
           --token="${{ inputs.kbcStorageApiToken }}" \
           --destination-file="${{ inputs.destFile }}"
 
+    - name: get random number
+      id: random_number
+      uses: yakubique/random-number@v1.1
+      with:
+        min: 1
+        max: 1000
+
     - name: Save structure to artifact
       uses: actions/upload-artifact@v4
       with:
-        name: projects_structure_${{ github.run_id }}
+        name: projects_structure_${{ steps.random_number.outputs.number }}
         path: ${{ inputs.destFile }}
-        overwrite: true
         retention-days: 5
