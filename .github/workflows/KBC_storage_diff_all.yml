@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        environment: [ ${ { github.ref_name == 'main' && 'prod' || github.ref_name == 'dev' && 'dev' } }, ${ { github.event.inputs.dest_env } } ]
+        environment: [ "${ { github.ref_name == 'main' && 'prod' || github.ref_name == 'dev' && 'dev' }}", "${{ github.event.inputs.dest_env }}" ]
     environment: ${{ matrix.environment }}
     steps:
       - uses: actions/checkout@v4
