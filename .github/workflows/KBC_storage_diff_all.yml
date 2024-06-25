@@ -23,15 +23,12 @@ jobs:
           - environment: ${{ github.event.inputs.dest_env }}
             origin: "destination"
     environment: ${{ matrix.environment }}
-    env:
-      outFolder: "projects_structure_${{ matrix.origin }}"
     steps:
       - uses: actions/checkout@v4
       # L0
       - name: Pull storage L0
         uses: ./.github/actions/kbc_storage_validation/pull
         with:
-          outFolder: "${{ env.outFolder }}"
           destFile: "${{ matrix.origin }}/${{ matrix.environment }}/L0.json"
           kbcStorageApiHost: ${{ vars.KBC_STORAGE_API_HOST_L0 }}
           kbcStorageApiToken: ${{ secrets.KBC_STORAGE_API_TOKEN_L0 }}
@@ -40,7 +37,6 @@ jobs:
       - name: Pull storage L1
         uses: ./.github/actions/kbc_storage_validation/pull
         with:
-          outFolder: "${{ env.outFolder }}"
           destFile: "${{ matrix.origin }}/${{ matrix.environment }}/L1.json"
           kbcStorageApiHost: ${{ vars.KBC_STORAGE_API_HOST_L1 }}
           kbcStorageApiToken: ${{ secrets.KBC_STORAGE_API_TOKEN_L1 }}
@@ -49,12 +45,15 @@ jobs:
     runs-on: ubuntu-latest
     needs: get_current_branch_env
     steps:
-      - uses: actions/checkout@v4
+      - name: Merge Artifacts
+        uses: actions/upload-artifact/merge@v4
+        with:
+          name: projects_structure
+          pattern: projects_structure_*
       - name: Download structures
         uses: actions/download-artifact@v4
         with:
-          name: |
-            projects_structure_source
-            projects_structure_destination
+          name: projects_structure
       - run: |
           ls -l
+      - uses: actions/checkout@v4
