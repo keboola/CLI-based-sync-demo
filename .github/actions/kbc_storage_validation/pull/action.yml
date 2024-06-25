@@ -26,7 +26,7 @@ runs:
     - name: Def out directory
       id: def_dir
       run: |
-        echo "OUT_DIR=projects_structure_${{ steps.random_number.outputs.number }}" >> "${GITHUB_OUTPUT}"
+        echo "OUT_DIR=projects_structure_${{ steps.random_number.outputs.number }}" >> "${GITHUB_ENV}"
       shell: bash
 
     - name: Pull storage structure
@@ -35,11 +35,11 @@ runs:
         python3 .github/actions/kbc_storage_validation/pull/storage_pull.py \
           --host="${{ inputs.kbcStorageApiHost }}" \
           --token="${{ inputs.kbcStorageApiToken }}" \
-          --destination-file="${{ steps.def_dir.output.OUT_DIR }}/${{ inputs.destFile }}"
+          --destination-file="$OUT_DIR/${{ inputs.destFile }}"
 
     - name: Save structure to artifact
       uses: actions/upload-artifact@v4
       with:
-        name: ${{ steps.def_dir.output.OUT_DIR }}
-        path: ${{ steps.def_dir.output.OUT_DIR }}/*
+        name: $OUT_DIR
+        path: $OUT_DIR/*
         retention-days: 5
