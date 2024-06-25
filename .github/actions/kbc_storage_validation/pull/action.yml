@@ -32,4 +32,5 @@ runs:
       with:
         name: ${{ inputs.outFolder }}
         path: ${{ inputs.outFolder }}/*
+        overwrite: true
         retention-days: 5
