@@ -28,8 +28,8 @@ runs:
           --destination-file="${{ inputs.outFolder }}/${{ inputs.destFile }}"
 
     - name: Save structure to artifact
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
-        name: projects_structure
+        name: ${{ inputs.outFolder }}
         path: ${{ inputs.outFolder }}/*
         retention-days: 5
