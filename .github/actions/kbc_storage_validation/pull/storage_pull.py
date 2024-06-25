@@ -1,4 +1,6 @@
 import json
+import os
+
 import requests
 
 
@@ -22,6 +24,10 @@ class StoragePull:
         return tables.json()
 
     def _save_storage_structure(self, structure):
+        # create whole tree if not exists
+        if not os.path.exists(os.path.dirname(self._destination_file)):
+            os.makedirs(os.path.dirname(self._destination_file))
+
         with open(self._destination_file, 'w') as f:
             json.dump(structure, f, indent=4)
 
