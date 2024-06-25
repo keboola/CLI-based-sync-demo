@@ -16,14 +16,6 @@ runs:
     - name: Checkout code
       uses: actions/checkout@v4
 
-    - name: Pull storage structure
-      shell: bash
-      run: |
-        python3 .github/actions/kbc_storage_validation/pull/storage_pull.py \
-          --host="${{ inputs.kbcStorageApiHost }}" \
-          --token="${{ inputs.kbcStorageApiToken }}" \
-          --destination-file="${{ inputs.destFile }}"
-
     - name: get random number
       id: random_number
       uses: yakubique/random-number@v1.1
@@ -31,9 +23,23 @@ runs:
         min: 1
         max: 1000
 
+    - name: Def out directory
+      id: def_dir
+      run: |
+        echo "OUT_DIR=projects_structure_${{ steps.random_number.outputs.number }}" >> "${GITHUB_OUTPUT}"
+      shell: bash
+
+    - name: Pull storage structure
+      shell: bash
+      run: |
+        python3 .github/actions/kbc_storage_validation/pull/storage_pull.py \
+          --host="${{ inputs.kbcStorageApiHost }}" \
+          --token="${{ inputs.kbcStorageApiToken }}" \
+          --destination-file="${{ steps.def_dir.output.OUT_DIR }}/${{ inputs.destFile }}"
+
     - name: Save structure to artifact
       uses: actions/upload-artifact@v4
       with:
-        name: projects_structure_${{ steps.random_number.outputs.number }}
-        path: ${{ inputs.destFile }}
+        name: ${{ steps.def_dir.output.OUT_DIR }}
+        path: ${{ steps.def_dir.output.OUT_DIR }}/*
         retention-days: 5
