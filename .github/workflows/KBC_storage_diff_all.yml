@@ -8,64 +8,27 @@ on:
         default: ''
 permissions:
   contents: write
+env:
+  current_environment: ${{ github.ref_name == 'main' && 'prod' || github.ref_name == 'dev' && 'dev' }}
 jobs:
-  source_vars:
+  get_current_branch_env:
     runs-on: ubuntu-latest
-    environment: |-
-      ${{
-         github.ref_name == 'main' && 'prod'
-      || github.ref_name == 'dev' && 'dev'
-      }}
-    outputs:
-      WORKDIR_L0: "L0"
-      KBC_STORAGE_API_HOST_L0: ${{ vars.KBC_STORAGE_API_HOST_L0 }}
-      KBC_STORAGE_API_TOKEN_L0: ${{ steps.L0.outputs.KBC_STORAGE_API_TOKEN_L0 }}
-
-      WORKDIR_L1: "L1"
-      KBC_STORAGE_API_HOST_L1: ${{ vars.KBC_STORAGE_API_HOST_L1 }}
-      KBC_STORAGE_API_TOKEN_L1: ${{ steps.L1.outputs.KBC_STORAGE_API_TOKEN_L1 }}
-    env:
-      token_L0: ${{ secrets.KBC_STORAGE_API_TOKEN_L0 }}
+    strategy:
+      matrix:
+        environment: [ $current_environment, ${ { github.event.inputs.dest_env } } ]
+    environment: ${{ matrix.environment }}
     steps:
-      - name: L0
-        id: L0
-        run: echo "KBC_STORAGE_API_TOKEN_L0=::add-mask::$token_L0" >> "${GITHUB_OUTPUT}"
+      - name: Pull storage L0
+        uses: ./.github/actions/kbc_storage_validation/pull
+        with:
+          environment: ${{ matrix.environment }}
+          workdir: "L0"
+          kbcStorageApiHost: ${{ secrets.KBC_STORAGE_API_HOST_L0 }}
+          kbcStorageApiToken: ${{ secrets.KBC_STORAGE_API_TOKEN_L0 }}
 
-      - name: L1
-        id: L1
-        run: echo "KBC_STORAGE_API_TOKEN_L1=::add-mask::${{ secrets.KBC_STORAGE_API_TOKEN_L1 }}" >> "${GITHUB_OUTPUT}"
-
-  dest_vars:
-    runs-on: ubuntu-latest
-    environment: ${{ inputs.dest_env }}
-    outputs:
-        WORKDIR_L0: "L0"
-        KBC_STORAGE_API_HOST_L0: ${{ vars.KBC_STORAGE_API_HOST_L0 }}
-        KBC_STORAGE_API_TOKEN_L0: ::add-mask::${{ secrets.KBC_STORAGE_API_TOKEN_L0 }}
-
-        WORKDIR_L1: "L1"
-        KBC_STORAGE_API_HOST_L1: ${{ vars.KBC_STORAGE_API_HOST_L1 }}
-        KBC_STORAGE_API_TOKEN_L1: ::add-mask::${{ secrets.KBC_STORAGE_API_TOKEN_L1 }}
-
-    steps:
-      - name: Echo
-        run: echo "Get variables only!"
-
-  run_storage_diff_for_all:
-    runs-on: ubuntu-latest
-    needs: [ source_vars, dest_vars ]
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Compare storage structure L0
-        run: |
-          python3 .github/actions/kbc_storage_validation/storage/main.py \
-            --source-workdir="${{ needs.source_vars.outputs.WORKDIR_L0 }}" \
-            --source-host="${{ needs.source_vars.outputs.KBC_STORAGE_API_HOST_L0 }}" \
-            --source-token="${{ needs.source_vars.outputs.KBC_STORAGE_API_TOKEN_L0 }}" \
-            --dest-workdir="${{ needs.dest_vars.outputs.WORKDIR_L0 }}" \
-            --dest-host="${{ needs.dest_vars.outputs.KBC_STORAGE_API_HOST_L0 }}" \
-            --dest-token="${{ needs.dest_vars.outputs.KBC_STORAGE_API_TOKEN_L0 }}"
-          # TODO handle the output to commit description
+      - name: Save variables to file
+        uses: actions/upload-artifact@v3
+        with:
+          name: source_projects_structure
+          path: .
+          retention-days: 5

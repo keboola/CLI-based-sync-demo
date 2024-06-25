@@ -1,0 +1,40 @@
+name: Manual Storage Diff All
+on:
+  workflow_dispatch:
+    inputs:
+      dest_env:
+        description: 'Which environment to compare against (will be destination)'
+        required: true
+        default: ''
+permissions:
+  contents: write
+jobs:
+  run_python:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        environment: [ prod, dev ]
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Set environment variables
+      run: |
+        if [ "${{ matrix.environment }}" == "prod" ]; then
+          echo "SRC_KBC_STORAGE_API_TOKEN_L0=${{ secrets.KBC_STORAGE_API_TOKEN_L0 }}" >> $GITHUB_ENV
+          echo "TARGET_TOKEN=${{ secrets.KBC_STORAGE_API_TOKEN_L1 }}" >> $GITHUB_ENV
+        elif [ "${{ matrix.environment }}" == "dev" ]; then
+          echo "SRC_KBC_STORAGE_API_TOKEN_L0=${{ secrets.KBC_STORAGE_API_TOKEN_L0 }}" >> $GITHUB_ENV
+          echo "TARGET_TOKEN=${{ secrets.KBC_STORAGE_API_TOKEN_L1 }}" >> $GITHUB_ENV
+        fi
+
+    - name: Compare storage structure L0
+      run: |
+        python3 .github/actions/kbc_storage_validation/storage/main.py \
+          --source-workdir="${{ needs.source_vars.outputs.WORKDIR_L0 }}" \
+          --source-host="${{ needs.source_vars.outputs.KBC_STORAGE_API_HOST_L0 }}" \
+          --source-token="${{ needs.source_vars.outputs.KBC_STORAGE_API_TOKEN_L0 }}" \
+          --dest-workdir="${{ needs.dest_vars.outputs.WORKDIR_L0 }}" \
+          --dest-host="${{ needs.dest_vars.outputs.KBC_STORAGE_API_HOST_L0 }}" \
+          --dest-token="${{ needs.dest_vars.outputs.KBC_STORAGE_API_TOKEN_L0 }}"
+        # TODO handle the output to commit description

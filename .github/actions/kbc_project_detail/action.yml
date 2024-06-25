@@ -1,0 +1,35 @@
+name: 'Encrypt and Save Secrets'
+description: 'Encrypt secrets and save them as artifacts'
+inputs:
+  source_token:
+    description: 'Source token'
+    required: true
+  target_token:
+    description: 'Target token'
+    required: true
+  encryption_key:
+    description: 'Encryption key'
+    required: true
+outputs:
+  artifact_name:
+    value: 'encrypted-secrets'
+    description: 'Name of the created artifact'
+runs:
+  using: 'composite'
+  steps:
+    - run: |
+        echo "${{ inputs.source_token }}" > source_token.txt
+        echo "${{ inputs.target_token }}" > target_token.txt
+
+        gpg --symmetric --batch --passphrase "${{ inputs.encryption_key }}" source_token.txt
+        gpg --symmetric --batch --passphrase "${{ inputs.encryption_key }}" target_token.txt
+
+        chmod 600 source_token.txt.gpg target_token.txt.gpg
+      shell: bash
+    - name: Upload artifact
+      uses: actions/upload-artifact@v2
+      with:
+        name: encrypted-secrets
+        path: |
+          source_token.txt.gpg
+          target_token.txt.gpg
