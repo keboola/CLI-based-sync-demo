@@ -25,12 +25,22 @@ jobs:
     environment: ${{ matrix.environment }}
     steps:
       - uses: actions/checkout@v4
+
+      # Dynamic generated value
       - name: Pull storage L0
         uses: ./.github/actions/kbc_storage_validation/pull
         with:
           destFile: "${{ matrix.type }}/${{ matrix.environment }}_L0.json"
-          kbcStorageApiHost: ${{ secrets.KBC_STORAGE_API_HOST_L0 }}
+          kbcStorageApiHost: ${{ vars.KBC_STORAGE_API_HOST_L0 }}
           kbcStorageApiToken: ${{ secrets.KBC_STORAGE_API_TOKEN_L0 }}
+
+      - name: Pull storage L1
+        uses: ./.github/actions/kbc_storage_validation/pull
+        with:
+          destFile: "${{ matrix.type }}/${{ matrix.environment }}_L1.json"
+          kbcStorageApiHost: ${{ vars.KBC_STORAGE_API_HOST_L1 }}
+          kbcStorageApiToken: ${{ secrets.KBC_STORAGE_API_TOKEN_L1 }}
+       # END Dynamic generated value
 
       - name: Save variables to file
         uses: actions/upload-artifact@v3
