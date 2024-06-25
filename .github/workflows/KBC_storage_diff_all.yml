@@ -8,14 +8,12 @@ on:
         default: ''
 permissions:
   contents: write
-env:
-  current_environment: ${{ github.ref_name == 'main' && 'prod' || github.ref_name == 'dev' && 'dev' }}
 jobs:
   get_current_branch_env:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        environment: [ "${{ env.current_environment }}", "${{ github.event.inputs.dest_env }}" ]
+        environment: [ ${ { github.ref_name == 'main' && 'prod' || github.ref_name == 'dev' && 'dev' } }, ${ { github.event.inputs.dest_env } } ]
     environment: ${{ matrix.environment }}
     steps:
       - uses: actions/checkout@v4
