@@ -56,7 +56,6 @@ runs:
         # Init data from Keboola connection project
         kbc init -d "$WORKDIR" --allow-target-env --ci=false 2>&1 | tee "$RUNNER_TEMP/log.txt"
         
-        tree -a
-        python3 .github/actions/kbc_pull/secret_validations.py target_dir="$WORKDIR"
+        python3 .github/actions/kbc_pull/secret_validations/validations.py target_dir="$WORKDIR"
 
       shell: bash

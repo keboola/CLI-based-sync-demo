@@ -62,7 +62,6 @@ jobs:
       - name: Compare storage structure
         shell: bash
         run: |
-          ls
           python3 .github/actions/kbc_storage_validation/storage_diff/main.py \
             --workdir="./projects_structure" 
 
