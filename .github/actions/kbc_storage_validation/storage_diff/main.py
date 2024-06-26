@@ -66,7 +66,7 @@ class StorageDiff:
 
             markdown_output.append(
                 f"## Project '{source_project.project}' vs project '{destination_project.project}'\n\n")
-            markdown_output.extend(DiffToMarkdown(diff_file).convert())
+            markdown_output.extend(self.create_markdown(diff_file))
 
         self._write_report(markdown_output)
 
