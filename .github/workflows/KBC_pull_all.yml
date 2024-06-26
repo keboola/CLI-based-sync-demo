@@ -74,6 +74,11 @@ jobs:
           path: ./Storage_report.md
           retention-days: 5
 
+      - name: Save message to output
+        id: storage_report
+        run: |
+          echo "::set-output name=commit_message::$(cat ./Storage_report.md)"
+
   Pull_All:
     if: always()
     needs: [storage_validation_comparison]
@@ -110,20 +115,13 @@ jobs:
           kbcBranchId: ${{ vars.KBC_BRANCH_ID_L1 }}
       # End generated steps
 
-      - name: Download structures
-        uses: actions/download-artifact@v4
-        with:
-          name: projects_structure_result
-
       - name: Commit and push
+        env:
+          commit_message: ${{ steps.storage_report.outputs.commit_message }}
         run: |
           apt-get update && apt-get install -y tree
           tree -a
           currentDate=`date +%Y-%m-%d:%T%Z`
-          
-          commit_message=$(cat ./Storage_report.md)
-          rm ./Storage_report.md
-          rm -rf projects_structure
           
           commit_message+=`cat "$RUNNER_TEMP/log.txt"`
           git config --global user.name 'Keboola CLI'
