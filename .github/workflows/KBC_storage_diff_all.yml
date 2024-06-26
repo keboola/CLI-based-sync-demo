@@ -45,6 +45,8 @@ jobs:
     runs-on: ubuntu-latest
     needs: get_current_branch_env
     steps:
+      - uses: actions/checkout@v4
+
       - name: Merge Artifacts
         uses: actions/upload-artifact/merge@v4
         with:
@@ -56,12 +58,10 @@ jobs:
         with:
           name: projects_structure
 
-      - uses: actions/checkout@v4
-
       - name: Compare storage structure
         shell: bash
         run: |
-          ls -l
+          ls
           python3 .github/actions/kbc_storage_validation/storage_diff/main.py \
             --workdir="./projects_structure" 
 
