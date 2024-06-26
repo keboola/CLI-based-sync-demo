@@ -5,7 +5,7 @@ import os
 import zipfile
 from pathlib import Path
 
-from storage_diff import StorageDiff as Diff, DiffToMarkdown
+from storage_diff import StorageDiff as Diff
 
 KEY_ORIGIN_SOURCE = "source"
 KEY_ORIGIN_DESTINATION = "destination"
