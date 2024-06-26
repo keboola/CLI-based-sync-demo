@@ -74,12 +74,6 @@ jobs:
           path: ./Storage_report.md
           retention-days: 5
 
-      - name: Save message to output
-        id: storage_report
-        run: |
-          message=`$(cat ./Storage_report.md)`
-          echo "commit_message=`$message`" > $GITHUB_OUTPUT
-
   Pull_All:
     if: always()
     needs: [storage_validation_comparison]
@@ -116,12 +110,45 @@ jobs:
           kbcBranchId: ${{ vars.KBC_BRANCH_ID_L1 }}
       # End generated steps
 
+      - name: Check if artifact exists
+        id: check_artifact
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const artifactName = 'projects_structure_result';
+            const runId = process.env.GITHUB_RUN_ID;
+            const { data: artifacts } = await github.actions.listWorkflowRunArtifacts({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              run_id: runId,
+            });
+            
+            const artifact = artifacts.artifacts.find(artifact => artifact.name === artifactName);
+            
+            if (artifact) {
+              core.setOutput('artifact_exists', true);
+              core.setOutput('artifact_name', artifact.name);
+            } else {
+              core.setOutput('artifact_exists', false);
+            }
+
+      - name: Download artifact if exists
+        if: steps.check_artifact.outputs.artifact_exists == 'true'
+        uses: actions/download-artifact@v3
+        with:
+          name: ${{ steps.check_artifact.outputs.artifact_name }}
+          path: ./artifacts
+
       - name: Commit and push
         env:
           commit_message: ${{ steps.storage_report.outputs.commit_message }}
         run: |
           currentDate=`date +%Y-%m-%d:%T%Z`
-          echo $commit_message
+          
+          commit_message=$(cat ./Storage_report.md)
+          rm ./Storage_report.md
+          rm -rf projects_structure
+          
           commit_message+=`cat "$RUNNER_TEMP/log.txt"`
           echo $commit_message
           git config --global user.name 'Keboola CLI'
