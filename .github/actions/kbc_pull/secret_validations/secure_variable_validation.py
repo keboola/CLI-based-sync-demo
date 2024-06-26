@@ -1,3 +1,4 @@
+import logging
 import os
 import json
 import argparse
@@ -43,6 +44,7 @@ def write_encrypted(secure_encrypted):
 
 
 def main(target_dir):
+    logging.info(f"Checking JSON keys and values in {target_dir}")
     for root, _, files in os.walk(target_dir):
         for file in files:
             if file.endswith('.json'):
