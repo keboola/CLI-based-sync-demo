@@ -50,10 +50,23 @@ jobs:
         with:
           name: projects_structure
           pattern: projects_structure_*
+
       - name: Download structures
         uses: actions/download-artifact@v4
         with:
           name: projects_structure
-      - run: |
-          ls -l
+
       - uses: actions/checkout@v4
+
+      - name: Compare storage structure
+        shell: bash
+        run: |
+          python3 .github/actions/kbc_storage_validation/main.py \
+            --workdir="./projects_structure" 
+
+      - name: Save structure to artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: projects_structure_result
+          path: ./Storage_report.md
+          retention-days: 5

@@ -1,4 +1,5 @@
 import json
+import logging
 
 STORAGE_STRUCTURE_DIFF_FILE = 'storage_structure_diff.json'
 
@@ -10,10 +11,11 @@ column_relevant_keys = ['id', 'columnMetadata', 'primaryKey']
 
 
 class StorageDiff:
-    def __init__(self, source_storage_structure_file, dest_storage_structure_file):
+    def __init__(self, source_storage_structure_file, dest_storage_structure_file,
+                 storage_structure_diff_file=STORAGE_STRUCTURE_DIFF_FILE):
         self.relevant_changes = None
         self._diff = None
-        self.storage_structure_diff_file = STORAGE_STRUCTURE_DIFF_FILE
+        self.storage_structure_diff_file = storage_structure_diff_file
         self.source_storage_structure_file = source_storage_structure_file
         self.dest_storage_structure_file = dest_storage_structure_file
 
@@ -113,6 +115,7 @@ class StorageDiff:
     def _write_file(self, data):
         with open(self.storage_structure_diff_file, 'w') as f:
             json.dump(data, f, indent=4)
+        return self.storage_structure_diff_file
 
     @staticmethod
     def _read_file(file_path):
