@@ -45,6 +45,7 @@ class StorageDiff:
     destination_structure: ComparisonStructure
 
     def __init__(self, workdir):
+        logging.info(f"Storage comparison running... structure folder: '{workdir}'.")
         workdir = self._check_workdir(workdir)
         self.source_structure, self.destination_structure = self._create_objects_from_structure(workdir)
 

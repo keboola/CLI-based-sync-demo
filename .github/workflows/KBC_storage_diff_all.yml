@@ -61,7 +61,7 @@ jobs:
       - name: Compare storage structure
         shell: bash
         run: |
-          python3 .github/actions/kbc_storage_validation/main.py \
+          python3 .github/actions/kbc_storage_validation/storage_diff/main.py \
             --workdir="./projects_structure" 
 
       - name: Save structure to artifact
