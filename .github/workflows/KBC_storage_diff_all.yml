@@ -57,6 +57,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: projects_structure
+          path: ./projects_structure
 
       - name: Compare storage structure
         shell: bash
