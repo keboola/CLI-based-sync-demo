@@ -1,5 +1,4 @@
 import json
-import logging
 
 STORAGE_STRUCTURE_DIFF_FILE = 'storage_structure_diff.json'
 
