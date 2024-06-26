@@ -77,7 +77,7 @@ jobs:
       - name: Save message to output
         id: storage_report
         run: |
-          echo "::set-output name=commit_message::$(cat ./Storage_report.md)"
+          echo "commit_message=$(cat ./Storage_report.md)" > $GITHUB_OUTPUT
 
   Pull_All:
     if: always()
@@ -120,8 +120,9 @@ jobs:
           commit_message: ${{ steps.storage_report.outputs.commit_message }}
         run: |
           currentDate=`date +%Y-%m-%d:%T%Z`
-          
+          echo $commit_message
           commit_message+=`cat "$RUNNER_TEMP/log.txt"`
+          echo $commit_message
           git config --global user.name 'Keboola CLI'
           git config --global user.email 'keboola-cli@users.noreply.github.com'
           git add -A
