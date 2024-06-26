@@ -1,4 +1,4 @@
-name: Manual Storage Diff All
+name: Storage Diff All
 on:
   workflow_dispatch:
     inputs:
@@ -9,7 +9,7 @@ on:
 permissions:
   contents: write
 jobs:
-  get_current_branch_env:
+  storage_validation_get_structure:
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -41,9 +41,9 @@ jobs:
           kbcStorageApiHost: ${{ vars.KBC_STORAGE_API_HOST_L1 }}
           kbcStorageApiToken: ${{ secrets.KBC_STORAGE_API_TOKEN_L1 }}
 
-  compare_storage:
+  storage_validation_comparison:
     runs-on: ubuntu-latest
-    needs: get_current_branch_env
+    needs: storage_validation_get_structure
     steps:
       - uses: actions/checkout@v4
 
@@ -78,6 +78,8 @@ jobs:
           git config --global user.name 'Keboola CLI'
           git config --global user.email 'keboola-cli@users.noreply.github.com'
           commit_message=$(cat ./Storage_report.md)
+          rm ./Storage_report.md
+          rm -rf projects_structure
           git commit -m '$commit_message'
           git push
         env:
