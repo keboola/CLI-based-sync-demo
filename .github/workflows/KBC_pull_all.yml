@@ -77,7 +77,7 @@ jobs:
       - name: Save message to output
         id: storage_report
         run: |
-          message=$(cat ./Storage_report.md)
+          message=`$(cat ./Storage_report.md)`
           echo $message
           echo "commit_message=$message" > $GITHUB_OUTPUT
 
