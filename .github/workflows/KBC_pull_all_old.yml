@@ -4,6 +4,7 @@ on:
     inputs:
       dest_env:
         description: 'Which environment to compare against (will be destination)'
+        required: true
         default: ''
 permissions:
   contents: write
