@@ -78,8 +78,7 @@ jobs:
         id: storage_report
         run: |
           message=`$(cat ./Storage_report.md)`
-          echo $message
-          echo "commit_message=$message" > $GITHUB_OUTPUT
+          echo "commit_message=`$message`" > $GITHUB_OUTPUT
 
   Pull_All:
     if: always()
