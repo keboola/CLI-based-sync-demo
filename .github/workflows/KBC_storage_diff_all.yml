@@ -72,3 +72,14 @@ jobs:
           name: projects_structure_result
           path: ./Storage_report.md
           retention-days: 5
+
+      - name: Commit and push changes
+        run: |
+          git config --global user.name 'Keboola CLI'
+          git config --global user.email 'keboola-cli@users.noreply.github.com'
+          git add ./Storage_report.md
+          commit_message=$(cat ./Storage_report.md)
+          git commit -m "$commit_message"
+          git push
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
