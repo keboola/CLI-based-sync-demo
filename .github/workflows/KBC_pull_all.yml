@@ -147,6 +147,10 @@ jobs:
     environment: ${{ github.event.inputs.dest_env }}
     steps:
       - uses: actions/checkout@v4
+      - uses: ./.github/actions/install
+        with:
+          githubToken: ${{ secrets.GITHUB_TOKEN }}
+
       # L0
       - name: Get CLI diff L0
         uses: ./.github/actions/kbc_push_dry
