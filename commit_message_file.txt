@@ -1,0 +1,101 @@
+Manual KBC pull 2024-06-27:15:39:21UTC
+Storage Comparison Result ('prod' vs 'dev')
+===========================================
+
+
+Project 'L1' vs Project 'L1'
+-----------------------------
+
+Storage structure is the same - No changes detected
+
+
+Project 'L0' vs Project 'L0'
+-----------------------------
+
+- Bucket modified:
+in.c-test
+
+- Bucket removed:
+out.c-create-table-test
+
+- Bucket removed:
+in.c-keboola-ex-google-drive-1119451229
+
+- Table added:
+in.c-test.testaccount
+
+- Table removed:
+out.c-create-table-test.out
+
+- Table removed:
+in.c-keboola-ex-google-drive-1119451229.test-Sheet1
+
+
+--------------------------------------------------
+
+
+Vault Comparison Result ('prod' vs 'dev')
+=========================================
+
+
+Source project 'L1' vs Destination project 'L1'
+------------------------------------------------
+
+Vault structure is the same - No changes detected
+
+
+Source project 'L0' vs Destination project 'L0'
+------------------------------------------------
+
+- In source project is missing following keys:
+project_db
+schema
+sf_writer_pass
+
+- In destination project is missing following keys:
+testvar
+
+
+--------------------------------------------------
+
+
+
+CLI Push dry-run output for project: L0
+
+Overriding the project ID by the environment variable KBC_PROJECT_ID=9994
+Overriding the branch ID by the environment variable KBC_BRANCH_ID=865218
+Plan for "push" operation:
+  × C main/application/keboola.app-merge-branch-storage/my-merge-branch-storage-application - SKIPPED
+  * C main/transformation/keboola.snowflake-transformation/nova-transofrmace | changed: transformation
+Skipped remote objects deletion, use "--force" to delete them.
+Dry run, nothing changed.
+
+
+CLI Push dry-run output for project: L1
+
+Overriding the project ID by the environment variable KBC_PROJECT_ID=9995
+Overriding the branch ID by the environment variable KBC_BRANCH_ID=865219
+Plan for "push" operation:
+  no difference
+
+------------------- 
+
+
+KBC CLI log below: 
+
+------------------- 
+
+
+Storage API host "connection.keboola.com" set from ENV.
+Created file ".env.local" - it contains the API token, keep it local and secret.
+Created file ".env.dist" - an ".env.local" template.
+Created file ".gitignore" - to keep ".env.local" local.
+Created metadata directory ".keboola".
+Created manifest file ".keboola/manifest.json".
+Init done.
+
+Running pull.
+Plan for "pull" operation:
+  + B main
+  + C main/extractor/keboola.ex-google-analytics-v4/my-google-analytics-data-source
+Pull done.
