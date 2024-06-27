@@ -262,7 +262,9 @@ jobs:
           commit_message: ${{ steps.storage_report.outputs.commit_message }}
         run: |
           currentDate=$(date +%Y-%m-%d:%T%Z)
-
+          
+          echo "Manual KBC pull $currentDate" > commit_message_file.txt
+          
           if [ -f ./Storage_report.txt ]; then
             cat ./Storage_report.txt >> commit_message_file.txt
             echo "" >> commit_message_file.txt
@@ -301,9 +303,9 @@ jobs:
           git config --global user.email 'keboola-cli@users.noreply.github.com'
           
           git add -A
-          git commit --allow-empty -a -m "Manual KBC pull $currentDate" -F "commit_message_file.txt" || true
+          git commit --allow-empty -a -F "commit_message_file.txt" || true
           git push --force
           
-          rm commit_message_file.txt
+          
 
 
