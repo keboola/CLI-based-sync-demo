@@ -32,7 +32,7 @@ runs:
     - name: Pull storage structure
       shell: bash
       run: |
-        python3 .github/actions/kbc_storage_validation/pull/scripts/storage_pull.py \
+        python3 .github/actions/kbc_storage_validation/get_storage_structure/scripts/storage_pull.py \
           --host="${{ inputs.kbcStorageApiHost }}" \
           --token="${{ inputs.kbcStorageApiToken }}" \
           --destination-file="${{ env.OUT_DIR }}/${{ inputs.destFile }}"

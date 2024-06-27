@@ -35,7 +35,7 @@ runs:
     - name: Pull vault structure
       shell: bash
       run: |
-        python3 .github/actions/kbc_storage_validation/pull/scripts/storage_pull.py \
+        python3 .github/actions/kbc_vault_validation/get_vault_keys/scripts/vault_pull.py \
           --host="${{ inputs.kbcStorageApiHost }}" \
           --token="${{ inputs.kbcStorageApiToken }}" \
           --branch="${{ inputs.kbcBranchId }}" \
