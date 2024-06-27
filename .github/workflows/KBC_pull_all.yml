@@ -112,7 +112,7 @@ jobs:
 
       - name: Check if artifact exists
         id: check_artifact
-        uses: actions/github-script@v6
+        uses: actions/github-script@v7
         with:
           script: |
             const artifactName = 'projects_structure_result';
