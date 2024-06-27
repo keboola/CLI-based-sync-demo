@@ -1,5 +1,5 @@
-name: Configurations Diff
-description: CLI Diff before push
+name: Push - dry run
+description: CLI dry run for push
 inputs:
   destFile:
     description: Destination file
@@ -39,7 +39,7 @@ runs:
       shell: bash
 
     # Pull remote project's state
-    - name: CLI Diff before push
+    - name: CLI push dry run
       env:
         # filled by the script
         KBC_STORAGE_API_TOKEN: ${{ inputs.kbcStorageApiToken }}
@@ -62,7 +62,7 @@ runs:
         done
         
         # push to Keboola Connection
-        kbc diff -d "$WORKDIR" --force --verbose 2>&1 | tee "$RUNNER_TEMP/${{ env.OUT_DIR }}/${{ inputs.destFile }}"
+        kbc push --dry-run -d "$WORKDIR" --verbose 2>&1 | tee "$RUNNER_TEMP/${{ env.OUT_DIR }}/${{ inputs.destFile }}"
       shell: bash
 
     - name: Save output to artifact
