@@ -4,10 +4,15 @@ inputs:
   artifactName:
     description: Artifact name to check
     required: true
+outputs:
+    artifact_exists:
+        description: Whether the artifact exists
+        value: ${{ steps.check_artifact_exists.outputs.artifact_exists }}
 runs:
   using: "composite"
   steps:
     - name: Check if artifact storage_structures_result exists
+      id: check_artifact_exists
       uses: actions/github-script@v7
       with:
         script: |
