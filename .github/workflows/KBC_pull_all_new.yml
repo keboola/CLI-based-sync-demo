@@ -68,7 +68,7 @@ jobs:
           ls
           python3 .github/actions/kbc_vault_validation/scripts/validate.py \
             --workdir="./vault_structures" 
-          cat "./Vault_report.txt" >> "RUNNER_TEMP/log.txt" 
+          cat "./Vault_report.txt" >> "$RUNNER_TEMP/log.txt" 
 
       - name: Save structure to artifact
         uses: actions/upload-artifact@v4
@@ -133,7 +133,7 @@ jobs:
         run: |
           python3 .github/actions/kbc_storage_validation/scripts/validate.py \
             --workdir="./storage_structures" 
-          cat "./Storage_report.txt" >> "RUNNER_TEMP/log.txt" 
+          cat "./Storage_report.txt" >> "$RUNNER_TEMP/log.txt" 
 
       - name: Save structure to artifact
         uses: actions/upload-artifact@v4
