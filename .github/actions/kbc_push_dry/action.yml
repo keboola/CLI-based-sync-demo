@@ -61,8 +61,9 @@ runs:
           fi
         done
         
-        # push to Keboola Connection
-        kbc push --dry-run -d "$WORKDIR" --verbose 2>&1 | tee "$RUNNER_TEMP/${{ env.OUT_DIR }}/${{ inputs.destFile }}"
+        # Dry push to Keboola Connection
+        mkdir -p "${{ env.OUT_DIR }}"
+        kbc push --dry-run -d "$WORKDIR" --verbose 2>&1 | tee "${{ env.OUT_DIR }}/${{ inputs.destFile }}"
       shell: bash
 
     - name: Save output to artifact
