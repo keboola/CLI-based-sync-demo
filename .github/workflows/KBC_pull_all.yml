@@ -261,18 +261,18 @@ jobs:
         env:
           commit_message: ${{ steps.storage_report.outputs.commit_message }}
         run: |
-          currentDate=`date +%Y-%m-%d:%T%Z`
-          
+          currentDate=$(date +%Y-%m-%d:%T%Z)
+
           commit_message=""
           
           if [ -f ./Storage_report.txt ]; then
-            commit_message+=`cat "./Storage_report.txt"`
+            commit_message+=$(cat "./Storage_report.txt")
             rm ./Storage_report.txt
             rm -rf storage_structures
           fi
           
           if [ -f ./Vault_report.txt ]; then
-            commit_message+=`cat "./Vault_report.txt"`
+            commit_message+=$(cat "./Vault_report.txt")
             rm ./Vault_report.txt
             rm -rf vault_structures
           fi
@@ -282,16 +282,16 @@ jobs:
               if [ -f "$file" ]; then
                 project=$(basename "$file" .txt)
                 commit_message+="\nCLI Push dry-run output for project: $project\n"
-                commit_message+=`cat "$file"`
+                commit_message+=$(cat "$file")
               fi
             done
             commit_message+="------------------- \n\n"
             rm -rf ./cli_diffs
           fi
           
-          commit_message+="KBC CLI log bellow: \n"
+          commit_message+="KBC CLI log below: \n"
           commit_message+="------------------- \n\n"
-          commit_message+=`cat "$RUNNER_TEMP/log.txt"`
+          commit_message+=$(cat "$RUNNER_TEMP/log.txt")
           
           git config --global user.name 'Keboola CLI'
           git config --global user.email 'keboola-cli@users.noreply.github.com'
