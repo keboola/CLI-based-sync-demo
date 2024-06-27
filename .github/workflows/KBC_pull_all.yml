@@ -27,7 +27,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       # L0
-      - name: Pull storage L0
+      - name: Pull vault L0
         uses: ./.github/actions/kbc_vault_validation/get_vault_keys
         with:
           destFile: "${{ matrix.origin }}/${{ matrix.environment }}/L0.json"
@@ -36,7 +36,7 @@ jobs:
           kbcBranchId: ${{ vars.KBC_BRANCH_ID_L0 }}
 
       # L1
-      - name: Pull storage L1
+      - name: Pull vault L1
         uses: ./.github/actions/kbc_vault_validation/get_vault_keys
         with:
           destFile: "${{ matrix.origin }}/${{ matrix.environment }}/L1.json"
@@ -140,6 +140,40 @@ jobs:
           name: storage_structures_result
           path: ./Storage_report.txt
           retention-days: 5
+
+  CLI_diff:
+    if: github.event.inputs.dest_env != ''
+    runs-on: ubuntu-latest
+    environment: ${{ github.event.inputs.dest_env }}
+    steps:
+      - uses: actions/checkout@v4
+      # L0
+      - name: Get CLI diff L0
+        uses: ./.github/actions/kbc_storage_validation/get_storage_structure
+        with:
+          destFile: "L0.txt"
+          workdir: "L0"
+          kbcStorageApiHost: ${{ vars.KBC_STORAGE_API_HOST_L0 }}
+          kbcStorageApiToken: ${{ secrets.KBC_STORAGE_API_TOKEN_L0 }}
+          kbcProjectId: ${{ vars.KBC_PROJECT_ID_L0 }}
+          kbcBranchId: ${{ vars.KBC_BRANCH_ID_L0 }}
+
+      # L1
+      - name: Get CLI diff L1
+        uses: ./.github/actions/kbc_storage_validation/get_storage_structure
+        with:
+          destFile: "L1.txt"
+          workdir: "L1"
+          kbcStorageApiHost: ${{ vars.KBC_STORAGE_API_HOST_L1 }}
+          kbcStorageApiToken: ${{ secrets.KBC_STORAGE_API_TOKEN_L1 }}
+          kbcProjectId: ${{ vars.KBC_PROJECT_ID_L1 }}
+          kbcBranchId: ${{ vars.KBC_BRANCH_ID_L1 }}
+
+      - name: Merge Artifacts
+        uses: actions/upload-artifact/merge@v4
+        with:
+          name: cli_diffs
+          pattern: cli_diff_*
 
   Pull_All:
     if: always()

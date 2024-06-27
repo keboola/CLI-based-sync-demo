@@ -46,4 +46,4 @@ runs:
       with:
         name: ${{ env.OUT_DIR }}
         path: ${{ env.OUT_DIR }}/*
-        retention-days: 5
+        retention-days: 1
