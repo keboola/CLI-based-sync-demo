@@ -215,26 +215,13 @@ jobs:
           kbcBranchId: ${{ vars.KBC_BRANCH_ID_L1 }}
       # End generated steps
 
+
+      # Vault artifacts downloading
       - name: Check if artifact vault_structures_result exists
         id: check_vault_artifact
-        uses: actions/github-script@v7
+        uses: ./.github/actions/check_artifact_exists
         with:
-          script: |
-            const artifactName = 'vault_structures_result';
-            const runId = process.env.GITHUB_RUN_ID;
-            const { data: artifacts } = await github.rest.actions.listWorkflowRunArtifacts({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              run_id: runId,
-            });
-
-            const artifact = artifacts.artifacts.find(artifact => artifact.name === artifactName);
-
-            if (artifact) {
-              core.setOutput('artifact_exists', true);
-            } else {
-              core.setOutput('artifact_exists', false);
-            }
+          artifactName: vault_structures_result
 
       - name: Download artifact if exists
         if: steps.check_vault_artifact.outputs.artifact_exists == 'true'
@@ -242,11 +229,12 @@ jobs:
         with:
           name: vault_structures_result
 
+      # Storage artifacts downloading
       - name: Check if artifact storage_structures_result exists
         id: check_storage_artifact
         uses: ./.github/actions/check_artifact_exists
         with:
-          artifactName: "storage_structures_result"
+          artifactName: storage_structures_result
 
       - name: Download artifact if exists
         if: steps.check_storage_artifact.outputs.artifact_exists == 'true'
@@ -254,6 +242,21 @@ jobs:
         with:
           name: storage_structures_result
 
+      # CLI diff artifacts downloading
+      - name: Check if artifact cli_result exists
+        id: check_cli_artifacts
+        uses: ./.github/actions/check_artifact_exists
+        with:
+          artifactName: cli_diffs
+
+      - name: Download artifact if exists
+        if: steps.check_cli_artifacts.outputs.artifact_exists == 'true'
+        uses: actions/download-artifact@v4
+        with:
+          path: cli_diffs
+          name: cli_diffs
+
+      # Final commit and GIT push
       - name: Commit and push
         env:
           commit_message: ${{ steps.storage_report.outputs.commit_message }}
@@ -272,6 +275,18 @@ jobs:
             commit_message+=`cat "./Vault_report.txt"`
             rm ./Vault_report.txt
             rm -rf vault_structures
+          fi
+          
+          if [ -d ./cli_diffs ]; then
+            for file in ./cli_diffs/*; then
+              if [ -f "$file" ]; then
+                project=$(basename "$file" .txt)
+                commit_message+="\nCLI Push dry-run output for project: $project\n"
+                commit_message+=`cat "$file"`
+              fi
+            done
+            commit_message+="------------------- \n\n"
+            rm -rf ./cli_diffs
           fi
           
           commit_message+="KBC CLI log bellow: \n"
