@@ -43,14 +43,14 @@ class VaultDiff:
     destination_structure: ComparisonStructure
 
     def __init__(self, workdir):
-        logging.info(f"Storage comparison running... structure folder: '{workdir}'.")
+        logging.info(f"Vault comparison running... structure folder: '{workdir}'.")
         workdir = self._check_workdir(workdir)
         self.source_structure, self.destination_structure = self._create_objects_from_structure(workdir)
 
         if self.source_structure.get_projects() != self.destination_structure.get_projects():
             raise ValueError("Projects in source and destination structures do not match!")
 
-        text_output = [f"Storage Comparison Result ('{self.source_structure.environment}' "
+        text_output = [f"Vault Comparison Result ('{self.source_structure.environment}' "
                        f"vs '{self.destination_structure.environment}')"]
         text_output.append(self._generate_line(text_output, '='))
         for source_project in self.source_structure.projects:
@@ -83,14 +83,17 @@ class VaultDiff:
         missing_in_source = [item for item in destination if item not in source]
         missing_in_destination = [item for item in source if item not in destination]
 
-        if len(missing_in_source) == 0 and len(missing_in_destination) == 0:
-            return ["Vault structure is the same - No changes detected\n"]
-
         text_lines = []
-        for key in missing_in_source:
-            text_lines.append(f"- In source project is missing:\n{key}\n")
-        for key in missing_in_destination:
-            text_lines.append(f"- In destination project is missing:\n{key}\n")
+        if len(missing_in_source) > 0:
+            missing_in_source_text = "\n".join(missing_in_source)
+            text_lines.append(f"- In source project is missing following keys:\n{missing_in_source_text}\n")
+
+        if len(missing_in_destination) > 0:
+            missing_in_destination_text = "\n".join(missing_in_destination)
+            text_lines.append(f"- In destination project is missing following keys:\n{missing_in_destination_text}\n")
+
+        if not text_lines:
+            return ["Vault structure is the same - No changes detected\n"]
 
         return text_lines
 
@@ -151,7 +154,7 @@ class VaultDiff:
 
 
 if __name__ == '__main__':
-    parser = argparse.ArgumentParser(description='Storage structure comparison')
+    parser = argparse.ArgumentParser(description='Vault structure comparison')
     parser.add_argument('--workdir', type=str, required=True)
     args = parser.parse_args()
     VaultDiff(
