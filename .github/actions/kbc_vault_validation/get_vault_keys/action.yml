@@ -1,0 +1,49 @@
+name: Keboola Vault validation pull
+description: Pulling from Keboola project vault structure
+inputs:
+  destFile:
+    description: Destination file
+    required: true
+  kbcStorageApiHost:
+    description: Keboola Connection Stack URL
+    required: true
+  kbcStorageApiToken:
+    description: Keboola Connection Storage API Token
+    required: true
+  kbcBranchId:
+    description: Keboola Connection Branch
+    required: true
+runs:
+  using: "composite"
+  steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: get random number
+      id: random_number
+      uses: yakubique/random-number@v1.1
+      with:
+        min: 1
+        max: 1000
+
+    - name: Def out directory
+      id: def_dir
+      run: |
+        echo "OUT_DIR=vault_structure_${{ steps.random_number.outputs.number }}" >> "${GITHUB_ENV}"
+      shell: bash
+
+    - name: Pull vault structure
+      shell: bash
+      run: |
+        python3 .github/actions/kbc_storage_validation/pull/scripts/storage_pull.py \
+          --host="${{ inputs.kbcStorageApiHost }}" \
+          --token="${{ inputs.kbcStorageApiToken }}" \
+          --branch="${{ inputs.kbcBranchId }}" \
+          --destination-file="${{ env.OUT_DIR }}/${{ inputs.destFile }}"
+
+    - name: Save structure to artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: ${{ env.OUT_DIR }}
+        path: ${{ env.OUT_DIR }}/*
+        retention-days: 5

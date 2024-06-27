@@ -9,7 +9,7 @@ permissions:
   contents: write
 jobs:
 
-  storage_validation_get_structure:
+  vault_validation_get_structures:
     if: github.event.inputs.dest_env != ''
     runs-on: ubuntu-latest
     strategy:
@@ -28,7 +28,74 @@ jobs:
       - uses: actions/checkout@v4
       # L0
       - name: Pull storage L0
-        uses: ./.github/actions/kbc_storage_validation/pull
+        uses: ./.github/actions/kbc_vault_validation/get_vault_keys
+        with:
+          destFile: "${{ matrix.origin }}/${{ matrix.environment }}/L0.json"
+          kbcStorageApiHost: ${{ vars.KBC_STORAGE_API_HOST_L0 }}
+          kbcStorageApiToken: ${{ secrets.KBC_STORAGE_API_TOKEN_L0 }}
+          kbcBranchId: ${{ vars.KBC_BRANCH_ID_L0 }}
+
+      # L1
+      - name: Pull storage L1
+        uses: ./.github/actions/kbc_vault_validation/get_vault_keys
+        with:
+          destFile: "${{ matrix.origin }}/${{ matrix.environment }}/L1.json"
+          kbcStorageApiHost: ${{ vars.KBC_STORAGE_API_HOST_L1 }}
+          kbcStorageApiToken: ${{ secrets.KBC_STORAGE_API_TOKEN_L1 }}
+          kbcBranchId: ${{ vars.KBC_BRANCH_ID_L0 }}
+
+  vault_validation_comparison:
+    runs-on: ubuntu-latest
+    needs: vault_validation_get_structures
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Merge Artifacts
+        uses: actions/upload-artifact/merge@v4
+        with:
+          name: vault_structures
+          pattern: vault_structure_*
+
+      - name: Download structures
+        uses: actions/download-artifact@v4
+        with:
+          name: vault_structures
+          path: ./vault_structures
+
+      - name: Compare storage structure
+        shell: bash
+        run: |
+          ls
+          python3 .github/actions/kbc_vault_validation/scripts/validate.py \
+            --workdir="./vault_structures" 
+
+      - name: Save structure to artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: vault_structures_result
+          path: ./Vault_report.txt
+          retention-days: 5
+
+  storage_validation_get_structures:
+    if: github.event.inputs.dest_env != ''
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        include:
+          - environment: |-
+              ${{
+                 github.ref_name == 'main' && 'prod'
+              || github.ref_name == 'dev' && 'dev'
+              }}
+            origin: "source"
+          - environment: ${{ github.event.inputs.dest_env }}
+            origin: "destination"
+    environment: ${{ matrix.environment }}
+    steps:
+      - uses: actions/checkout@v4
+      # L0
+      - name: Pull storage L0
+        uses: ./.github/actions/kbc_storage_validation/get_storage_structure
         with:
           destFile: "${{ matrix.origin }}/${{ matrix.environment }}/L0.json"
           kbcStorageApiHost: ${{ vars.KBC_STORAGE_API_HOST_L0 }}
@@ -36,7 +103,7 @@ jobs:
 
       # L1
       - name: Pull storage L1
-        uses: ./.github/actions/kbc_storage_validation/pull
+        uses: ./.github/actions/kbc_storage_validation/get_storage_structure
         with:
           destFile: "${{ matrix.origin }}/${{ matrix.environment }}/L1.json"
           kbcStorageApiHost: ${{ vars.KBC_STORAGE_API_HOST_L1 }}
@@ -44,39 +111,39 @@ jobs:
 
   storage_validation_comparison:
     runs-on: ubuntu-latest
-    needs: storage_validation_get_structure
+    needs: storage_validation_get_structures
     steps:
       - uses: actions/checkout@v4
 
       - name: Merge Artifacts
         uses: actions/upload-artifact/merge@v4
         with:
-          name: projects_structure
-          pattern: projects_structure_*
+          name: storage_structures
+          pattern: storage_structure_*
 
       - name: Download structures
         uses: actions/download-artifact@v4
         with:
-          name: projects_structure
-          path: ./projects_structure
+          name: storage_structures
+          path: ./storage_structures
 
       - name: Compare storage structure
         shell: bash
         run: |
           ls
-          python3 .github/actions/kbc_storage_validation/storage_diff/main.py \
-            --workdir="./projects_structure" 
+          python3 .github/actions/kbc_storage_validation/scripts/validate.py \
+            --workdir="./storage_structures" 
 
       - name: Save structure to artifact
         uses: actions/upload-artifact@v4
         with:
-          name: projects_structure_result
-          path: ./Storage_report.md
+          name: storage_structures_result
+          path: ./Storage_report.txt
           retention-days: 5
 
   Pull_All:
     if: always()
-    needs: [storage_validation_comparison]
+    needs: [ storage_validation_comparison,vault_validation_comparison ]
     # Dynamic generated value
     environment: |-
       ${{
@@ -110,12 +177,39 @@ jobs:
           kbcBranchId: ${{ vars.KBC_BRANCH_ID_L1 }}
       # End generated steps
 
-      - name: Check if artifact exists
-        id: check_artifact
+      - name: Check if artifact vault_structures_result exists
+        id: check_vault_artifact
         uses: actions/github-script@v7
         with:
           script: |
-            const artifactName = 'projects_structure_result';
+            const artifactName = 'vault_structures_result';
+            const runId = process.env.GITHUB_RUN_ID;
+            const { data: artifacts } = await github.rest.actions.listWorkflowRunArtifacts({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              run_id: runId,
+            });
+
+            const artifact = artifacts.artifacts.find(artifact => artifact.name === artifactName);
+
+            if (artifact) {
+              core.setOutput('artifact_exists', true);
+            } else {
+              core.setOutput('artifact_exists', false);
+            }
+
+      - name: Download artifact if exists
+        if: steps.check_vault_artifact.outputs.artifact_exists == 'true'
+        uses: actions/download-artifact@v4
+        with:
+          name: vault_structures_result
+
+      - name: Check if artifact storage_structures_result exists
+        id: check_storage_artifact
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const artifactName = 'storage_structures_result';
             const runId = process.env.GITHUB_RUN_ID;
             const { data: artifacts } = await github.rest.actions.listWorkflowRunArtifacts({
               owner: context.repo.owner,
@@ -132,10 +226,10 @@ jobs:
             }
 
       - name: Download artifact if exists
-        if: steps.check_artifact.outputs.artifact_exists == 'true'
+        if: steps.check_storage_artifact.outputs.artifact_exists == 'true'
         uses: actions/download-artifact@v4
         with:
-          name: projects_structure_result
+          name: storage_structures_result
 
       - name: Commit and push
         env:
@@ -143,10 +237,18 @@ jobs:
         run: |
           currentDate=`date +%Y-%m-%d:%T%Z`
           
-          if [ -f ./Storage_report.md ]; then
-            commit_message=`cat "./Storage_report.md"`
-            rm ./Storage_report.md
-            rm -rf projects_structure
+          commit_message=""
+          
+          if [ -f ./Storage_report.txt ]; then
+            commit_message+=`cat "./Storage_report.txt"`
+            rm ./Storage_report.txt
+            rm -rf storage_structures
+          fi
+          
+          if [ -f ./Vault_report.txt ]; then
+            commit_message+=`cat "./Vault_report.txt"`
+            rm ./Vault_report.txt
+            rm -rf vault_structures
           fi
           
           commit_message+='**KBC CLI log bellow:** \n\n'

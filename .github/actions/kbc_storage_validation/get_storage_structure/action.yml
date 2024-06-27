@@ -26,13 +26,13 @@ runs:
     - name: Def out directory
       id: def_dir
       run: |
-        echo "OUT_DIR=projects_structure_${{ steps.random_number.outputs.number }}" >> "${GITHUB_ENV}"
+        echo "OUT_DIR=project_structure_${{ steps.random_number.outputs.number }}" >> "${GITHUB_ENV}"
       shell: bash
 
     - name: Pull storage structure
       shell: bash
       run: |
-        python3 .github/actions/kbc_storage_validation/pull/storage_pull.py \
+        python3 .github/actions/kbc_storage_validation/pull/scripts/storage_pull.py \
           --host="${{ inputs.kbcStorageApiHost }}" \
           --token="${{ inputs.kbcStorageApiToken }}" \
           --destination-file="${{ env.OUT_DIR }}/${{ inputs.destFile }}"

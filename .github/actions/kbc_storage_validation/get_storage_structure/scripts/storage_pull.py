@@ -2,6 +2,7 @@ import json
 import os
 
 import requests
+import argparse
 
 
 class StoragePull:
@@ -39,12 +40,9 @@ class StoragePull:
 
 
 if __name__ == '__main__':
-    import argparse
-
     parser = argparse.ArgumentParser(description='Pull storage structure from KBC')
     parser.add_argument('--host', required=True, help='KBC host')
     parser.add_argument('--token', required=True, help='KBC token')
     parser.add_argument('--destination-file', required=True, help='Destination file')
     args = parser.parse_args()
-    # TODO add empty var check
     StoragePull(args.host, args.token, args.destination_file).pull()
