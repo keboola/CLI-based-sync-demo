@@ -251,7 +251,8 @@ jobs:
             rm -rf vault_structures
           fi
           
-          commit_message+='**KBC CLI log bellow:** \n\n'
+          commit_message+="KBC CLI log bellow: \n"
+          commit_message+="------------------- \n\n"
           commit_message+=`cat "$RUNNER_TEMP/log.txt"`
           
           git config --global user.name 'Keboola CLI'
