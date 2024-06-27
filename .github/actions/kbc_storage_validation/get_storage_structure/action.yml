@@ -26,7 +26,7 @@ runs:
     - name: Def out directory
       id: def_dir
       run: |
-        echo "OUT_DIR=project_structure_${{ steps.random_number.outputs.number }}" >> "${GITHUB_ENV}"
+        echo "OUT_DIR=storage_structure_${{ steps.random_number.outputs.number }}" >> "${GITHUB_ENV}"
       shell: bash
 
     - name: Pull storage structure
