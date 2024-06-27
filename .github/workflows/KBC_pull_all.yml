@@ -263,18 +263,16 @@ jobs:
         run: |
           currentDate=$(date +%Y-%m-%d:%T%Z)
 
-          commit_message_file=$(mktemp)
-          
           if [ -f ./Storage_report.txt ]; then
-            cat ./Storage_report.txt >> "$commit_message_file"
-            echo "" >> "$commit_message_file"
+            cat ./Storage_report.txt >> commit_message_file.txt
+            echo "" >> commit_message_file.txt
             rm ./Storage_report.txt
             rm -rf storage_structures
           fi
           
           if [ -f ./Vault_report.txt ]; then
-            cat ./Vault_report.txt >> "$commit_message_file"
-            echo "" >> "$commit_message_file"
+            cat ./Vault_report.txt >> commit_message_file.txt
+            echo "" >> commit_message_file.txt
             rm ./Vault_report.txt
             rm -rf vault_structures
           fi
@@ -283,26 +281,29 @@ jobs:
             for file in ./cli_diffs/*; do
               if [ -f "$file" ]; then
                 project=$(basename "$file" .txt)
-                echo -e "\nCLI Push dry-run output for project: $project\n" >> "$commit_message_file"
-                cat "$file" >> "$commit_message_file"
-                echo "" >> "$commit_message_file"
+                echo -e "\nCLI Push dry-run output for project: $project\n" >> commit_message_file.txt
+                cat "$file" >> commit_message_file.txt
+                echo "" >> commit_message_file.txt
               fi
             done
-            echo -e "------------------- \n\n" >> "$commit_message_file"
+            echo -e "------------------- \n\n" >> commit_message_file.txt
             rm -rf ./cli_diffs
           fi
           
-          echo -e "KBC CLI log below: \n" >> "$commit_message_file"
-          echo -e "------------------- \n\n" >> "$commit_message_file"
-          cat "$RUNNER_TEMP/log.txt" >> "$commit_message_file"
+          echo -e "KBC CLI log below: \n" >> commit_message_file.txt
+          echo -e "------------------- \n\n" >> commit_message_file.txt
+          cat "$RUNNER_TEMP/log.txt" >> commit_message_file.txt
           
+          cat commit_message_file.txt
+          
+          # Commit and push
           git config --global user.name 'Keboola CLI'
           git config --global user.email 'keboola-cli@users.noreply.github.com'
           
           git add -A
-          git commit --allow-empty -a -m "Manual KBC pull $currentDate" -F "$commit_message_file" || true
+          git commit --allow-empty -a -m "Manual KBC pull $currentDate" -F "commit_message_file.txt" || true
           git push --force
           
-          rm "$commit_message_file"
+          rm commit_message_file.txt
 
 
