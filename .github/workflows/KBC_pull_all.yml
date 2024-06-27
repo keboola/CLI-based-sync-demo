@@ -244,24 +244,9 @@ jobs:
 
       - name: Check if artifact storage_structures_result exists
         id: check_storage_artifact
-        uses: actions/github-script@v7
+        uses: ./.github/actions/kbc_pull
         with:
-          script: |
-            const artifactName = 'storage_structures_result';
-            const runId = process.env.GITHUB_RUN_ID;
-            const { data: artifacts } = await github.rest.actions.listWorkflowRunArtifacts({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              run_id: runId,
-            });
-            
-            const artifact = artifacts.artifacts.find(artifact => artifact.name === artifactName);
-            
-            if (artifact) {
-              core.setOutput('artifact_exists', true);
-            } else {
-              core.setOutput('artifact_exists', false);
-            }
+          artifactName: "storage_structures_result"
 
       - name: Download artifact if exists
         if: steps.check_storage_artifact.outputs.artifact_exists == 'true'
