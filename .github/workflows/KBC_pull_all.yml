@@ -117,7 +117,7 @@ jobs:
           script: |
             const artifactName = 'projects_structure_result';
             const runId = process.env.GITHUB_RUN_ID;
-            const { data: artifacts } = await github.actions.listWorkflowRunArtifacts({
+            const { data: artifacts } = await github.rest.actions.listWorkflowRunArtifacts({
               owner: context.repo.owner,
               repo: context.repo.repo,
               run_id: runId,
