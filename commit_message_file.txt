@@ -1,64 +1,4 @@
-Manual KBC pull 2024-06-27:15:39:21UTC
-Storage Comparison Result ('prod' vs 'dev')
-===========================================
-
-
-Project 'L1' vs Project 'L1'
------------------------------
-
-Storage structure is the same - No changes detected
-
-
-Project 'L0' vs Project 'L0'
------------------------------
-
-- Bucket modified:
-in.c-test
-
-- Bucket removed:
-out.c-create-table-test
-
-- Bucket removed:
-in.c-keboola-ex-google-drive-1119451229
-
-- Table added:
-in.c-test.testaccount
-
-- Table removed:
-out.c-create-table-test.out
-
-- Table removed:
-in.c-keboola-ex-google-drive-1119451229.test-Sheet1
-
-
---------------------------------------------------
-
-
-Vault Comparison Result ('prod' vs 'dev')
-=========================================
-
-
-Source project 'L1' vs Destination project 'L1'
-------------------------------------------------
-
-Vault structure is the same - No changes detected
-
-
-Source project 'L0' vs Destination project 'L0'
-------------------------------------------------
-
-- In source project is missing following keys:
-project_db
-schema
-sf_writer_pass
-
-- In destination project is missing following keys:
-testvar
-
-
---------------------------------------------------
-
-
+Manual KBC pull 2024-06-27:15:48:36UTC
 
 CLI Push dry-run output for project: L0
 
@@ -86,6 +26,28 @@ KBC CLI log below:
 ------------------- 
 
 
+Storage API host "connection.keboola.com" set from ENV.
+Created file ".env.local" - it contains the API token, keep it local and secret.
+Created file ".env.dist" - an ".env.local" template.
+Created file ".gitignore" - to keep ".env.local" local.
+Created metadata directory ".keboola".
+Created manifest file ".keboola/manifest.json".
+Init done.
+
+Running pull.
+Plan for "pull" operation:
+  + B main
+  + C main/extractor/keboola.ex-google-drive/my-google-sheets-data-source
+  + C main/transformation/keboola.snowflake-transformation/create-table-test
+  + C main/transformation/keboola.snowflake-transformation/nova-transofrmace
+  + C main/transformation/keboola.snowflake-transformation/test-transformace
+  + C main/writer/keboola.wr-db-snowflake/my-new-config
+  + C main/writer/keboola.wr-db-snowflake/my-snowflake-data-destination
+  + C main/writer/keboola.wr-db-snowflake/my-snowflake-data-destination-bad-config
+  + R main/writer/keboola.wr-db-snowflake/my-snowflake-data-destination-bad-config/rows/out
+  + C main/writer/keboola.wr-db-snowflake/my-snowflake-data-destination-test
+  + R main/writer/keboola.wr-db-snowflake/my-snowflake-data-destination/rows/test-sheet1
+Pull done.
 Storage API host "connection.keboola.com" set from ENV.
 Created file ".env.local" - it contains the API token, keep it local and secret.
 Created file ".env.dist" - an ".env.local" template.
