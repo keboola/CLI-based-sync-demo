@@ -141,7 +141,7 @@ jobs:
           path: ./Storage_report.txt
           retention-days: 5
 
-  CLI_dry_run:
+  CLI_push_dry_run:
     if: github.event.inputs.dest_env != ''
     runs-on: ubuntu-latest
     environment: ${{ github.event.inputs.dest_env }}
@@ -181,7 +181,7 @@ jobs:
 
   Pull_All:
     if: always()
-    needs: [ storage_validation_comparison,vault_validation_comparison ]
+    needs: [ storage_validation_comparison,vault_validation_comparison,CLI_push_dry_run ]
     # Dynamic generated value
     environment: |-
       ${{
@@ -278,7 +278,7 @@ jobs:
           fi
           
           if [ -d ./cli_diffs ]; then
-            for file in ./cli_diffs/*; then
+            for file in ./cli_diffs/*; do
               if [ -f "$file" ]; then
                 project=$(basename "$file" .txt)
                 commit_message+="\nCLI Push dry-run output for project: $project\n"
