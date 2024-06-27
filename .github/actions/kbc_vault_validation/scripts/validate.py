@@ -64,6 +64,7 @@ class VaultDiff:
             text_output.append(self._generate_line(text_output))
             text_output.extend(self._compare_structure(source_project.path, destination_project.path))
 
+        text_output.append(f"\n{'-' * 50}\n\n")
         self._write_report(text_output)
 
     @staticmethod
