@@ -145,12 +145,12 @@ jobs:
           
           if [ -f ./Storage_report.md ]; then
             commit_message=`cat "./Storage_report.md"`
-            commit_message+=`cat "$RUNNER_TEMP/log.txt"`
             rm ./Storage_report.md
             rm -rf projects_structure
-          else
-            commit_message=`cat "$RUNNER_TEMP/log.txt"`
           fi
+          
+          commit_message+=`KBC CLI log bellow: \n\n`
+          commit_message+=`cat "$RUNNER_TEMP/log.txt"`
           
           git config --global user.name 'Keboola CLI'
           git config --global user.email 'keboola-cli@users.noreply.github.com'

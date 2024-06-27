@@ -53,8 +53,8 @@ class StorageDiff:
         if self.source_structure.get_projects() != self.destination_structure.get_projects():
             raise ValueError("Projects in source and destination structures do not match!")
 
-        markdown_output = [f"# Storage comparison result \n\n",
-                           f"## Comparison environments '{self.source_structure.environment}' "
+        markdown_output = [f"**Storage comparison result** \n\n",
+                           f"* **Comparison environments** '{self.source_structure.environment}' "
                            f"vs '{self.destination_structure.environment}' \n\n"]
         for source_project in self.source_structure.projects:
             destination_project = self.destination_structure.get_project(source_project.project)
@@ -65,7 +65,7 @@ class StorageDiff:
             diff_file = Diff(source_project.path, destination_project.path, diff_file_path).compare()
 
             markdown_output.append(
-                f"## Project '{source_project.project}' vs project '{destination_project.project}'\n\n")
+                f"+ **Project '{source_project.project}' vs project** '{destination_project.project}'\n\n")
             markdown_output.extend(self.create_markdown(diff_file))
 
         self._write_report(markdown_output)
@@ -77,20 +77,20 @@ class StorageDiff:
             diff = json.load(f)
 
         if not diff:
-            return ["### Storage structure is the same\n\nNo changes detected\n"]
+            return ["- **Storage structure is the same - No changes detected**\n"]
 
         markdown_lines = []
         for event in diff:
             if event['event'] == 'ADD_BUCKET':
-                markdown_lines.append(f"### Bucket added\n\n{event['bucket']}\n")
+                markdown_lines.append(f"- **Bucket added**\n\n{event['bucket']}\n")
             elif event['event'] == 'DROP_BUCKET':
-                markdown_lines.append(f"### Bucket removed\n\n{event['bucket']}\n")
+                markdown_lines.append(f"- **Bucket removed**\n\n{event['bucket']}\n")
             elif event['event'] == 'MODIFY_BUCKET':
-                markdown_lines.append(f"### Bucket modified\n\n{event['bucket']}\n")
+                markdown_lines.append(f"- **Bucket modified**\n\n{event['bucket']}\n")
             elif event['event'] == 'ADD_TABLE':
-                markdown_lines.append(f"### Table added\n\n{event['table']}\n")
+                markdown_lines.append(f"- **Table added**\n\n{event['table']}\n")
             elif event['event'] == 'DROP_TABLE':
-                markdown_lines.append(f"### Table removed\n\n{event['table']}\n")
+                markdown_lines.append(f"- **Table removed**\n\n{event['table']}\n")
             # TODO: Add more event types here...
 
         return markdown_lines
