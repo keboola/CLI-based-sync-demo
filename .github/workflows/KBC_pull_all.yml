@@ -65,14 +65,14 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      # Generated steps }
+      # Generated steps 
       - name: Pull storage L0
         uses: ./.github/actions/kbc_storage_validation/get_storage_structure
         with:
           destFile: "${{ matrix.origin }}/${{ matrix.environment }}/L0.json"
           kbcSapiHost: ${{ vars.KBC_SAPI_HOST }}
           kbcSapiToken: ${{ secrets.KBC_SAPI_TOKEN_L0 }}
-      }
+      
       - name: Pull storage L1
         uses: ./.github/actions/kbc_storage_validation/get_storage_structure
         with:
@@ -194,6 +194,3 @@ jobs:
           git add -A
           git commit --allow-empty -a -F "$RUNNER_TEMP/log.txt" || true
           git push --force
-
-
-
