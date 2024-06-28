@@ -2,7 +2,7 @@
   "parameters": {
     "db": {
       "port": "443",
-      "schema": "WORKSPACE_1119462025",
+      "schema": "{{ vault.schema }}",
       "warehouse": "KEBOOLA_PROD_SMALL",
       "driver": "snowflake",
       "host": "keboola.snowflakecomputing.com",
