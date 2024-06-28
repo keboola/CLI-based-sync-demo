@@ -152,19 +152,19 @@ jobs:
 
       # Read Vault artifacts to log
       - name: Read vault_structures_result
-        uses: ./.github/actions/download_artifact
+        uses: ./.github/actions/read_artifact
         with:
           artifactName: vault_structures_result
 
       # Read Storage artifacts to log
       - name: Read vault_structures_result
-        uses: ./.github/actions/download_artifact
+        uses: ./.github/actions/read_artifact
         with:
           artifactName: storage_structures_result
 
       # Read CLI diff artifacts to log
       - name: Read vault_structures_result
-        uses: ./.github/actions/download_artifact
+        uses: ./.github/actions/read_artifact
         with:
           artifactName: cli_diffs
 
