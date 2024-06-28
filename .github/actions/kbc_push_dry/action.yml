@@ -1,9 +1,6 @@
 name: Push - dry run
 description: CLI dry run for push
 inputs:
-  destFile:
-    description: Destination file
-    required: true
   workdir:
     description: Working directory
     required: true
@@ -38,6 +35,12 @@ runs:
         echo "OUT_DIR=cli_diff_${{ steps.random_number.outputs.number }}" >> "${GITHUB_ENV}"
       shell: bash
 
+    - name: Def out file
+      id: def_file
+      run: |
+        echo "OUT_FILE=${{ inputs.workdir }}.txt" >> "${GITHUB_ENV}"
+      shell: bash
+
     # Pull remote project's state
     - name: CLI push dry run
       env:
@@ -63,7 +66,9 @@ runs:
         
         # Dry push to Keboola Connection
         mkdir -p "${{ env.OUT_DIR }}"
-        kbc push --dry-run -d "$WORKDIR" 2>&1 | tee "${{ env.OUT_DIR }}/${{ inputs.destFile }}"
+        echo -e "\nCLI Push dry-run output for project: ${{ inputs.kbcProjectId }}\n" > "${{ env.OUT_DIR }}/${{ env.OUT_FILE }}"
+        kbc push --dry-run -d "$WORKDIR" 2>&1 | tee -a "${{ env.OUT_DIR }}/${{ env.OUT_FILE }}"
+        echo -e "------------------- \n\n" >> ${{ env.OUT_DIR }}/${{ env.OUT_FILE }}
       shell: bash
 
     - name: Save output to artifact

@@ -9,6 +9,7 @@ permissions:
   contents: write
 jobs:
 
+  # VAULT validation
   vault_validation_get_structures:
     if: github.event.inputs.dest_env != ''
     runs-on: ubuntu-latest
@@ -31,7 +32,7 @@ jobs:
         uses: ./.github/actions/kbc_vault_validation/get_vault_keys
         with:
           destFile: "${{ matrix.origin }}/${{ matrix.environment }}/L0.json"
-          kbcSapiHost: ${{ vars.KBC_SAPI_HOST_L0 }}
+          kbcSapiHost: ${{ vars.KBC_SAPI_HOST }}
           kbcSapiToken: ${{ secrets.KBC_SAPI_TOKEN_L0 }}
           kbcBranchId: ${{ vars.KBC_BRANCH_ID_L0 }}
 
@@ -40,7 +41,7 @@ jobs:
         uses: ./.github/actions/kbc_vault_validation/get_vault_keys
         with:
           destFile: "${{ matrix.origin }}/${{ matrix.environment }}/L1.json"
-          kbcSapiHost: ${{ vars.KBC_SAPI_HOST_L1 }}
+          kbcSapiHost: ${{ vars.KBC_SAPI_HOST }}
           kbcSapiToken: ${{ secrets.KBC_SAPI_TOKEN_L1 }}
           kbcBranchId: ${{ vars.KBC_BRANCH_ID_L0 }}
 
@@ -48,34 +49,10 @@ jobs:
     runs-on: ubuntu-latest
     needs: vault_validation_get_structures
     steps:
-      - uses: actions/checkout@v4
+      - name: Compare vault structure
+        uses: ./.github/actions/kbc_vault_validation
 
-      - name: Merge Artifacts
-        uses: actions/upload-artifact/merge@v4
-        with:
-          name: vault_structures
-          pattern: vault_structure_*
-
-      - name: Download structures
-        uses: actions/download-artifact@v4
-        with:
-          name: vault_structures
-          path: ./vault_structures
-
-      - name: Compare storage structure
-        shell: bash
-        run: |
-          ls
-          python3 .github/actions/kbc_vault_validation/scripts/validate.py \
-            --workdir="./vault_structures" 
-
-      - name: Save structure to artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: vault_structures_result
-          path: ./Vault_report.txt
-          retention-days: 5
-
+  # STORAGE validation
   storage_validation_get_structures:
     if: github.event.inputs.dest_env != ''
     runs-on: ubuntu-latest
@@ -98,7 +75,7 @@ jobs:
         uses: ./.github/actions/kbc_storage_validation/get_storage_structure
         with:
           destFile: "${{ matrix.origin }}/${{ matrix.environment }}/L0.json"
-          kbcSapiHost: ${{ vars.KBC_SAPI_HOST_L0 }}
+          kbcSapiHost: ${{ vars.KBC_SAPI_HOST }}
           kbcSapiToken: ${{ secrets.KBC_SAPI_TOKEN_L0 }}
 
       # L1
@@ -106,40 +83,17 @@ jobs:
         uses: ./.github/actions/kbc_storage_validation/get_storage_structure
         with:
           destFile: "${{ matrix.origin }}/${{ matrix.environment }}/L1.json"
-          kbcSapiHost: ${{ vars.KBC_SAPI_HOST_L1 }}
+          kbcSapiHost: ${{ vars.KBC_SAPI_HOST }}
           kbcSapiToken: ${{ secrets.KBC_SAPI_TOKEN_L1 }}
 
   storage_validation_comparison:
     runs-on: ubuntu-latest
     needs: storage_validation_get_structures
     steps:
-      - uses: actions/checkout@v4
-
-      - name: Merge Artifacts
-        uses: actions/upload-artifact/merge@v4
-        with:
-          name: storage_structures
-          pattern: storage_structure_*
-
-      - name: Download structures
-        uses: actions/download-artifact@v4
-        with:
-          name: storage_structures
-          path: ./storage_structures
-
       - name: Compare storage structure
-        shell: bash
-        run: |
-          python3 .github/actions/kbc_storage_validation/scripts/validate.py \
-            --workdir="./storage_structures" 
+        uses: ./.github/actions/kbc_storage_validation
 
-      - name: Save structure to artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: storage_structures_result
-          path: ./Storage_report.txt
-          retention-days: 5
-
+  # CLI push dry-run
   CLI_push_dry_run:
     if: github.event.inputs.dest_env != ''
     runs-on: ubuntu-latest
@@ -154,9 +108,8 @@ jobs:
       - name: Get CLI diff L0
         uses: ./.github/actions/kbc_push_dry
         with:
-          destFile: "L0.txt"
           workdir: "L0"
-          kbcSapiHost: ${{ vars.KBC_SAPI_HOST_L0 }}
+          kbcSapiHost: ${{ vars.KBC_SAPI_HOST }}
           kbcSapiToken: ${{ secrets.KBC_SAPI_TOKEN_L0 }}
           kbcProjectId: ${{ vars.KBC_PROJECT_ID_L0 }}
           kbcBranchId: ${{ vars.KBC_BRANCH_ID_L0 }}
@@ -165,9 +118,8 @@ jobs:
       - name: Get CLI diff L1
         uses: ./.github/actions/kbc_push_dry
         with:
-          destFile: "L1.txt"
           workdir: "L1"
-          kbcSapiHost: ${{ vars.KBC_SAPI_HOST_L1 }}
+          kbcSapiHost: ${{ vars.KBC_SAPI_HOST }}
           kbcSapiToken: ${{ secrets.KBC_SAPI_TOKEN_L1 }}
           kbcProjectId: ${{ vars.KBC_PROJECT_ID_L1 }}
           kbcBranchId: ${{ vars.KBC_BRANCH_ID_L1 }}
@@ -178,6 +130,7 @@ jobs:
           name: cli_diffs
           pattern: cli_diff_*
 
+  # Pull all configurations from projects, collection of validation results and push with commit
   Pull_All:
     if: always()
     needs: [ storage_validation_comparison,vault_validation_comparison,CLI_push_dry_run ]
@@ -189,7 +142,32 @@ jobs:
       }}
     runs-on: ubuntu-latest
     steps:
+      - name: Log
+        run: |
+          currentDate=$(date +%Y-%m-%d:%T%Z)
+          
+          echo "Manual KBC pull $currentDate" > "$RUNNER_TEMP/log.txt"
+
       - uses: actions/checkout@v4
+
+      # Vault artifacts downloading if exists
+      - name: Download vault_structures_result if exists
+        uses: ./.github/actions/download_artifact
+        with:
+          artifactName: vault_structures_result
+
+      # Storage artifacts downloading if exists
+      - name: Download vault_structures_result if exists
+        uses: ./.github/actions/download_artifact
+        with:
+          artifactName: storage_structures_result
+
+      # CLI diff artifacts downloading if exists
+      - name: Download vault_structures_result if exists
+        uses: ./.github/actions/download_artifact
+        with:
+          artifactName: cli_diffs
+
       - uses: ./.github/actions/install
         with:
           githubToken: ${{ secrets.GITHUB_TOKEN }}
@@ -199,7 +177,7 @@ jobs:
         uses: ./.github/actions/kbc_pull
         with:
           workdir: "L0"
-          kbcSapiHost: ${{ vars.KBC_SAPI_HOST_L0 }}
+          kbcSapiHost: ${{ vars.KBC_SAPI_HOST }}
           kbcSapiToken: ${{ secrets.KBC_SAPI_TOKEN_L0 }}
           kbcProjectId: ${{ vars.KBC_PROJECT_ID_L0 }}
           kbcBranchId: ${{ vars.KBC_BRANCH_ID_L0 }}
@@ -208,101 +186,23 @@ jobs:
         uses: ./.github/actions/kbc_pull
         with:
           workdir: "L1"
-          kbcSapiHost: ${{ vars.KBC_SAPI_HOST_L1 }}
+          kbcSapiHost: ${{ vars.KBC_SAPI_HOST }}
           kbcSapiToken: ${{ secrets.KBC_SAPI_TOKEN_L1 }}
           kbcProjectId: ${{ vars.KBC_PROJECT_ID_L1 }}
           kbcBranchId: ${{ vars.KBC_BRANCH_ID_L1 }}
       # End generated steps
-
-
-      # Vault artifacts downloading
-      - name: Check if artifact vault_structures_result exists
-        id: check_vault_artifact
-        uses: ./.github/actions/check_artifact_exists
-        with:
-          artifactName: vault_structures_result
-
-      - name: Download artifact if exists
-        if: steps.check_vault_artifact.outputs.artifact_exists == 'true'
-        uses: actions/download-artifact@v4
-        with:
-          name: vault_structures_result
-
-      # Storage artifacts downloading
-      - name: Check if artifact storage_structures_result exists
-        id: check_storage_artifact
-        uses: ./.github/actions/check_artifact_exists
-        with:
-          artifactName: storage_structures_result
-
-      - name: Download artifact if exists
-        if: steps.check_storage_artifact.outputs.artifact_exists == 'true'
-        uses: actions/download-artifact@v4
-        with:
-          name: storage_structures_result
-
-      # CLI diff artifacts downloading
-      - name: Check if artifact cli_result exists
-        id: check_cli_artifacts
-        uses: ./.github/actions/check_artifact_exists
-        with:
-          artifactName: cli_diffs
-
-      - name: Download artifact if exists
-        if: steps.check_cli_artifacts.outputs.artifact_exists == 'true'
-        uses: actions/download-artifact@v4
-        with:
-          path: cli_diffs
-          name: cli_diffs
 
       # Final commit and GIT push
       - name: Commit and push
         env:
           commit_message: ${{ steps.storage_report.outputs.commit_message }}
         run: |
-          currentDate=$(date +%Y-%m-%d:%T%Z)
-          
-          echo "Manual KBC pull $currentDate" > commit_message_file.txt
-          
-          if [ -f ./Storage_report.txt ]; then
-            cat ./Storage_report.txt >> commit_message_file.txt
-            echo "" >> commit_message_file.txt
-            rm ./Storage_report.txt
-            rm -rf storage_structures
-          fi
-          
-          if [ -f ./Vault_report.txt ]; then
-            cat ./Vault_report.txt >> commit_message_file.txt
-            echo "" >> commit_message_file.txt
-            rm ./Vault_report.txt
-            rm -rf vault_structures
-          fi
-          
-          if [ -d ./cli_diffs ]; then
-            for file in ./cli_diffs/*; do
-              if [ -f "$file" ]; then
-                project=$(basename "$file" .txt)
-                echo -e "\nCLI Push dry-run output for project: $project\n" >> commit_message_file.txt
-                cat "$file" >> commit_message_file.txt
-                echo "" >> commit_message_file.txt
-              fi
-            done
-            echo -e "------------------- \n\n" >> commit_message_file.txt
-            rm -rf ./cli_diffs
-          fi
-          
-          echo -e "KBC CLI log below: \n" >> commit_message_file.txt
-          echo -e "------------------- \n\n" >> commit_message_file.txt
-          cat "$RUNNER_TEMP/log.txt" >> commit_message_file.txt
-          
-          cat commit_message_file.txt
-          
           # Commit and push
           git config --global user.name 'Keboola CLI'
           git config --global user.email 'keboola-cli@users.noreply.github.com'
           
           git add -A
-          git commit --allow-empty -a -F "commit_message_file.txt" || true
+          git commit --allow-empty -a -F "$RUNNER_TEMP/log.txt" || true
           git push --force
           
           

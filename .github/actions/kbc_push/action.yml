@@ -43,5 +43,7 @@ runs:
         done
         
         # push to Keboola Connection
-        kbc push -d "$WORKDIR" --force --verbose 2>&1 | tee "$RUNNER_TEMP/log.txt"
+        echo -e "KBC CLI log below: \n" >> "$RUNNER_TEMP/log.txt"
+        kbc push -d "$WORKDIR" --force --verbose 2>&1 | tee -a "$RUNNER_TEMP/log.txt"
+        echo -e "------------------- \n\n" >> "$RUNNER_TEMP/log.txt"
       shell: bash
