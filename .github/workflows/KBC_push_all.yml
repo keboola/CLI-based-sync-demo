@@ -23,8 +23,8 @@ jobs:
         uses: ./.github/actions/kbc_push
         with:
           workdir: "L0"
-          kbcStorageApiHost: ${{ vars.KBC_STORAGE_API_HOST_L0 }}
-          kbcStorageApiToken: ${{ secrets.KBC_STORAGE_API_TOKEN_L0 }}
+          kbcSapiHost: ${{ vars.KBC_SAPI_HOST_L0 }}
+          kbcSapiToken: ${{ secrets.KBC_SAPI_TOKEN_L0 }}
           kbcProjectId: ${{ vars.KBC_PROJECT_ID_L0 }}
           kbcBranchId: ${{ vars.KBC_BRANCH_ID_L0 }}
       
@@ -32,8 +32,8 @@ jobs:
         uses: ./.github/actions/kbc_push
         with:
           workdir: "L1"
-          kbcStorageApiHost: ${{ vars.KBC_STORAGE_API_HOST_L1 }}
-          kbcStorageApiToken: ${{ secrets.KBC_STORAGE_API_TOKEN_L1 }}
+          kbcSapiHost: ${{ vars.KBC_SAPI_HOST_L1 }}
+          kbcSapiToken: ${{ secrets.KBC_SAPI_TOKEN_L1 }}
           kbcProjectId: ${{ vars.KBC_PROJECT_ID_L1 }}
           kbcBranchId: ${{ vars.KBC_BRANCH_ID_L1 }}
       # End generated steps

@@ -4,10 +4,10 @@ inputs:
   destFile:
     description: Destination file
     required: true
-  kbcStorageApiHost:
+  kbcSapiHost:
     description: Keboola Connection Stack URL
     required: true
-  kbcStorageApiToken:
+  kbcSapiToken:
     description: Keboola Connection Storage API Token
     required: true
   kbcBranchId:
@@ -34,8 +34,8 @@ runs:
       shell: bash
       run: |
         python3 .github/actions/kbc_vault_validation/get_vault_keys/scripts/vault_pull.py \
-          --host="${{ inputs.kbcStorageApiHost }}" \
-          --token="${{ inputs.kbcStorageApiToken }}" \
+          --host="${{ inputs.kbcSapiHost }}" \
+          --token="${{ inputs.kbcSapiToken }}" \
           --branch="${{ inputs.kbcBranchId }}" \
           --destination-file="${{ env.OUT_DIR }}/${{ inputs.destFile }}"
 
