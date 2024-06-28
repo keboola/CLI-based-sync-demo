@@ -1,4 +1,4 @@
-name: Manual KBC Push (L0, L1)
+name: Manual KBC Push (L0, L1) to Environment by branch
 on:
   workflow_dispatch:
 permissions:
@@ -6,11 +6,7 @@ permissions:
 jobs:
   Push_All:
     # Dynamic generated value
-    environment: |-
-      ${{
-         github.ref_name == 'main' && 'prod'
-      || github.ref_name == 'dev' && 'dev'
-      }}
+    environment: ${{github.ref_name == 'dev' && 'dev' || github.ref_name == 'main' && 'prod' }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4

@@ -3,7 +3,7 @@ on:
   workflow_dispatch:
     inputs:
       dest_env:
-        description: 'Which environment to compare against (will be destination)'
+        description: 'Destination Environment (OPT)'
         default: ''
 permissions:
   contents: write
@@ -16,18 +16,15 @@ jobs:
     strategy:
       matrix:
         include:
-          - environment: |-
-              ${{
-                 github.ref_name == 'main' && 'prod'
-              || github.ref_name == 'dev' && 'dev'
-              }}
+          - environment: ${{github.ref_name == 'dev' && 'dev' || github.ref_name == 'main' && 'prod' }}
             origin: "source"
           - environment: ${{ github.event.inputs.dest_env }}
             origin: "destination"
     environment: ${{ matrix.environment }}
     steps:
       - uses: actions/checkout@v4
-      # L0
+
+      # Generated steps 
       - name: Pull vault L0
         uses: ./.github/actions/kbc_vault_validation/get_vault_keys
         with:
@@ -35,15 +32,15 @@ jobs:
           kbcSapiHost: ${{ vars.KBC_SAPI_HOST }}
           kbcSapiToken: ${{ secrets.KBC_SAPI_TOKEN_L0 }}
           kbcBranchId: ${{ vars.KBC_BRANCH_ID_L0 }}
-
-      # L1
+      
       - name: Pull vault L1
         uses: ./.github/actions/kbc_vault_validation/get_vault_keys
         with:
           destFile: "${{ matrix.origin }}/${{ matrix.environment }}/L1.json"
           kbcSapiHost: ${{ vars.KBC_SAPI_HOST }}
           kbcSapiToken: ${{ secrets.KBC_SAPI_TOKEN_L1 }}
-          kbcBranchId: ${{ vars.KBC_BRANCH_ID_L0 }}
+          kbcBranchId: ${{ vars.KBC_BRANCH_ID_L1 }}
+      # End generated steps
 
   vault_validation_comparison:
     runs-on: ubuntu-latest
@@ -60,32 +57,29 @@ jobs:
     strategy:
       matrix:
         include:
-          - environment: |-
-              ${{
-                 github.ref_name == 'main' && 'prod'
-              || github.ref_name == 'dev' && 'dev'
-              }}
+          - environment: ${{github.ref_name == 'dev' && 'dev' || github.ref_name == 'main' && 'prod' }}
             origin: "source"
           - environment: ${{ github.event.inputs.dest_env }}
             origin: "destination"
     environment: ${{ matrix.environment }}
     steps:
       - uses: actions/checkout@v4
-      # L0
+
+      # Generated steps }
       - name: Pull storage L0
         uses: ./.github/actions/kbc_storage_validation/get_storage_structure
         with:
           destFile: "${{ matrix.origin }}/${{ matrix.environment }}/L0.json"
           kbcSapiHost: ${{ vars.KBC_SAPI_HOST }}
           kbcSapiToken: ${{ secrets.KBC_SAPI_TOKEN_L0 }}
-
-      # L1
+      }
       - name: Pull storage L1
         uses: ./.github/actions/kbc_storage_validation/get_storage_structure
         with:
           destFile: "${{ matrix.origin }}/${{ matrix.environment }}/L1.json"
           kbcSapiHost: ${{ vars.KBC_SAPI_HOST }}
           kbcSapiToken: ${{ secrets.KBC_SAPI_TOKEN_L1 }}
+      # End generated steps
 
   storage_validation_comparison:
     runs-on: ubuntu-latest
@@ -106,25 +100,25 @@ jobs:
         with:
           githubToken: ${{ secrets.GITHUB_TOKEN }}
 
-      # L0
+      # Generated steps 
       - name: Get CLI diff L0
         uses: ./.github/actions/kbc_push_dry
         with:
-          workdir: "L0"
+          workdir: L0
           kbcSapiHost: ${{ vars.KBC_SAPI_HOST }}
           kbcSapiToken: ${{ secrets.KBC_SAPI_TOKEN_L0 }}
           kbcProjectId: ${{ vars.KBC_PROJECT_ID_L0 }}
           kbcBranchId: ${{ vars.KBC_BRANCH_ID_L0 }}
-
-      # L1
+      
       - name: Get CLI diff L1
         uses: ./.github/actions/kbc_push_dry
         with:
-          workdir: "L1"
+          workdir: L1
           kbcSapiHost: ${{ vars.KBC_SAPI_HOST }}
           kbcSapiToken: ${{ secrets.KBC_SAPI_TOKEN_L1 }}
           kbcProjectId: ${{ vars.KBC_PROJECT_ID_L1 }}
           kbcBranchId: ${{ vars.KBC_BRANCH_ID_L1 }}
+      # End generated steps
 
       - name: Merge Artifacts
         uses: actions/upload-artifact/merge@v4
@@ -137,17 +131,13 @@ jobs:
     if: always()
     needs: [ storage_validation_comparison,vault_validation_comparison,CLI_push_dry_run ]
     # Dynamic generated value
-    environment: |-
-      ${{
-         github.ref_name == 'main' && 'prod'
-      || github.ref_name == 'dev' && 'dev'
-      }}
+    environment: ${{github.ref_name == 'dev' && 'dev' || github.ref_name == 'main' && 'prod' }}
     runs-on: ubuntu-latest
     steps:
       - name: Log
         run: |
           currentDate=$(date +%Y-%m-%d:%T%Z)
-          
+
           echo "Manual KBC pull $currentDate" > "$RUNNER_TEMP/log.txt"
 
       - uses: actions/checkout@v4
@@ -174,7 +164,7 @@ jobs:
         with:
           githubToken: ${{ secrets.GITHUB_TOKEN }}
 
-      # Generated steps 
+     # Generated steps 
       - name: Pull configurations from L0
         uses: ./.github/actions/kbc_pull
         with:
@@ -183,7 +173,7 @@ jobs:
           kbcSapiToken: ${{ secrets.KBC_SAPI_TOKEN_L0 }}
           kbcProjectId: ${{ vars.KBC_PROJECT_ID_L0 }}
           kbcBranchId: ${{ vars.KBC_BRANCH_ID_L0 }}
-
+      
       - name: Pull configurations from L1
         uses: ./.github/actions/kbc_pull
         with:
@@ -196,17 +186,14 @@ jobs:
 
       # Final commit and GIT push
       - name: Commit and push
-        env:
-          commit_message: ${{ steps.storage_report.outputs.commit_message }}
         run: |
           # Commit and push
           git config --global user.name 'Keboola CLI'
           git config --global user.email 'keboola-cli@users.noreply.github.com'
-          
+
           git add -A
           git commit --allow-empty -a -F "$RUNNER_TEMP/log.txt" || true
           git push --force
-          
-          
+
 
 
