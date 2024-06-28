@@ -52,7 +52,7 @@ def main(target_dir):
     if secure_keys:
         write_encrypted([key for key in secure_keys if not key['is_vault_value']])
     else:
-        print("No secure values found in the configurations")
+        print("No secure values found in the configurations - validation is ok")
 
 
 if __name__ == '__main__':
