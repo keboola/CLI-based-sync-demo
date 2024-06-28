@@ -51,6 +51,8 @@ def main(target_dir):
                 check_json_keys_and_values(os.path.join(root, file))
     if secure_keys:
         write_encrypted([key for key in secure_keys if not key['is_vault_value']])
+    else:
+        print("No secure values found in the configurations")
 
 
 if __name__ == '__main__':
