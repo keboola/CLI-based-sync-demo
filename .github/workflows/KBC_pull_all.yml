@@ -49,6 +49,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: vault_validation_get_structures
     steps:
+      - uses: actions/checkout@v4
       - name: Compare vault structure
         uses: ./.github/actions/kbc_vault_validation
 
@@ -90,6 +91,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: storage_validation_get_structures
     steps:
+      - uses: actions/checkout@v4
       - name: Compare storage structure
         uses: ./.github/actions/kbc_storage_validation
 
