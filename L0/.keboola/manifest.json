@@ -80,6 +80,13 @@
     },
     {
       "branchId": 865218,
+      "componentId": "keboola.snowflake-transformation",
+      "id": "1150956950",
+      "path": "transformation/keboola.snowflake-transformation/dev-transofmration",
+      "rows": []
+    },
+    {
+      "branchId": 865218,
       "componentId": "keboola.wr-db-snowflake",
       "id": "1119462008",
       "path": "writer/keboola.wr-db-snowflake/change",
