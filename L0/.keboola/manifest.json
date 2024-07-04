@@ -75,7 +75,7 @@
       "branchId": 865218,
       "componentId": "keboola.snowflake-transformation",
       "id": "1131104553",
-      "path": "transformation/keboola.snowflake-transformation/nova-transofrmace",
+      "path": "transformation/keboola.snowflake-transformation/old-tranformation",
       "rows": []
     },
     {
