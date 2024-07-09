@@ -1,6 +1,6 @@
 import json
 import os
-
+import logging
 import requests
 import argparse
 
@@ -18,25 +18,34 @@ class StoragePull:
             return ''.join(['https://', host])
         return host
 
-    # TODO: change to list buckets and then tables
-    def _get_tables(self):
-        tables = requests.get(url=''.join([self._base, '/v2/storage/tables']), headers=self._head,
-                              params={'include': 'buckets,columns,metadata,columnMetadata'})
+    def _get_buckets(self):
+        buckets = requests.get(url=''.join([self._base, '/v2/storage/buckets']), headers=self._head)
+        return buckets.json()
+
+    def _get_tables(self, bucket_id):
+        tables = requests.get(url=''.join([self._base, f'/v2/storage/buckets/{bucket_id}/tables']), headers=self._head,
+                              params={'include': 'columns,metadata,columnMetadata'})
         return tables.json()
 
-    def _save_storage_structure(self, structure):
+    def pull(self):
         # create whole tree if not exists
         if not os.path.exists(os.path.dirname(self._destination_file)):
             os.makedirs(os.path.dirname(self._destination_file))
 
+        buckets = self._get_buckets()
+        tables = []
+        for bucket in buckets:
+            tables = self._get_tables(bucket.get('id'))
+            for table in tables:
+                table['bucket'] = bucket
+
+        storage_structure = tables
+
         with open(self._destination_file, 'w') as f:
-            json.dump(structure, f, indent=4)
+            json.dump(storage_structure, f, indent=4)
 
         print(f'Storage structure saved to {self._destination_file}')
         return self._destination_file
-
-    def pull(self):
-        return self._save_storage_structure(self._get_tables())
 
 
 if __name__ == '__main__':
