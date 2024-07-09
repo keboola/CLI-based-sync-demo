@@ -1,0 +1,14 @@
+{
+  "parameters": {
+    "db": {
+      "driver": "snowflake",
+      "port": "443",
+      "host": "as",
+      "user": "sad",
+      "#password": "{{ vault.sf_writer_pass }}",
+      "database": "asd",
+      "schema": "asd",
+      "warehouse": "asd"
+    }
+  }
+}
