@@ -30,9 +30,7 @@ runs:
       shell: bash
 
     - name: Pull storage structure
-      uses: actions/setup-python@v5
-      with:
-        python-version: '3.9'
+      shell: bash
       run: |
         python .github/actions/kbc_storage_validation/get_storage_structure/scripts/storage_pull.py \
           --host="${{ inputs.kbcSapiHost }}" \

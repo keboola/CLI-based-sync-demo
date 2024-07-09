@@ -21,10 +21,13 @@ runs:
         name: storage_structures
         path: ./storage_structures
 
-    - name: Compare storage structure
+    - name: Setup python
       uses: actions/setup-python@v5
       with:
         python-version: '3.9'
+
+    - name: Compare storage structure
+      shell: bash
       run: |
         python -m pip install --upgrade pip tabulate
         python .github/actions/kbc_storage_validation/scripts/validate.py \
