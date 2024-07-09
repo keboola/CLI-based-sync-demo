@@ -1,0 +1,15 @@
+{
+  "parameters": {
+    "db": {
+      "port": "443",
+      "schema": "{{ vault.schema }}",
+      "warehouse": "KEBOOLA_PROD_SMALL",
+      "driver": "snowflake",
+      "host": "keboola.snowflakecomputing.com",
+      "user": "SAPI_WORKSPACE_1119462025",
+      "region": "us-east-1",
+      "database": "SAPI_9994",
+      "#password": "{{ vault.sf_writer_pass }}"
+    }
+  }
+}
