@@ -157,7 +157,7 @@ jobs:
 
       - name: Log_cli_header
         run: |
-          echo -e "CLI Push dry-runs \n" >> "$RUNNER_TEMP/log.txt"
+          echo -e "CLI Push dry-runs" >> "$RUNNER_TEMP/log.txt"
           echo -e "====================================================================\n" >> "$RUNNER_TEMP/log.txt"
 
       # Read CLI diff artifacts to log
@@ -172,7 +172,7 @@ jobs:
 
       - name: Log_pull_header
         run: |
-          echo -e "Pull configurations from projects \n" >> "$RUNNER_TEMP/log.txt"
+          echo -e "Pull configurations from projects" >> "$RUNNER_TEMP/log.txt"
           echo -e "====================================================================\n" >> "$RUNNER_TEMP/log.txt"
 
      # Generated steps 
