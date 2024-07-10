@@ -54,7 +54,7 @@ runs:
         fi
         
         # Init data from Keboola connection project
-        echo -e "KBC CLI PULL from project ${{ inputs.kbcProjectId }} and branch ${{ inputs.kbcBranchId }} log: \n" >> "$RUNNER_TEMP/log.txt"
+        echo -e "KBC CLI PULL from project ${{ inputs.kbcProjectId }} and branch ${{ inputs.kbcBranchId }} log:" >> "$RUNNER_TEMP/log.txt"
         echo -e "---------------------------------------------------------------------------- " >> "$RUNNER_TEMP/log.txt"
         echo -e "\`\`\`" >> "$RUNNER_TEMP/log.txt"
         kbc init -d "$WORKDIR" --allow-target-env --ci=false 2>&1 | tee -a "$RUNNER_TEMP/log.txt"
