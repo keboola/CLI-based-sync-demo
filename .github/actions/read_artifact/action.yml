@@ -42,7 +42,6 @@ runs:
             for file in ${{ inputs.artifactName }}/*; do
               if [ -f "$file" ]; then
                 cat "$file" >> "$RUNNER_TEMP/log.txt"
-                echo "\n" >> "$RUNNER_TEMP/log.txt"
               fi
             done
             rm -rf ${{ inputs.artifactName }}
