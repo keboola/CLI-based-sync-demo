@@ -139,7 +139,7 @@ jobs:
           currentDate=$(date +%Y-%m-%d:%T%Z)
 
           echo "Manual KBC pull $currentDate" > "$RUNNER_TEMP/log.txt"
-          echo -e "Validation time: $currentDate" >> "$RUNNER_TEMP/log.txt"
+          echo -e "Validation time: $currentDate\n" >> "$RUNNER_TEMP/log.txt"
 
       - uses: actions/checkout@v4
 
