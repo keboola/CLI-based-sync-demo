@@ -64,6 +64,6 @@ runs:
         echo -e "Secrets validation for project ${{ inputs.kbcProjectId }} and branch ${{ inputs.kbcBranchId }} log: \n" >> "$RUNNER_TEMP/log.txt"
         echo -e "\n---------------------------------------------------------------------------- \n\n" >> "$RUNNER_TEMP/log.txt"
         python3 .github/actions/kbc_pull/secret_validations/validation.py target_dir="$WORKDIR" 2>&1 | tee -a "$RUNNER_TEMP/log.txt" 
-        echo -e "\n---------------------------------------------------------------------------- \n\n" >> "$RUNNER_TEMP/log.txt"
+        echo -e "\n\n---------------------------------------------------------------------------- \n\n" >> "$RUNNER_TEMP/log.txt"
 
       shell: bash
