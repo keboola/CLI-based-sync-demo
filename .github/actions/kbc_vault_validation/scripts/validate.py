@@ -64,8 +64,8 @@ class VaultDiff:
             text_output.append(f"Source project '{source_project.project}' "
                                f"({self.source_structure.environment}) "
                                f"vs Destination project '{destination_project.project} "
-                               f"({self.destination_structure.environment})'")
-            text_output.append('')
+                               f"({self.destination_structure.environment})'\n")
+
             text_output.append(self._generate_line(text_output))
             text_output.append('')
             text_output.append(self._compare_structure(source_project, destination_project))
