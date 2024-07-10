@@ -155,16 +155,12 @@ jobs:
         with:
           artifactName: storage_structures_result
 
-      - name: Log_cli_header
-        run: |
-          echo -e "CLI Push dry-runs" >> "$RUNNER_TEMP/log.txt"
-          echo -e "====================================================================\n" >> "$RUNNER_TEMP/log.txt"
-
       # Read CLI diff artifacts to log
       - name: Read storage_structures_result
         uses: ./.github/actions/read_artifact
         with:
           artifactName: cli_diffs
+          logHeader: "CLI Push dry-runs\n=================\n"
 
       - uses: ./.github/actions/install
         with:
@@ -173,7 +169,7 @@ jobs:
       - name: Log_pull_header
         run: |
           echo -e "Pull configurations from projects" >> "$RUNNER_TEMP/log.txt"
-          echo -e "====================================================================\n" >> "$RUNNER_TEMP/log.txt"
+          echo -e "=================================\n" >> "$RUNNER_TEMP/log.txt"
 
      # Generated steps 
       - name: Pull configurations from L0

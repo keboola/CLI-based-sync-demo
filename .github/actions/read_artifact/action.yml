@@ -4,6 +4,9 @@ inputs:
   artifactName:
     description: Artifact name to check
     required: true
+  logHeader:
+    description: Header for the log
+    required: false
 runs:
   using: "composite"
   steps:
@@ -41,6 +44,7 @@ runs:
         if [ -d ${{ inputs.artifactName }} ]; then
             for file in ${{ inputs.artifactName }}/*; do
               if [ -f "$file" ]; then
+                echo -e "${{ inputs.logHeader }}" >> "$RUNNER_TEMP/log.txt"
                 cat "$file" >> "$RUNNER_TEMP/log.txt"
               fi
             done
