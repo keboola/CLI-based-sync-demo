@@ -42,9 +42,9 @@ runs:
       if: steps.check_artifact_exists.outputs.artifact_exists == 'true'
       run: |
         if [ -d ${{ inputs.artifactName }} ]; then
+            echo -e "${{ inputs.logHeader }}" >> "$RUNNER_TEMP/log.txt"
             for file in ${{ inputs.artifactName }}/*; do
               if [ -f "$file" ]; then
-                echo -e "${{ inputs.logHeader }}" >> "$RUNNER_TEMP/log.txt"
                 cat "$file" >> "$RUNNER_TEMP/log.txt"
               fi
             done
