@@ -70,6 +70,7 @@ class StorageDiff:
                                f"({self.source_structure.environment}) "
                                f"vs Destination project '{destination_project.project} "
                                f"({self.destination_structure.environment})'")
+            text_output.append('')
             text_output.append(self._generate_line(text_output))
             text_output.append('')
             text_output.append(self._create_text(diff_file))
