@@ -52,7 +52,7 @@ class VaultDiff:
             raise ValueError("Projects in source and destination structures do not match!")
 
         text_output = [f"Vault Comparison Result ('{self.source_structure.environment}' "
-                       f"vs '{self.destination_structure.environment}')\n"]
+                       f"vs '{self.destination_structure.environment}')"]
         text_output.append(self._generate_line(text_output, '='))
         text_output.append('')
         for source_project in self.source_structure.projects:
@@ -71,7 +71,7 @@ class VaultDiff:
             text_output.append(self._compare_structure(source_project, destination_project))
             text_output.append('\n')
 
-        text_output.append(f"\n{'-' * 50}\n")
+        text_output.append(f"{'-' * 50}")
         self._write_report(text_output)
 
     @staticmethod

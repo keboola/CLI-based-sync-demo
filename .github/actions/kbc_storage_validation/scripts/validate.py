@@ -75,7 +75,7 @@ class StorageDiff:
             text_output.append(self._create_text(diff_file))
             text_output.append('\n')
 
-        text_output.append(f"\n{'-' * 50}\n")
+        text_output.append(f"{'-' * 50}")
         self._write_report(text_output)
 
     @staticmethod
