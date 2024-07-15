@@ -72,6 +72,7 @@ jobs:
           destFile: "${{ matrix.origin }}/${{ matrix.environment }}/L0.json"
           kbcSapiHost: ${{ vars.KBC_SAPI_HOST }}
           kbcSapiToken: ${{ secrets.KBC_SAPI_TOKEN_L0 }}
+          kbcProjectId: ${{ vars.KBC_PROJECT_ID_L0 }}
       
       - name: Pull storage L1
         uses: ./.github/actions/kbc_storage_validation/get_storage_structure
@@ -79,6 +80,7 @@ jobs:
           destFile: "${{ matrix.origin }}/${{ matrix.environment }}/L1.json"
           kbcSapiHost: ${{ vars.KBC_SAPI_HOST }}
           kbcSapiToken: ${{ secrets.KBC_SAPI_TOKEN_L1 }}
+          kbcProjectId: ${{ vars.KBC_PROJECT_ID_L1 }}
       # End generated steps
 
   storage_validation_comparison:

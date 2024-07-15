@@ -64,7 +64,8 @@ class StorageDiff:
 
             diff_file_path = f"{source_project.project}_vs_{destination_project.project}.json"
 
-            diff_file = Diff(source_project.path, destination_project.path, diff_file_path).compare()
+            diff_file = Diff(source_project.path, destination_project.path, source_project.project,
+                             destination_project.project, diff_file_path).compare()
 
             text_output.append(f"Source project '{source_project.project}' "
                                f"({self.source_structure.environment}) "
@@ -76,7 +77,7 @@ class StorageDiff:
             text_output.append(self._create_text(diff_file))
             text_output.append('\n')
 
-        #text_output.append(f"{'-' * 50}")
+        # text_output.append(f"{'-' * 50}")
         self._write_report(text_output)
 
     @staticmethod
