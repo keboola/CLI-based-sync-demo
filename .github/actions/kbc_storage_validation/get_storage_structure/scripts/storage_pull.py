@@ -18,6 +18,10 @@ class StoragePull:
             return ''.join(['https://', host])
         return host
 
+    def _get_branches(self):
+        branches = requests.get(url=''.join([self._base, '/v2/storage/dev-branches']), headers=self._head)
+        return branches.json()
+
     def _get_buckets(self):
         buckets = requests.get(url=''.join([self._base, '/v2/storage/buckets']), headers=self._head)
         return buckets.json()
@@ -40,7 +44,7 @@ class StoragePull:
                 table['bucket'] = bucket
             all_tables.extend(bucket_tables)
 
-        storage_structure = {'project_id': self._project_id, 'tables': all_tables}
+        storage_structure = {'project_id': self._project_id, 'dev-branches': self._get_branches(), 'tables': all_tables}
 
         with open(self._destination_file, 'w') as f:
             json.dump(storage_structure, f, indent=4)
