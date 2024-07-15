@@ -23,7 +23,8 @@ class StoragePull:
         return branches.json()
 
     def _get_buckets(self):
-        buckets = requests.get(url=''.join([self._base, '/v2/storage/buckets']), headers=self._head)
+        buckets = requests.get(url=''.join([self._base, '/v2/storage/buckets']), headers=self._head,
+                               params={'include': 'metadata'})
         return buckets.json()
 
     def _get_tables(self, bucket_id):
