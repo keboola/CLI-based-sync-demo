@@ -48,7 +48,6 @@ class StorageDiff:
             else:
                 dest_bucket = dest_buckets[bucket_id]
                 if src_bucket != dest_bucket:
-                    # TODO better recognise changing! Especially for sharing
                     events.append({"event": "MODIFY_BUCKET", "bucket": src_bucket})
 
         # Detect removed buckets

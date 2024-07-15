@@ -33,13 +33,14 @@ class StoragePull:
             os.makedirs(os.path.dirname(self._destination_file))
 
         buckets = self._get_buckets()
-        tables = []
+        all_tables = []
         for bucket in buckets:
-            tables = self._get_tables(bucket.get('id'))
-            for table in tables:
+            bucket_tables = self._get_tables(bucket.get('id'))
+            for table in bucket_tables:
                 table['bucket'] = bucket
+            all_tables.extend(bucket_tables)
 
-        storage_structure = tables
+        storage_structure = all_tables
 
         with open(self._destination_file, 'w') as f:
             json.dump(storage_structure, f, indent=4)
