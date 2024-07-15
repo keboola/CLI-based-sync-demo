@@ -100,24 +100,24 @@ class StorageDiff:
         table_data = [['Object ID', 'Operation', 'Values']]
         for event in diff:
             if event['event'] == 'ADD_BUCKET':
-                table_data.append([f"[`{event['link']}`]({event['bucket']['id']})", 'Bucket added', '-'])
+                table_data.append([f"[{event['bucket']['id']}]({event['link']})", 'Bucket added', '-'])
 
             elif event['event'] == 'DROP_BUCKET':
-                table_data.append([f"[`{event['link']}`]({event['bucket']['id']})", 'Bucket removed', '-'])
+                table_data.append([f"[{event['bucket']['id']}]({event['link']})", 'Bucket removed', '-'])
 
             elif event['event'] == 'MODIFY_BUCKET':
-                table_data.append([f"[`{event['link']}`]({event['bucket']['id']})", 'Bucket modified', '-'])
+                table_data.append([f"[{event['bucket']['id']}]({event['link']})", 'Bucket modified', '-'])
 
             elif event['event'] == 'SHARE_BUCKET':
-                table_data.append([f"[`{event['link']}`]({event['bucket']['id']})", 'Bucket shared', '-'])
+                table_data.append([f"[{event['bucket']['id']}]({event['link']})", 'Bucket shared', '-'])
 
             elif event['event'] == 'ADD_TABLE':
-                table_data.append([f"[`{event['link']}`]({event['table']['id']})", 'Table added', '-'])
+                table_data.append([f"[{event['table']['id']}]({event['link']})", 'Table added', '-'])
 
             elif event['event'] == 'DROP_TABLE':
-                table_data.append([f"[`{event['link']}`]({event['table']['id']})", 'Table removed', '-'])
+                table_data.append([f"[{event['table']['id']}]({event['link']})", 'Table removed', '-'])
             else:
-                table_data.append([f"[`{event['link']}`]()", event['event'], '-'])
+                table_data.append([f"[{event['link']}]({event['link']})", event['event'], '-'])
         return tabulate(table_data, headers="firstrow", tablefmt="github")
 
     @staticmethod
