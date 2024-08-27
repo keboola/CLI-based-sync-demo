@@ -59,9 +59,23 @@
     },
     {
       "branchId": 865218,
+      "componentId": "keboola.python-transformation-v2",
+      "id": "1170912686",
+      "path": "transformation/keboola.python-transformation-v2/rename",
+      "rows": []
+    },
+    {
+      "branchId": 865218,
       "componentId": "keboola.snowflake-transformation",
       "id": "1119449902",
       "path": "transformation/keboola.snowflake-transformation/create-table-test",
+      "rows": []
+    },
+    {
+      "branchId": 865218,
+      "componentId": "keboola.snowflake-transformation",
+      "id": "1122841647",
+      "path": "transformation/keboola.snowflake-transformation/test-tr",
       "rows": []
     },
     {
@@ -89,7 +103,7 @@
       "branchId": 865218,
       "componentId": "keboola.wr-db-snowflake",
       "id": "1119462008",
-      "path": "writer/keboola.wr-db-snowflake/change",
+      "path": "writer/keboola.wr-db-snowflake/my-snowflake-data-destination",
       "rows": [
         {
           "id": "1119462395",
