@@ -7,7 +7,7 @@ on:
         default: 'main'
         type: choice
         options:
-          - 'main'
+          - 'prod'
           - 'dev'
           - ''
 permissions:
