@@ -4,7 +4,12 @@ on:
     inputs:
       dest_env:
         description: 'Destination Environment (OPT)'
-        default: ''
+        default: 'main'
+        type: choice
+        options:
+          - 'prod'
+          - 'dev'
+          - ''
 permissions:
   contents: write
 jobs:
