@@ -54,7 +54,7 @@
       "branchId": 865218,
       "componentId": "keboola.ex-google-drive",
       "id": "1119451229",
-      "path": "extractor/keboola.ex-google-drive/my-google-sheets-data-source",
+      "path": "extractor/keboola.ex-google-drive/zmena",
       "rows": []
     },
     {
