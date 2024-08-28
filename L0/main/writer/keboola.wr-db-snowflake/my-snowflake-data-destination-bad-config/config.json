@@ -5,7 +5,7 @@
       "port": "443",
       "host": "as",
       "user": "sad",
-      "#password": "{{ vault.sf_writer_pass }}",
+      "#password": "KBC::ProjectSecure::eJwBLwHQ/mE6Mjp7aTowO3M6ODg6It71AgBU38ede+UQKdzq8ZjSsEW6RFHxeAfH4d0CiuZ07ID9PtYuCMjyHTEXrux3TC2xgcL4i++aR3EcVT3Nt0ZgpiThrhFeFcNqjX3N0PSuBQRbtso/yBIiO2k6MTtzOjE4NDoiAQIDAHhlXs9v5x5d+klIkL9bzyaH5qzvWHJt2fGW9czDhWdtwAHEPVS/3sKRAOxeUBCHAqb9AAAAfjB8BgkqhkiG9w0BBwagbzBtAgEAMGgGCSqGSIb3DQEHATAeBglghkgBZQMEAS4wEQQMY+Kj/EUUt0ut8WW3AgEQgDvAIee9FsIdZKvPdPzm2Eqv4eLd7Aa2Ou1MOvKBmMaxOVO28Dm/dGLbnw4AKw8k/9fBfCLXMHjRjC9uuyI7fQ1PhQg=",
       "database": "asd",
       "schema": "asd",
       "warehouse": "asd"
