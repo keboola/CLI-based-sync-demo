@@ -115,7 +115,7 @@
       "branchId": 865218,
       "componentId": "keboola.wr-db-snowflake",
       "id": "1119462979",
-      "path": "writer/keboola.wr-db-snowflake/my-snowflake-data-destination-bad-config",
+      "path": "writer/keboola.wr-db-snowflake/change-name-for-demo",
       "rows": [
         {
           "id": "1119463062",
