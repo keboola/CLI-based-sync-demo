@@ -145,11 +145,12 @@ jobs:
           git commit --allow-empty -a -F "./log.txt" || true
           git push --force
 
-      - name: Merge Artifacts
-        uses: actions/upload-artifact/merge@v4
+      - name: Save log to artifact
+        uses: actions/upload-artifact@v4
         with:
           name: log
-          pattern: ./log.txt
+          path: ./log.txt
+          retention-days: 5
 
   # CLI push dry-run
   CLI_push_dry_run:
