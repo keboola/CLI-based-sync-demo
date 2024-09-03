@@ -28,6 +28,8 @@ jobs:
     environment: ${{ matrix.environment }}
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref }}
 
       # Generated steps 
       - name: Pull vault L0
@@ -52,6 +54,8 @@ jobs:
     needs: vault_validation_get_structures
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref }}
       - name: Compare vault structure
         uses: ./.github/actions/kbc_vault_validation
 
@@ -69,6 +73,8 @@ jobs:
     environment: ${{ matrix.environment }}
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref }}
 
       # Generated steps 
       - name: Pull storage L0
@@ -93,6 +99,8 @@ jobs:
     needs: storage_validation_get_structures
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref }}
       - name: Compare storage structure
         uses: ./.github/actions/kbc_storage_validation
 
@@ -105,6 +113,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref }}
+
       - uses: ./.github/actions/install
         with:
           githubToken: ${{ secrets.GITHUB_TOKEN }}
