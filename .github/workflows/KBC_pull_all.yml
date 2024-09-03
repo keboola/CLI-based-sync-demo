@@ -171,6 +171,8 @@ jobs:
     environment: ${{ github.event.inputs.dest_env }}
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref }}
       - uses: ./.github/actions/install
         with:
           githubToken: ${{ secrets.GITHUB_TOKEN }}
