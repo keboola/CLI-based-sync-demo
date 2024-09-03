@@ -169,6 +169,7 @@ jobs:
   # CLI push dry-run
   CLI_push_dry_run:
     if: github.event.inputs.dest_env != ''
+    needs: [ Pull_All ]
     runs-on: ubuntu-latest
     environment: ${{ github.event.inputs.dest_env }}
     steps:
