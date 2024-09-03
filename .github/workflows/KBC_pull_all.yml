@@ -164,7 +164,12 @@ jobs:
           git add -A
           git commit --allow-empty -a -F "$RUNNER_TEMP/log.txt" || true
           git push --force
-  
+
+      - name: Merge Artifacts
+        uses: actions/upload-artifact/merge@v4
+        with:
+          name: log
+          pattern: $RUNNER_TEMP/log.txt
 
   # CLI push dry-run
   CLI_push_dry_run:
@@ -203,6 +208,12 @@ jobs:
         with:
           name: cli_diffs
           pattern: cli_diff_*
+
+      # Read log
+      - name: Read storage_structures_result
+        uses: ./.github/actions/read_artifact
+        with:
+          artifactName: log
 
       # Read CLI diff artifacts to log
       - name: Read storage_structures_result
