@@ -104,35 +104,14 @@ jobs:
     environment: ${{github.ref_name == 'dev' && 'dev' || github.ref_name == 'main' && 'prod' }}
     runs-on: ubuntu-latest
     steps:
-      - name: Log
-        run: |
-          currentDate=$(date +%Y-%m-%d:%T%Z)
-
-          echo "Manual KBC pull $currentDate" > "$RUNNER_TEMP/log.txt"
-          echo -e "Validation time: $currentDate\n" >> "$RUNNER_TEMP/log.txt"
-
-      - uses: actions/checkout@v4
-
-      # Read Vault artifacts to log
-      - name: Read vault_structures_result
-        uses: ./.github/actions/read_artifact
-        with:
-          artifactName: vault_structures_result
-
-      # Read Storage artifacts to log
-      - name: Read storage_structures_result
-        uses: ./.github/actions/read_artifact
-        with:
-          artifactName: storage_structures_result
-
       - uses: ./.github/actions/install
         with:
           githubToken: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Log_pull_header
         run: |
-          echo -e "Pull configurations from projects" >> "$RUNNER_TEMP/log.txt"
-          echo -e "=================================\n" >> "$RUNNER_TEMP/log.txt"
+          echo -e "Pull configurations from projects" >> "./log.txt"
+          echo -e "=================================\n" >> "./log.txt"
 
       # Generated steps
       - name: Pull configurations from L0
@@ -162,14 +141,14 @@ jobs:
           git config --global user.email 'keboola-cli@users.noreply.github.com'
 
           git add -A
-          git commit --allow-empty -a -F "$RUNNER_TEMP/log.txt" || true
+          git commit --allow-empty -a -F "./log.txt" || true
           git push --force
 
       - name: Merge Artifacts
         uses: actions/upload-artifact/merge@v4
         with:
           name: log
-          pattern: $RUNNER_TEMP/log.txt
+          pattern: ./log.txt
 
   # CLI push dry-run
   CLI_push_dry_run:
@@ -203,17 +182,32 @@ jobs:
           kbcBranchId: ${{ vars.KBC_BRANCH_ID_L1 }}
       # End generated steps
 
+      # write diff to log
       - name: Merge Artifacts
         uses: actions/upload-artifact/merge@v4
         with:
           name: cli_diffs
           pattern: cli_diff_*
 
-      # Read log
+      # construct commit message
+      - name: Log
+        run: |
+          currentDate=$(date +%Y-%m-%d:%T%Z)
+
+          echo "Manual KBC pull $currentDate" > "$RUNNER_TEMP/log.txt"
+          echo -e "Validation time: $currentDate\n" >> "$RUNNER_TEMP/log.txt"
+
+      # Read Vault artifacts to log
+      - name: Read vault_structures_result
+        uses: ./.github/actions/read_artifact
+        with:
+          artifactName: vault_structures_result
+
+      # Read Storage artifacts to log
       - name: Read storage_structures_result
         uses: ./.github/actions/read_artifact
         with:
-          artifactName: log
+          artifactName: storage_structures_result
 
       # Read CLI diff artifacts to log
       - name: Read storage_structures_result
@@ -221,6 +215,12 @@ jobs:
         with:
           artifactName: cli_diffs
           logHeader: "CLI Push dry-runs\n=================\n"
+
+      # Read log
+      - name: Read storage_structures_result
+        uses: ./.github/actions/read_artifact
+        with:
+          artifactName: log
 
       # Final commit and GIT push
       - name: Commit and push
@@ -231,3 +231,5 @@ jobs:
 
           git commit --amend --allow-empty -a -F "$RUNNER_TEMP/log.txt" || true
           git push --force
+          
+          #- uses: actions/checkout@v4
