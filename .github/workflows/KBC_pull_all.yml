@@ -104,6 +104,7 @@ jobs:
     environment: ${{github.ref_name == 'dev' && 'dev' || github.ref_name == 'main' && 'prod' }}
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v4
       - uses: ./.github/actions/install
         with:
           githubToken: ${{ secrets.GITHUB_TOKEN }}
@@ -231,5 +232,3 @@ jobs:
 
           git commit --amend --allow-empty -a -F "$RUNNER_TEMP/log.txt" || true
           git push --force
-          
-          #- uses: actions/checkout@v4
