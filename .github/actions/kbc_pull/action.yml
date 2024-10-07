@@ -44,20 +44,33 @@ runs:
         done
         
         # Working directory is ready and empty
-        if [ ! -d "$WORKDIR" ]; then
-          mkdir -p "$WORKDIR"
-        else
-            if [ -n "$WORKDIR" ] && [ "$WORKDIR" != "/" ]; then
-                rm -rf "$WORKDIR"
-                mkdir -p "$WORKDIR"
-            fi
-        fi
+        # if [ ! -d "$WORKDIR" ]; then
+        #   mkdir -p "$WORKDIR"
+        # else
+        #     if [ -n "$WORKDIR" ] && [ "$WORKDIR" != "/" ]; then
+        #         rm -rf "$WORKDIR"
+        #         mkdir -p "$WORKDIR"
+        #     fi
+        # fi
         
+        if [ -f "$WORKDIR/.keboola/manifest.json" ]; then
+          echo "Manifest file exists, pulling"
+          ENV_FILE="$WORKDIR/.env.local"
+          echo "KBC_STORAGE_API_TOKEN=${KBC_STORAGE_API_TOKEN}" > $ENV_FILE
+          echo "KBC_PROJECT_ID=${KBC_PROJECT_ID}" >> $ENV_FILE
+          echo "KBC_BRANCHES=${KBC_BRANCHES}" >> $ENV_FILE
+          cat $ENV_FILE
+          kbc pull -d "$WORKDIR" --force --verbose
+        else
+          echo "File does not exist."
+          kbc init -d "$WORKDIR" --allow-target-env --ci=false --verbose
+        fi
+                
         # Init data from Keboola connection project
         echo -e "KBC CLI PULL from project ${{ inputs.kbcProjectId }} and branch ${{ inputs.kbcBranchId }} log:" >> "./log.txt"
         echo -e "---------------------------------------------------------------------------- " >> "./log.txt"
         echo -e "\`\`\`" >> "./log.txt"
-        kbc init -d "$WORKDIR" --allow-target-env --ci=false 2>&1 | tee -a "./log.txt"
+        # kbc init -d "$WORKDIR" --allow-target-env --ci=false 2>&1 | tee -a "./log.txt"
         echo -e "\`\`\`" >> "./log.txt"
         echo -e "\n---------------------------------------------------------------------------- \n" >> "./log.txt"
         
