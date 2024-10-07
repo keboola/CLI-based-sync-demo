@@ -248,5 +248,5 @@ jobs:
           git config --global user.name 'Keboola CLI'
           git config --global user.email 'keboola-cli@users.noreply.github.com'
 
-          git commit --amend --allow-empty -a -F "$RUNNER_TEMP/log.txt" || true
+          git commit --allow-empty -a -F "$RUNNER_TEMP/log.txt" || true
           git push --force
