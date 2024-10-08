@@ -58,7 +58,7 @@ runs:
           ENV_FILE="$WORKDIR/.env.local"
           echo "KBC_STORAGE_API_TOKEN=${KBC_STORAGE_API_TOKEN}" > $ENV_FILE
           echo "KBC_PROJECT_ID=${KBC_PROJECT_ID}" >> $ENV_FILE
-          echo "KBC_BRANCHES=${KBC_BRANCHES}" >> $ENV_FILE
+          echo "KBC_BRANCH_ID=${KBC_BRANCHES}" >> $ENV_FILE
           cat $ENV_FILE
           kbc pull -d "$WORKDIR" --force --verbose
         else
