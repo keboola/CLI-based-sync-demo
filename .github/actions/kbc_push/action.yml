@@ -44,6 +44,6 @@ runs:
         
         # push to Keboola Connection
         echo -e "KBC CLI PUSH to project ${{ inputs.kbcProjectId }} and branch ${{ inputs.kbcBranchId }} log: \n" >> "$RUNNER_TEMP/log.txt"
-        kbc push -d "$WORKDIR" --force --verbose 2>&1 | tee -a "$RUNNER_TEMP/log.txt"
+        kbc push -d "$WORKDIR" --verbose 2>&1 | tee -a "$RUNNER_TEMP/log.txt"
         echo -e "---------------------------------------------------------------------------- \n\n" >> "$RUNNER_TEMP/log.txt"
       shell: bash

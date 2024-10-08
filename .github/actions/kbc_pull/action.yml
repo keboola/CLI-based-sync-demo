@@ -55,12 +55,10 @@ runs:
         
         if [ -f "$WORKDIR/.keboola/manifest.json" ]; then
           echo "Manifest file exists, pulling"
-          ENV_FILE="$WORKDIR/.env.local"
-          echo "KBC_STORAGE_API_TOKEN=${KBC_STORAGE_API_TOKEN}" > $ENV_FILE
-          echo "KBC_PROJECT_ID=${KBC_PROJECT_ID}" >> $ENV_FILE
-          echo "KBC_BRANCHES=${KBC_BRANCHES}" >> $ENV_FILE
-          cat $ENV_FILE
-          kbc pull -d "$WORKDIR" --force --verbose
+          export KBC_STORAGE_API_TOKEN=${KBC_STORAGE_API_TOKEN}
+          export KBC_PROJECT_ID=${KBC_PROJECT_ID}
+          export KBC_BRANCH_ID=${KBC_BRANCH_ID}
+          kbc pull -d "$WORKDIR" --verbose
         else
           echo "File does not exist."
           kbc init -d "$WORKDIR" --allow-target-env --ci=false --verbose
