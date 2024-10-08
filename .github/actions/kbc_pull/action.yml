@@ -25,7 +25,7 @@ runs:
         # filled by the script
         KBC_STORAGE_API_TOKEN: ${{ inputs.kbcSapiToken }}
         KBC_PROJECT_ID: ${{ inputs.kbcProjectId }}
-        KBC_BRANCH_ID: ${{ inputs.kbcBranchId }}
+        KBC_BRANCHES: ${{ inputs.kbcBranchId }}
         KBC_STORAGE_API_HOST: ${{ inputs.kbcSapiHost }}
         WORKDIR: ${{ inputs.workdir }}
 
@@ -42,35 +42,25 @@ runs:
             exit 1
           fi
         done
-        
-        # Working directory is ready and empty
-        # if [ ! -d "$WORKDIR" ]; then
-        #   mkdir -p "$WORKDIR"
-        # else
-        #     if [ -n "$WORKDIR" ] && [ "$WORKDIR" != "/" ]; then
-        #         rm -rf "$WORKDIR"
-        #         mkdir -p "$WORKDIR"
-        #     fi
-        # fi
-        
-        if [ -f "$WORKDIR/.keboola/manifest.json" ]; then
-          echo "Manifest file exists, pulling"
-          ENV_FILE="$WORKDIR/.env.local"
-          echo "KBC_STORAGE_API_TOKEN=${KBC_STORAGE_API_TOKEN}" > $ENV_FILE
-          echo "KBC_PROJECT_ID=${KBC_PROJECT_ID}" >> $ENV_FILE
-          echo "KBC_BRANCH_ID=${KBC_BRANCHES}" >> $ENV_FILE
-          cat $ENV_FILE
-          kbc pull -d "$WORKDIR" --force --verbose
-        else
-          echo "File does not exist."
-          kbc init -d "$WORKDIR" --allow-target-env --ci=false --verbose
-        fi
-                
-        # Init data from Keboola connection project
+
+         # Init data from Keboola connection project
         echo -e "KBC CLI PULL from project ${{ inputs.kbcProjectId }} and branch ${{ inputs.kbcBranchId }} log:" >> "./log.txt"
         echo -e "---------------------------------------------------------------------------- " >> "./log.txt"
         echo -e "\`\`\`" >> "./log.txt"
-        # kbc init -d "$WORKDIR" --allow-target-env --ci=false 2>&1 | tee -a "./log.txt"
+        
+        if [ -f "$WORKDIR/.keboola/manifest.json" ]; then
+          echo "Manifest file exists, pulling"
+          # ENV_FILE="$WORKDIR/.env.local"
+          # echo "KBC_STORAGE_API_TOKEN=${KBC_STORAGE_API_TOKEN}" > $ENV_FILE
+          # echo "KBC_PROJECT_ID=${KBC_PROJECT_ID}" >> $ENV_FILE
+          echo "KBC_BRANCH_ID=${KBC_BRANCHES}" >> $ENV_FILE
+          # cat $ENV_FILE
+          kbc pull -d "$WORKDIR" --force --verbose 2>&1 | tee -a "./log.txt"
+        else
+          echo "Manifest file not exists, initing"
+          kbc init -d "$WORKDIR" --allow-target-env --ci=false --verbose 2>&1 | tee -a "./log.txt"
+        fi
+
         echo -e "\`\`\`" >> "./log.txt"
         echo -e "\n---------------------------------------------------------------------------- \n" >> "./log.txt"
         
