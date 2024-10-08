@@ -26,6 +26,7 @@ runs:
         KBC_STORAGE_API_TOKEN: ${{ inputs.kbcSapiToken }}
         KBC_PROJECT_ID: ${{ inputs.kbcProjectId }}
         KBC_BRANCHES: ${{ inputs.kbcBranchId }}
+        KBC_BRANCH_ID: ${{ inputs.kbcBranchId }}
         KBC_STORAGE_API_HOST: ${{ inputs.kbcSapiHost }}
         WORKDIR: ${{ inputs.workdir }}
 
@@ -53,7 +54,7 @@ runs:
           # ENV_FILE="$WORKDIR/.env.local"
           # echo "KBC_STORAGE_API_TOKEN=${KBC_STORAGE_API_TOKEN}" > $ENV_FILE
           # echo "KBC_PROJECT_ID=${KBC_PROJECT_ID}" >> $ENV_FILE
-          export KBC_BRANCH_ID=${KBC_BRANCHES}
+          # export KBC_BRANCH_ID=${KBC_BRANCHES}
           # cat $ENV_FILE
           kbc pull -d "$WORKDIR" --force --verbose 2>&1 | tee -a "./log.txt"
         else
