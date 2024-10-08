@@ -1,7 +1,7 @@
 {
   "parameters": {
     "tableId": "out.c-create-table-test.out",
-    "dbName": "table1",
+    "dbName": "out",
     "incremental": false,
     "primaryKey": [],
     "items": [
