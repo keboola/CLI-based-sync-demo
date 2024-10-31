@@ -1,6 +1,12 @@
 name: Manual KBC Push (L0, L1)
 on:
   workflow_dispatch:
+    inputs:
+      force_push:
+        description: 'True to use force push'
+        required: false
+        default: false
+        type: boolean
 permissions:
   contents: write
 jobs:
@@ -23,6 +29,7 @@ jobs:
           kbcSapiToken: ${{ secrets.KBC_SAPI_TOKEN_L0 }}
           kbcProjectId: ${{ vars.KBC_PROJECT_ID_L0 }}
           kbcBranchId: ${{ vars.KBC_BRANCH_ID_L0 }}
+          forcePush: ${{ github.event.inputs.force_push }}
       
       - name: Push configurations to L1
         uses: ./.github/actions/kbc_push
@@ -32,4 +39,5 @@ jobs:
           kbcSapiToken: ${{ secrets.KBC_SAPI_TOKEN_L1 }}
           kbcProjectId: ${{ vars.KBC_PROJECT_ID_L1 }}
           kbcBranchId: ${{ vars.KBC_BRANCH_ID_L1 }}
+          forcePush: ${{ github.event.inputs.force_push }}
       # End generated steps
