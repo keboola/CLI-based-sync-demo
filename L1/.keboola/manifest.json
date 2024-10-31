@@ -1,7 +1,7 @@
 {
   "version": 2,
   "project": {
-    "id": 9997,
+    "id": 9995,
     "apiHost": "connection.keboola.com"
   },
   "allowTargetEnv": true,
@@ -18,7 +18,7 @@
     "dataAppConfig": "app/{component_id}/{config_name}"
   },
   "allowedBranches": [
-    "865221"
+    "865219"
   ],
   "ignoredComponents": [],
   "templates": {
@@ -33,20 +33,20 @@
   },
   "branches": [
     {
-      "id": 865221,
+      "id": 865219,
       "path": "main"
     }
   ],
   "configurations": [
     {
-      "branchId": 865221,
+      "branchId": 865219,
       "componentId": "ex-generic-v2",
       "id": "1175835356",
       "path": "extractor/ex-generic-v2/my-generic-data-source",
       "rows": []
     },
     {
-      "branchId": 865221,
+      "branchId": 865219,
       "componentId": "keboola.ex-google-analytics-v4",
       "id": "1130997037",
       "path": "extractor/keboola.ex-google-analytics-v4/my-google-analytics-data-source",

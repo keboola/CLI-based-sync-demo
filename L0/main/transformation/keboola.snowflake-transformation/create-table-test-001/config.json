@@ -1,13 +1,3 @@
 {
-  "parameters": {},
-  "storage": {
-    "output": {
-      "tables": [
-        {
-          "destination": "out.c-create-table-test.out",
-          "source": "out"
-        }
-      ]
-    }
-  }
+  "parameters": {}
 }
