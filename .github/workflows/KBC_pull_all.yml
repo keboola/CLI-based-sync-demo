@@ -4,6 +4,7 @@ on:
     inputs:
       dest_env:
         description: 'Destination Environment (OPT)'
+        default: 'prod'
         type: choice
         options:
           - 'prod'
