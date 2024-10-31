@@ -61,11 +61,12 @@ runs:
           else
             echo "Exists $WORKDIR  purging..."
             rm -rf "$WORKDIR/*"
+            tree "$WORKDIR"
           fi
           kbc init -d "$WORKDIR" --allow-target-env --ci=false --verbose 2>&1 | tee -a "./log.txt"
         fi
         
-        tree "$WORKDIR"
+        
         
         echo -e "\`\`\`" >> "./log.txt"
         echo -e "\n---------------------------------------------------------------------------- \n" >> "./log.txt"
