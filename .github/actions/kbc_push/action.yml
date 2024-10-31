@@ -55,7 +55,7 @@ runs:
         fi
         
         # get manifest from actual project
-        WORKDIR_TMP="$WORKDIR_tmp"
+        WORKDIR_TMP="${WORKDIR:?}_tmp"
         mkdir "$WORKDIR_TMP"
         kbc init -d "$WORKDIR_TMP" --allow-target-env --ci=false --verbose
         cp -r "$WORKDIR_TMP/.keboola/" "$WORKDIR/.keboola/"
