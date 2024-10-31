@@ -1,4 +1,4 @@
-rname: Pulling from Keboola
+name: Pulling from Keboola
 description: Pulling from Keboola
 inputs:
   workdir:
