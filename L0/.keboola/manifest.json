@@ -42,7 +42,7 @@
       "branchId": 865220,
       "componentId": "keboola.app-merge-branch-storage",
       "id": "1141474615",
-      "path": "application/keboola.app-merge-branch-storage/my-merge-branch-storage-application-001",
+      "path": "application/keboola.app-merge-branch-storage/change-name",
       "rows": [
         {
           "id": "1141474638",
@@ -52,30 +52,42 @@
     },
     {
       "branchId": 865220,
+      "componentId": "keboola.app-merge-branch-storage",
+      "id": "1188165538",
+      "path": "application/keboola.app-merge-branch-storage/my-merge-branch-storage-application",
+      "rows": [
+        {
+          "id": "1188165568",
+          "path": "rows/s"
+        }
+      ]
+    },
+    {
+      "branchId": 865220,
       "componentId": "keboola.ex-google-drive",
       "id": "1119451229",
-      "path": "extractor/keboola.ex-google-drive/my-google-sheets-data-source",
+      "path": "extractor/keboola.ex-google-drive/zmena",
+      "rows": []
+    },
+    {
+      "branchId": 865220,
+      "componentId": "keboola.orchestrator",
+      "id": "1195860149",
+      "path": "other/keboola.orchestrator/testflow",
       "rows": []
     },
     {
       "branchId": 865220,
       "componentId": "keboola.python-transformation-v2",
       "id": "1170912686",
-      "path": "transformation/keboola.python-transformation-v2/rename-python",
-      "rows": []
-    },
-    {
-      "branchId": 865220,
-      "componentId": "keboola.snowflake-transformation",
-      "id": "1119449902",
-      "path": "transformation/keboola.snowflake-transformation/create-table-test",
+      "path": "transformation/keboola.python-transformation-v2/xxxxx",
       "rows": []
     },
     {
       "branchId": 865220,
       "componentId": "keboola.snowflake-transformation",
       "id": "1122841647",
-      "path": "transformation/keboola.snowflake-transformation/test-tr",
+      "path": "transformation/keboola.snowflake-transformation/testdasdasdasdsa-tras",
       "rows": []
     },
     {
@@ -101,6 +113,20 @@
     },
     {
       "branchId": 865220,
+      "componentId": "keboola.snowflake-transformation",
+      "id": "1195910720",
+      "path": "transformation/keboola.snowflake-transformation/create-table-test-001",
+      "rows": []
+    },
+    {
+      "branchId": 865220,
+      "componentId": "keboola.snowflake-transformation",
+      "id": "1195914963",
+      "path": "transformation/keboola.snowflake-transformation/create-table-test-002",
+      "rows": []
+    },
+    {
+      "branchId": 865220,
       "componentId": "keboola.wr-db-snowflake",
       "id": "1119462008",
       "path": "writer/keboola.wr-db-snowflake/my-snowflake-data-destination",
@@ -115,7 +141,7 @@
       "branchId": 865220,
       "componentId": "keboola.wr-db-snowflake",
       "id": "1119462979",
-      "path": "writer/keboola.wr-db-snowflake/my-snowflake-data-destination-bad-config",
+      "path": "writer/keboola.wr-db-snowflake/nope",
       "rows": [
         {
           "id": "1119463062",
