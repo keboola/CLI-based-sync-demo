@@ -60,7 +60,7 @@ runs:
             mkdir -p "$WORKDIR"
           else
             echo "Exists $WORKDIR  purging..."
-            rm -rf "$WORKDIR/*"
+            rm -rf ${WORKDIR:?}/*
             tree "$WORKDIR"
           fi
           kbc init -d "$WORKDIR" --allow-target-env --ci=false --verbose 2>&1 | tee -a "./log.txt"
