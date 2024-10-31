@@ -100,32 +100,32 @@
     {
       "branchId": 865220,
       "componentId": "keboola.snowflake-transformation",
-      "id": "1131104553",
-      "path": "transformation/keboola.snowflake-transformation/old-tranformation",
-      "rows": []
-    },
-    {
-      "branchId": 865220,
-      "componentId": "keboola.snowflake-transformation",
-      "id": "1150956950",
-      "path": "transformation/keboola.snowflake-transformation/dev-transofmration-new-name",
-      "rows": []
-    },
-    {
-      "branchId": 865220,
-      "componentId": "keboola.snowflake-transformation",
-      "id": "1196309834",
+      "id": "1196310048",
       "path": "transformation/keboola.snowflake-transformation/new-transformation",
       "rows": []
     },
     {
       "branchId": 865220,
+      "componentId": "keboola.snowflake-transformation",
+      "id": "1196331277",
+      "path": "transformation/keboola.snowflake-transformation/new-new-transformation",
+      "rows": []
+    },
+    {
+      "branchId": 865220,
       "componentId": "keboola.wr-db-snowflake",
-      "id": "1119462008",
+      "id": "1196309602",
+      "path": "writer/keboola.wr-db-snowflake/my-new-config",
+      "rows": []
+    },
+    {
+      "branchId": 865220,
+      "componentId": "keboola.wr-db-snowflake",
+      "id": "1196309603",
       "path": "writer/keboola.wr-db-snowflake/my-snowflake-data-destination",
       "rows": [
         {
-          "id": "1119462395",
+          "id": "1196309605",
           "path": "rows/test-sheet1"
         }
       ]
@@ -133,28 +133,21 @@
     {
       "branchId": 865220,
       "componentId": "keboola.wr-db-snowflake",
-      "id": "1119462979",
-      "path": "writer/keboola.wr-db-snowflake/nope",
-      "rows": [
-        {
-          "id": "1119463062",
-          "path": "rows/out"
-        }
-      ]
-    },
-    {
-      "branchId": 865220,
-      "componentId": "keboola.wr-db-snowflake",
-      "id": "1137270688",
+      "id": "1196309604",
       "path": "writer/keboola.wr-db-snowflake/my-snowflake-data-destination-test",
       "rows": []
     },
     {
       "branchId": 865220,
       "componentId": "keboola.wr-db-snowflake",
-      "id": "1137286631",
-      "path": "writer/keboola.wr-db-snowflake/my-new-config",
-      "rows": []
+      "id": "1196309606",
+      "path": "writer/keboola.wr-db-snowflake/nope",
+      "rows": [
+        {
+          "id": "1196309607",
+          "path": "rows/out"
+        }
+      ]
     }
   ]
 }
