@@ -3,7 +3,7 @@ on:
   workflow_dispatch:
     inputs:
       force_push:
-        description: 'True to use force push'
+        description: 'Use force push'
         required: false
         default: false
         type: boolean
