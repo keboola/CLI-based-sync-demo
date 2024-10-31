@@ -1,4 +1,3 @@
 .env.*
-/*/.keboola/
 /.github/actions/kbc_storage_validation/storage_structures/
 /.github/actions/kbc_storage_validation/storage_structure.json
