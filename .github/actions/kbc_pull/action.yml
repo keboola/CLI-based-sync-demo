@@ -63,7 +63,7 @@ runs:
           kbc init -d "$WORKDIR" --allow-target-env --ci=false --verbose 2>&1 | tee -a "./log.txt"
         fi
         
-        
+        echo "/.env.*" >> "$WORKDIR/.gitignore"
         
         echo -e "\`\`\`" >> "./log.txt"
         echo -e "\n---------------------------------------------------------------------------- \n" >> "./log.txt"
