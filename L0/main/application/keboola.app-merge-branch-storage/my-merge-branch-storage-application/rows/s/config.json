@@ -1,0 +1,7 @@
+{
+  "parameters": {
+    "action": "ADD_BUCKET",
+    "values": [],
+    "rawResourceJson": {}
+  }
+}
