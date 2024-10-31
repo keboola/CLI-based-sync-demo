@@ -56,6 +56,8 @@ runs:
           # if not exists $WORKDIR create it
           if [ ! -d "$WORKDIR" ]; then
             mkdir -p "$WORKDIR"
+          else
+            rm -rf "$WORKDIR/*"
           fi
           kbc init -d "$WORKDIR" --allow-target-env --ci=false --verbose 2>&1 | tee -a "./log.txt"
         fi
