@@ -29,7 +29,6 @@ runs:
         KBC_STORAGE_API_TOKEN: ${{ inputs.kbcSapiToken }}
         KBC_PROJECT_ID: ${{ inputs.kbcProjectId }}
         KBC_BRANCH_ID: ${{ inputs.kbcBranchId }}
-        KBC_BRANCHES: ${{ inputs.kbcBranchId }}
         KBC_STORAGE_API_HOST: ${{ inputs.kbcSapiHost }}
         WORKDIR: ${{ inputs.workdir }}
       # filled by the script
@@ -54,21 +53,8 @@ runs:
           FORCE=""
         fi
         
-        # get manifest from actual project
-        WORKDIR_TMP="${WORKDIR:?}_tmp"
-        mkdir "$WORKDIR_TMP"
-        kbc init -d "$WORKDIR_TMP" --allow-target-env --ci=false --verbose
-        cp -r "$WORKDIR_TMP/.keboola/" "$WORKDIR/.keboola/"
-        rm -rf "$WORKDIR_TMP"
-        
-        
         # push to Keboola Connection
         echo -e "KBC CLI PUSH to project ${{ inputs.kbcProjectId }} and branch ${{ inputs.kbcBranchId }} log: \n" >> "$RUNNER_TEMP/log.txt"
-        
-        kbc persist -d "$WORKDIR" --verbose
-        
-        kbc local fix-paths -d "$WORKDIR" --verbose
-        
         kbc push -d "$WORKDIR" --verbose "$FORCE" 2>&1 | tee -a "$RUNNER_TEMP/log.txt"
         echo -e "---------------------------------------------------------------------------- \n\n" >> "$RUNNER_TEMP/log.txt"
       shell: bash
