@@ -48,6 +48,8 @@ runs:
         echo -e "---------------------------------------------------------------------------- " >> "./log.txt"
         echo -e "\`\`\`" >> "./log.txt"
         
+        tree "$WORKDIR"
+        
         if [ -f "$WORKDIR/.keboola/manifest.json" ]; then
           echo "Manifest file exists, pulling"
           kbc pull -d "$WORKDIR" --force --verbose 2>&1 | tee -a "./log.txt"
@@ -62,7 +64,9 @@ runs:
           fi
           kbc init -d "$WORKDIR" --allow-target-env --ci=false --verbose 2>&1 | tee -a "./log.txt"
         fi
-
+        
+        tree "$WORKDIR"
+        
         echo -e "\`\`\`" >> "./log.txt"
         echo -e "\n---------------------------------------------------------------------------- \n" >> "./log.txt"
         
