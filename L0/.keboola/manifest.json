@@ -100,6 +100,27 @@
     {
       "branchId": 865220,
       "componentId": "keboola.snowflake-transformation",
+      "id": "1131104553",
+      "path": "transformation/keboola.snowflake-transformation/old-tranformation",
+      "rows": []
+    },
+    {
+      "branchId": 865220,
+      "componentId": "keboola.snowflake-transformation",
+      "id": "1150956950",
+      "path": "transformation/keboola.snowflake-transformation/dev-transofmration-new-name",
+      "rows": []
+    },
+    {
+      "branchId": 865220,
+      "componentId": "keboola.snowflake-transformation",
+      "id": "1196309834",
+      "path": "transformation/keboola.snowflake-transformation/new-transformation-001",
+      "rows": []
+    },
+    {
+      "branchId": 865220,
+      "componentId": "keboola.snowflake-transformation",
       "id": "1196310048",
       "path": "transformation/keboola.snowflake-transformation/new-transformation",
       "rows": []
@@ -109,6 +130,44 @@
       "componentId": "keboola.snowflake-transformation",
       "id": "1196331277",
       "path": "transformation/keboola.snowflake-transformation/new-new-transformation",
+      "rows": []
+    },
+    {
+      "branchId": 865220,
+      "componentId": "keboola.wr-db-snowflake",
+      "id": "1119462008",
+      "path": "writer/keboola.wr-db-snowflake/my-snowflake-data-destination-001",
+      "rows": [
+        {
+          "id": "1119462395",
+          "path": "rows/test-sheet1"
+        }
+      ]
+    },
+    {
+      "branchId": 865220,
+      "componentId": "keboola.wr-db-snowflake",
+      "id": "1119462979",
+      "path": "writer/keboola.wr-db-snowflake/nope-001",
+      "rows": [
+        {
+          "id": "1119463062",
+          "path": "rows/out"
+        }
+      ]
+    },
+    {
+      "branchId": 865220,
+      "componentId": "keboola.wr-db-snowflake",
+      "id": "1137270688",
+      "path": "writer/keboola.wr-db-snowflake/my-snowflake-data-destination-test-001",
+      "rows": []
+    },
+    {
+      "branchId": 865220,
+      "componentId": "keboola.wr-db-snowflake",
+      "id": "1137286631",
+      "path": "writer/keboola.wr-db-snowflake/my-new-config-001",
       "rows": []
     },
     {
