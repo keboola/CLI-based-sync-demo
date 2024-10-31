@@ -101,7 +101,7 @@
       "branchId": 865220,
       "componentId": "keboola.snowflake-transformation",
       "id": "1196310048",
-      "path": "transformation/keboola.snowflake-transformation/new-transformation-001",
+      "path": "transformation/keboola.snowflake-transformation/new-transformation",
       "rows": []
     },
     {
@@ -115,14 +115,14 @@
       "branchId": 865220,
       "componentId": "keboola.wr-db-snowflake",
       "id": "1196309602",
-      "path": "writer/keboola.wr-db-snowflake/my-new-config-001",
+      "path": "writer/keboola.wr-db-snowflake/my-new-config",
       "rows": []
     },
     {
       "branchId": 865220,
       "componentId": "keboola.wr-db-snowflake",
       "id": "1196309603",
-      "path": "writer/keboola.wr-db-snowflake/my-snowflake-data-destination-001",
+      "path": "writer/keboola.wr-db-snowflake/my-snowflake-data-destination",
       "rows": [
         {
           "id": "1196309605",
@@ -134,14 +134,14 @@
       "branchId": 865220,
       "componentId": "keboola.wr-db-snowflake",
       "id": "1196309604",
-      "path": "writer/keboola.wr-db-snowflake/my-snowflake-data-destination-test-001",
+      "path": "writer/keboola.wr-db-snowflake/my-snowflake-data-destination-test",
       "rows": []
     },
     {
       "branchId": 865220,
       "componentId": "keboola.wr-db-snowflake",
       "id": "1196309606",
-      "path": "writer/keboola.wr-db-snowflake/nope-001",
+      "path": "writer/keboola.wr-db-snowflake/nope",
       "rows": [
         {
           "id": "1196309607",

@@ -56,7 +56,7 @@
       "branchId": 865221,
       "componentId": "keboola.snowflake-transformation",
       "id": "1196288873",
-      "path": "transformation/keboola.snowflake-transformation/create-table-test-001",
+      "path": "transformation/keboola.snowflake-transformation/create-table-test",
       "rows": []
     }
   ]
