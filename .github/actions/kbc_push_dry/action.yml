@@ -69,7 +69,7 @@ runs:
         
         # get manifest from actual project
         echo "$WORKDIR"
-        WORKDIR_TMP="$WORKDIR_tmp"
+        WORKDIR_TMP="${WORKDIR:?}_tmp"
         echo "$WORKDIR_TMP"
         mkdir "$WORKDIR_TMP"
         kbc init -d "$WORKDIR_TMP" --allow-target-env --ci=false --verbose
