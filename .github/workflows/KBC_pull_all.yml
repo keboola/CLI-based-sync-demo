@@ -27,6 +27,10 @@ jobs:
             origin: "destination"
     environment: ${{ matrix.environment }}
     steps:
+      - name: echo
+        run: |
+            echo ${{ matrix.environment }}
+            echo ${{ github.event.inputs.dest_env }}
       - uses: actions/checkout@v4
         with:
           ref: ${{ github.ref }}
