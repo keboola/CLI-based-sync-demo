@@ -53,6 +53,10 @@ runs:
           kbc pull -d "$WORKDIR" --force --verbose 2>&1 | tee -a "./log.txt"
         else
           echo "Manifest file not exists, initialization"
+          # if not exists $WORKDIR create it
+          if [ ! -d "$WORKDIR" ]; then
+            mkdir -p "$WORKDIR"
+          fi
           kbc init -d "$WORKDIR" --allow-target-env --ci=false --verbose 2>&1 | tee -a "./log.txt"
         fi
 
