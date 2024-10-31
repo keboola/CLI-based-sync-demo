@@ -16,6 +16,9 @@ inputs:
   kbcBranchId:
     description: Keboola Connection Branch ID
     required: true
+  forcePush:
+    description: Enable force push
+    required: false
 runs:
   using: "composite"
   steps:
