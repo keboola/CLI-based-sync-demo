@@ -50,6 +50,7 @@ runs:
         
         if [ -f "$WORKDIR/.keboola/manifest.json" ]; then
           echo "Manifest file exists, pulling"
+          kbc persist -d "$WORKDIR" --verbose 2>&1 | tee -a "./log.txt"
           kbc pull -d "$WORKDIR" --force --verbose 2>&1 | tee -a "./log.txt"
         else
           echo "Manifest file not exists, initialization"
