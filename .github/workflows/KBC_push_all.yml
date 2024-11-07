@@ -12,7 +12,7 @@ permissions:
 jobs:
   Push_All:
     # Dynamic generated value
-    environment: ${{github.ref_name == 'dev' && 'dev' || github.ref_name == 'main' && 'prod' }}
+    environment: ${{github.ref_name == 'main' && 'prod' || github.ref_name == 'dev' && 'dev' }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4

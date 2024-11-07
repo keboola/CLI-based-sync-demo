@@ -6,8 +6,8 @@ on:
         description: 'Destination Environment (OPT)'
         type: choice
         options:
-        - 'dev'
         - 'prod'
+        - 'dev'
         - ''
 permissions:
   contents: write
@@ -20,7 +20,7 @@ jobs:
     strategy:
       matrix:
         include:
-          - environment: ${{github.ref_name == 'dev' && 'dev' || github.ref_name == 'main' && 'prod' }}
+          - environment: ${{github.ref_name == 'main' && 'prod' || github.ref_name == 'dev' && 'dev' }}
             origin: "source"
           - environment: ${{ github.event.inputs.dest_env }}
             origin: "destination"
@@ -65,7 +65,7 @@ jobs:
     strategy:
       matrix:
         include:
-          - environment: ${{github.ref_name == 'dev' && 'dev' || github.ref_name == 'main' && 'prod' }}
+          - environment: ${{github.ref_name == 'main' && 'prod' || github.ref_name == 'dev' && 'dev' }}
             origin: "source"
           - environment: ${{ github.event.inputs.dest_env }}
             origin: "destination"
@@ -108,7 +108,7 @@ jobs:
     if: always()
     needs: [ storage_validation_comparison,vault_validation_comparison ]
     # Dynamic generated value
-    environment: ${{github.ref_name == 'dev' && 'dev' || github.ref_name == 'main' && 'prod' }}
+    environment: ${{github.ref_name == 'main' && 'prod' || github.ref_name == 'dev' && 'dev' }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -148,7 +148,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: pull_log
-          path: ${{runner.temp}}/log.txt
+          path: ${{ runner.temp }}/log.txt
           retention-days: 1
 
       # Final commit and GIT push
@@ -161,7 +161,6 @@ jobs:
           git add -A
           git commit --allow-empty -a -F "$RUNNER_TEMP/log.txt" || true
           git push --force
-
 
 
   # CLI push dry-run
