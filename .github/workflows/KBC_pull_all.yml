@@ -148,7 +148,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: pull_log
-          path: $RUNNER_TEMP/log.txt
+          path: ${{runner.temp}}/log.txt
           retention-days: 1
 
       # Final commit and GIT push
@@ -252,5 +252,5 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: log
-          path: $RUNNER_TEMP/log.txt
+          path: ${{ runner.temp }}/log.txt
           retention-days: 5
