@@ -66,7 +66,7 @@
       "branchId": 865220,
       "componentId": "keboola.ex-google-drive",
       "id": "1119451229",
-      "path": "extractor/keboola.ex-google-drive/zmena",
+      "path": "extractor/keboola.ex-google-drive/asdasdasd",
       "rows": []
     },
     {
@@ -126,7 +126,7 @@
       "rows": [
         {
           "id": "1196309605",
-          "path": "rows/test-sheet1"
+          "path": "rows/test-sheets1"
         }
       ]
     },
