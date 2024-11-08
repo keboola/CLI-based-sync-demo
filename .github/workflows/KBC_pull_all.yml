@@ -10,6 +10,7 @@ on:
         - 'dev'
         - ''
 permissions:
+  actions: read
   contents: write
 jobs:
 
