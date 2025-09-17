@@ -1,0 +1,14 @@
+{
+  "parameters": {
+    "db": {
+      "port": 1433,
+      "ssh": {
+        "sshPort": 22
+      },
+      "user": "{{ vault.mssql_user }}",
+      "#password": "{{ vault.mssql_pass }}",
+      "host": "My.hostname.com",
+      "database": "test"
+    }
+  }
+}

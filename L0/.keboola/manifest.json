@@ -40,6 +40,20 @@
   "configurations": [
     {
       "branchId": 865220,
+      "componentId": "kds-team.app-custom-python",
+      "id": "1226806243",
+      "path": "application/kds-team.app-custom-python/my-custom-python-application",
+      "rows": []
+    },
+    {
+      "branchId": 865220,
+      "componentId": "kds-team.app-snowflake-query-runner",
+      "id": "1200653553",
+      "path": "application/kds-team.app-snowflake-query-runner/my-snowflake-query-runner-application",
+      "rows": []
+    },
+    {
+      "branchId": 865220,
       "componentId": "keboola.app-merge-branch-storage",
       "id": "1141474615",
       "path": "application/keboola.app-merge-branch-storage/change-name",
@@ -61,6 +75,13 @@
           "path": "rows/s"
         }
       ]
+    },
+    {
+      "branchId": 865220,
+      "componentId": "keboola.ex-db-mssql",
+      "id": "1230908014",
+      "path": "extractor/keboola.ex-db-mssql/my-microsoft-sql-server-data-source",
+      "rows": []
     },
     {
       "branchId": 865220,
@@ -130,6 +151,13 @@
       "componentId": "keboola.snowflake-transformation",
       "id": "1198320721",
       "path": "transformation/keboola.snowflake-transformation/specific-for-dev",
+      "rows": []
+    },
+    {
+      "branchId": 865220,
+      "componentId": "keboola.snowflake-transformation",
+      "id": "1208064068",
+      "path": "transformation/keboola.snowflake-transformation/specific-for-l0-dev",
       "rows": []
     },
     {

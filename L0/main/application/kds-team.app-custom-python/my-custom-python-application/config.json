@@ -1,0 +1,10 @@
+{
+  "parameters": {
+    "code": "from keboola.component import CommonInterface\nci = CommonInterface()\n# access user parameters\nprint(ci.configuration.parameters)\nprint(ci.configuration.parameters['#passwordk'].split('a'))",
+    "packages": [],
+    "user_properties": {
+      "#passwordk": "{{ vault.testpass }}"
+    }
+  },
+  "runtime": {}
+}

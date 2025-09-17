@@ -1,0 +1,8 @@
+{
+  "parameters": {
+    "account": "{{ vault.account }}",
+    "username": "test",
+    "#password": "{{ vault.password }}",
+    "warehouse": ""
+  }
+}
