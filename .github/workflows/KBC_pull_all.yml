@@ -37,7 +37,7 @@ jobs:
         with:
           destFile: "${{ matrix.origin }}/${{ matrix.environment }}/L0.json"
           kbcSapiHost: ${{ vars.KBC_SAPI_HOST }}
-          kbcSapiToken: ${{ secrets.KBC_SAPI_TOKEN_L0 }}
+          kbcSapiToken: ${{ secrets.KBC_SAPI_TOKEN_Test }}
           kbcBranchId: ${{ vars.KBC_BRANCH_ID_L0 }}
       
       - name: Pull vault L1
